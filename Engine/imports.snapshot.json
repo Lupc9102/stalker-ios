@@ -1,0 +1,4188 @@
+{
+  "sha256": "db894e66ec1b60c8c52bb1b3764e83f3e2131fbc6d56e0b309f5af1e08cf0b42",
+  "bytes": 22777962,
+  "imports": [
+    {
+      "module": "a",
+      "field": "a",
+      "kind": 2,
+      "name": "wasmMemory",
+      "category": "runtime",
+      "shared": true,
+      "memory64": true,
+      "initial_pages": 32768,
+      "maximum_pages": 262144
+    },
+    {
+      "module": "a",
+      "field": "b",
+      "kind": 0,
+      "name": "_glDrawElementsInstancedBaseVertexBaseInstanceWEBGL",
+      "category": "graphics",
+      "type_index": 383
+    },
+    {
+      "module": "a",
+      "field": "c",
+      "kind": 0,
+      "name": "_emscripten_date_now",
+      "category": "runtime",
+      "type_index": 249
+    },
+    {
+      "module": "a",
+      "field": "d",
+      "kind": 0,
+      "name": "_glGetIntegerv",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "e",
+      "kind": 0,
+      "name": "_emscripten_asm_const_int_sync_on_main_thread",
+      "category": "threads",
+      "type_index": 21
+    },
+    {
+      "module": "a",
+      "field": "f",
+      "kind": 0,
+      "name": "_exit",
+      "category": "runtime",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "g",
+      "kind": 0,
+      "name": "_alSourcef",
+      "category": "audio",
+      "type_index": 110
+    },
+    {
+      "module": "a",
+      "field": "h",
+      "kind": 0,
+      "name": "_glDisable",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "i",
+      "kind": 0,
+      "name": "_glEnable",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "j",
+      "kind": 0,
+      "name": "_glBindTexture",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "k",
+      "kind": 0,
+      "name": "_emscripten_set_canvas_element_size",
+      "category": "runtime",
+      "type_index": 44
+    },
+    {
+      "module": "a",
+      "field": "l",
+      "kind": 0,
+      "name": "_emscripten_get_element_css_size",
+      "category": "runtime",
+      "type_index": 21
+    },
+    {
+      "module": "a",
+      "field": "m",
+      "kind": 0,
+      "name": "_glBindBuffer",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "n",
+      "kind": 0,
+      "name": "_emscripten_get_now",
+      "category": "runtime",
+      "type_index": 249
+    },
+    {
+      "module": "a",
+      "field": "o",
+      "kind": 0,
+      "name": "_alcGetString",
+      "category": "audio",
+      "type_index": 15
+    },
+    {
+      "module": "a",
+      "field": "p",
+      "kind": 0,
+      "name": "_alIsExtensionPresent",
+      "category": "audio",
+      "type_index": 3
+    },
+    {
+      "module": "a",
+      "field": "q",
+      "kind": 0,
+      "name": "_glIsEnabled",
+      "category": "graphics",
+      "type_index": 49
+    },
+    {
+      "module": "a",
+      "field": "r",
+      "kind": 0,
+      "name": "_emscripten_get_device_pixel_ratio",
+      "category": "runtime",
+      "type_index": 249
+    },
+    {
+      "module": "a",
+      "field": "s",
+      "kind": 0,
+      "name": "_emscripten_err",
+      "category": "runtime",
+      "type_index": 0
+    },
+    {
+      "module": "a",
+      "field": "t",
+      "kind": 0,
+      "name": "_alSourcei",
+      "category": "audio",
+      "type_index": 36
+    },
+    {
+      "module": "a",
+      "field": "u",
+      "kind": 0,
+      "name": "_alGetError",
+      "category": "audio",
+      "type_index": 39
+    },
+    {
+      "module": "a",
+      "field": "v",
+      "kind": 0,
+      "name": "_alBufferData",
+      "category": "audio",
+      "type_index": 384
+    },
+    {
+      "module": "a",
+      "field": "w",
+      "kind": 0,
+      "name": "_glTexParameteri",
+      "category": "graphics",
+      "type_index": 36
+    },
+    {
+      "module": "a",
+      "field": "x",
+      "kind": 0,
+      "name": "_glPixelStorei",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "y",
+      "kind": 0,
+      "name": "_glBufferData",
+      "category": "graphics",
+      "type_index": 144
+    },
+    {
+      "module": "a",
+      "field": "z",
+      "kind": 0,
+      "name": "_alcIsExtensionPresent",
+      "category": "audio",
+      "type_index": 10
+    },
+    {
+      "module": "a",
+      "field": "A",
+      "kind": 0,
+      "name": "_alListener3f",
+      "category": "audio",
+      "type_index": 23
+    },
+    {
+      "module": "a",
+      "field": "B",
+      "kind": 0,
+      "name": "_glVertexAttribPointer",
+      "category": "graphics",
+      "type_index": 132
+    },
+    {
+      "module": "a",
+      "field": "C",
+      "kind": 0,
+      "name": "_glGetAttribLocation",
+      "category": "graphics",
+      "type_index": 95
+    },
+    {
+      "module": "a",
+      "field": "D",
+      "kind": 0,
+      "name": "_glEnableVertexAttribArray",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "E",
+      "kind": 0,
+      "name": "_glBindVertexArray",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "F",
+      "kind": 0,
+      "name": "_emscripten_sleep",
+      "category": "runtime",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "G",
+      "kind": 0,
+      "name": "_emscripten_set_element_css_size",
+      "category": "runtime",
+      "type_index": 385
+    },
+    {
+      "module": "a",
+      "field": "H",
+      "kind": 0,
+      "name": "_emscripten_has_asyncify",
+      "category": "runtime",
+      "type_index": 39
+    },
+    {
+      "module": "a",
+      "field": "I",
+      "kind": 0,
+      "name": "_emscripten_exit_with_live_runtime",
+      "category": "runtime",
+      "type_index": 29
+    },
+    {
+      "module": "a",
+      "field": "J",
+      "kind": 0,
+      "name": "_alcMakeContextCurrent",
+      "category": "audio",
+      "type_index": 3
+    },
+    {
+      "module": "a",
+      "field": "K",
+      "kind": 0,
+      "name": "_alcCloseDevice",
+      "category": "audio",
+      "type_index": 3
+    },
+    {
+      "module": "a",
+      "field": "L",
+      "kind": 0,
+      "name": "_alSourceQueueBuffers",
+      "category": "audio",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "M",
+      "kind": 0,
+      "name": "_alSourcePlay",
+      "category": "audio",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "N",
+      "kind": 0,
+      "name": "_alGetSourcei",
+      "category": "audio",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "O",
+      "kind": 0,
+      "name": "_glViewport",
+      "category": "graphics",
+      "type_index": 54
+    },
+    {
+      "module": "a",
+      "field": "P",
+      "kind": 0,
+      "name": "_glUseProgram",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "Q",
+      "kind": 0,
+      "name": "_glShaderSource",
+      "category": "graphics",
+      "type_index": 93
+    },
+    {
+      "module": "a",
+      "field": "R",
+      "kind": 0,
+      "name": "_glScissor",
+      "category": "graphics",
+      "type_index": 54
+    },
+    {
+      "module": "a",
+      "field": "S",
+      "kind": 0,
+      "name": "_glGetUniformLocation",
+      "category": "graphics",
+      "type_index": 95
+    },
+    {
+      "module": "a",
+      "field": "T",
+      "kind": 0,
+      "name": "_glGetShaderiv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "U",
+      "kind": 0,
+      "name": "_glGetProgramiv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "V",
+      "kind": 0,
+      "name": "_glGenBuffers",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "W",
+      "kind": 0,
+      "name": "_glDetachShader",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "X",
+      "kind": 0,
+      "name": "_glDeleteTextures",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Y",
+      "kind": 0,
+      "name": "_glDeleteShader",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "Z",
+      "kind": 0,
+      "name": "_glDeleteBuffers",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "_",
+      "kind": 0,
+      "name": "_glCreateShader",
+      "category": "graphics",
+      "type_index": 49
+    },
+    {
+      "module": "a",
+      "field": "$",
+      "kind": 0,
+      "name": "_glCompileShader",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "aa",
+      "kind": 0,
+      "name": "_glBufferSubData",
+      "category": "graphics",
+      "type_index": 172
+    },
+    {
+      "module": "a",
+      "field": "ba",
+      "kind": 0,
+      "name": "_glBlendFuncSeparate",
+      "category": "graphics",
+      "type_index": 54
+    },
+    {
+      "module": "a",
+      "field": "ca",
+      "kind": 0,
+      "name": "_glBindSampler",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "da",
+      "kind": 0,
+      "name": "_glAttachShader",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "ea",
+      "kind": 0,
+      "name": "_glActiveTexture",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "fa",
+      "kind": 0,
+      "name": "_emscripten_webgl_make_context_current",
+      "category": "graphics",
+      "type_index": 3
+    },
+    {
+      "module": "a",
+      "field": "ga",
+      "kind": 0,
+      "name": "_emscripten_set_wheel_callback_on_thread",
+      "category": "threads",
+      "type_index": 87
+    },
+    {
+      "module": "a",
+      "field": "ha",
+      "kind": 0,
+      "name": "_emscripten_set_visibilitychange_callback_on_thread",
+      "category": "threads",
+      "type_index": 118
+    },
+    {
+      "module": "a",
+      "field": "ia",
+      "kind": 0,
+      "name": "_emscripten_set_touchstart_callback_on_thread",
+      "category": "threads",
+      "type_index": 87
+    },
+    {
+      "module": "a",
+      "field": "ja",
+      "kind": 0,
+      "name": "_emscripten_set_touchmove_callback_on_thread",
+      "category": "threads",
+      "type_index": 87
+    },
+    {
+      "module": "a",
+      "field": "ka",
+      "kind": 0,
+      "name": "_emscripten_set_touchend_callback_on_thread",
+      "category": "threads",
+      "type_index": 87
+    },
+    {
+      "module": "a",
+      "field": "la",
+      "kind": 0,
+      "name": "_emscripten_set_touchcancel_callback_on_thread",
+      "category": "threads",
+      "type_index": 87
+    },
+    {
+      "module": "a",
+      "field": "ma",
+      "kind": 0,
+      "name": "_emscripten_set_resize_callback_on_thread",
+      "category": "threads",
+      "type_index": 87
+    },
+    {
+      "module": "a",
+      "field": "na",
+      "kind": 0,
+      "name": "_emscripten_set_pointerlockchange_callback_on_thread",
+      "category": "threads",
+      "type_index": 87
+    },
+    {
+      "module": "a",
+      "field": "oa",
+      "kind": 0,
+      "name": "_emscripten_set_mouseup_callback_on_thread",
+      "category": "threads",
+      "type_index": 87
+    },
+    {
+      "module": "a",
+      "field": "pa",
+      "kind": 0,
+      "name": "_emscripten_set_mousemove_callback_on_thread",
+      "category": "threads",
+      "type_index": 87
+    },
+    {
+      "module": "a",
+      "field": "qa",
+      "kind": 0,
+      "name": "_emscripten_set_mouseleave_callback_on_thread",
+      "category": "threads",
+      "type_index": 87
+    },
+    {
+      "module": "a",
+      "field": "ra",
+      "kind": 0,
+      "name": "_emscripten_set_mouseenter_callback_on_thread",
+      "category": "threads",
+      "type_index": 87
+    },
+    {
+      "module": "a",
+      "field": "sa",
+      "kind": 0,
+      "name": "_emscripten_set_mousedown_callback_on_thread",
+      "category": "threads",
+      "type_index": 87
+    },
+    {
+      "module": "a",
+      "field": "ta",
+      "kind": 0,
+      "name": "_emscripten_set_keyup_callback_on_thread",
+      "category": "threads",
+      "type_index": 87
+    },
+    {
+      "module": "a",
+      "field": "ua",
+      "kind": 0,
+      "name": "_emscripten_set_keypress_callback_on_thread",
+      "category": "threads",
+      "type_index": 87
+    },
+    {
+      "module": "a",
+      "field": "va",
+      "kind": 0,
+      "name": "_emscripten_set_keydown_callback_on_thread",
+      "category": "threads",
+      "type_index": 87
+    },
+    {
+      "module": "a",
+      "field": "wa",
+      "kind": 0,
+      "name": "_emscripten_set_gamepaddisconnected_callback_on_thread",
+      "category": "threads",
+      "type_index": 118
+    },
+    {
+      "module": "a",
+      "field": "xa",
+      "kind": 0,
+      "name": "_emscripten_set_gamepadconnected_callback_on_thread",
+      "category": "threads",
+      "type_index": 118
+    },
+    {
+      "module": "a",
+      "field": "ya",
+      "kind": 0,
+      "name": "_emscripten_set_fullscreenchange_callback_on_thread",
+      "category": "threads",
+      "type_index": 87
+    },
+    {
+      "module": "a",
+      "field": "za",
+      "kind": 0,
+      "name": "_emscripten_set_focus_callback_on_thread",
+      "category": "threads",
+      "type_index": 87
+    },
+    {
+      "module": "a",
+      "field": "Aa",
+      "kind": 0,
+      "name": "_emscripten_set_blur_callback_on_thread",
+      "category": "threads",
+      "type_index": 87
+    },
+    {
+      "module": "a",
+      "field": "Ba",
+      "kind": 0,
+      "name": "_emscripten_set_beforeunload_callback_on_thread",
+      "category": "threads",
+      "type_index": 21
+    },
+    {
+      "module": "a",
+      "field": "Ca",
+      "kind": 0,
+      "name": "_emscripten_sample_gamepad_data",
+      "category": "runtime",
+      "type_index": 39
+    },
+    {
+      "module": "a",
+      "field": "Da",
+      "kind": 0,
+      "name": "_emscripten_request_pointerlock",
+      "category": "runtime",
+      "type_index": 19
+    },
+    {
+      "module": "a",
+      "field": "Ea",
+      "kind": 0,
+      "name": "_emscripten_get_gamepad_status",
+      "category": "runtime",
+      "type_index": 95
+    },
+    {
+      "module": "a",
+      "field": "Fa",
+      "kind": 0,
+      "name": "_emscripten_check_blocking_allowed",
+      "category": "runtime",
+      "type_index": 29
+    },
+    {
+      "module": "a",
+      "field": "Ga",
+      "kind": 0,
+      "name": "_emscripten_cancel_main_loop",
+      "category": "runtime",
+      "type_index": 29
+    },
+    {
+      "module": "a",
+      "field": "Ha",
+      "kind": 0,
+      "name": "_eglGetDisplay",
+      "category": "runtime",
+      "type_index": 1
+    },
+    {
+      "module": "a",
+      "field": "Ia",
+      "kind": 0,
+      "name": "_alcOpenDevice",
+      "category": "audio",
+      "type_index": 1
+    },
+    {
+      "module": "a",
+      "field": "Ja",
+      "kind": 0,
+      "name": "_alcGetIntegerv",
+      "category": "audio",
+      "type_index": 64
+    },
+    {
+      "module": "a",
+      "field": "Ka",
+      "kind": 0,
+      "name": "_alcDestroyContext",
+      "category": "audio",
+      "type_index": 0
+    },
+    {
+      "module": "a",
+      "field": "La",
+      "kind": 0,
+      "name": "_alcCreateContext",
+      "category": "audio",
+      "type_index": 14
+    },
+    {
+      "module": "a",
+      "field": "Ma",
+      "kind": 0,
+      "name": "_alSourceStop",
+      "category": "audio",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "Na",
+      "kind": 0,
+      "name": "_alListenerfv",
+      "category": "audio",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Oa",
+      "kind": 0,
+      "name": "_alListenerf",
+      "category": "audio",
+      "type_index": 100
+    },
+    {
+      "module": "a",
+      "field": "Pa",
+      "kind": 0,
+      "name": "__wasmfs_opfs_open_access",
+      "category": "filesystem",
+      "type_index": 32
+    },
+    {
+      "module": "a",
+      "field": "Qa",
+      "kind": 0,
+      "name": "__emscripten_thread_set_strongref",
+      "category": "threads",
+      "type_index": 0
+    },
+    {
+      "module": "a",
+      "field": "Ra",
+      "kind": 0,
+      "name": "__emscripten_thread_cleanup",
+      "category": "threads",
+      "type_index": 0
+    },
+    {
+      "module": "a",
+      "field": "Sa",
+      "kind": 0,
+      "name": "__emscripten_receive_on_main_thread_js",
+      "category": "threads",
+      "type_index": 386
+    },
+    {
+      "module": "a",
+      "field": "Ta",
+      "kind": 0,
+      "name": "___assert_fail",
+      "category": "runtime",
+      "type_index": 38
+    },
+    {
+      "module": "a",
+      "field": "Ua",
+      "kind": 0,
+      "name": "_glUniformMatrix4fv",
+      "category": "graphics",
+      "type_index": 12
+    },
+    {
+      "module": "a",
+      "field": "Va",
+      "kind": 0,
+      "name": "_glUniform1i",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "Wa",
+      "kind": 0,
+      "name": "_glTexSubImage2D",
+      "category": "graphics",
+      "type_index": 111
+    },
+    {
+      "module": "a",
+      "field": "Xa",
+      "kind": 0,
+      "name": "_glTexImage2D",
+      "category": "graphics",
+      "type_index": 111
+    },
+    {
+      "module": "a",
+      "field": "Ya",
+      "kind": 0,
+      "name": "_glLinkProgram",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "Za",
+      "kind": 0,
+      "name": "_glIsProgram",
+      "category": "graphics",
+      "type_index": 49
+    },
+    {
+      "module": "a",
+      "field": "_a",
+      "kind": 0,
+      "name": "_glGetString",
+      "category": "graphics",
+      "type_index": 71
+    },
+    {
+      "module": "a",
+      "field": "$a",
+      "kind": 0,
+      "name": "_glGetShaderInfoLog",
+      "category": "graphics",
+      "type_index": 93
+    },
+    {
+      "module": "a",
+      "field": "ab",
+      "kind": 0,
+      "name": "_glGetProgramInfoLog",
+      "category": "graphics",
+      "type_index": 93
+    },
+    {
+      "module": "a",
+      "field": "bb",
+      "kind": 0,
+      "name": "_glGenVertexArrays",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "cb",
+      "kind": 0,
+      "name": "_glGenTextures",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "db",
+      "kind": 0,
+      "name": "_glDrawElements",
+      "category": "graphics",
+      "type_index": 12
+    },
+    {
+      "module": "a",
+      "field": "eb",
+      "kind": 0,
+      "name": "_glDeleteVertexArrays",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "fb",
+      "kind": 0,
+      "name": "_glDeleteProgram",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "gb",
+      "kind": 0,
+      "name": "_glCreateProgram",
+      "category": "graphics",
+      "type_index": 39
+    },
+    {
+      "module": "a",
+      "field": "hb",
+      "kind": 0,
+      "name": "_glClearColor",
+      "category": "graphics",
+      "type_index": 104
+    },
+    {
+      "module": "a",
+      "field": "ib",
+      "kind": 0,
+      "name": "_glClear",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "jb",
+      "kind": 0,
+      "name": "_glBlendEquationSeparate",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "kb",
+      "kind": 0,
+      "name": "_glBlendEquation",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "lb",
+      "kind": 0,
+      "name": "_getaddrinfo",
+      "category": "runtime",
+      "type_index": 46
+    },
+    {
+      "module": "a",
+      "field": "mb",
+      "kind": 0,
+      "name": "_emscripten_webgl_get_current_context",
+      "category": "graphics",
+      "type_index": 31
+    },
+    {
+      "module": "a",
+      "field": "nb",
+      "kind": 0,
+      "name": "_emscripten_webgl_enable_extension",
+      "category": "graphics",
+      "type_index": 10
+    },
+    {
+      "module": "a",
+      "field": "ob",
+      "kind": 0,
+      "name": "_emscripten_webgl_destroy_context",
+      "category": "graphics",
+      "type_index": 3
+    },
+    {
+      "module": "a",
+      "field": "pb",
+      "kind": 0,
+      "name": "_emscripten_webgl_create_context",
+      "category": "graphics",
+      "type_index": 14
+    },
+    {
+      "module": "a",
+      "field": "qb",
+      "kind": 0,
+      "name": "_emscripten_unwind_to_js_event_loop",
+      "category": "runtime",
+      "type_index": 29
+    },
+    {
+      "module": "a",
+      "field": "rb",
+      "kind": 0,
+      "name": "_emscripten_set_window_title",
+      "category": "runtime",
+      "type_index": 0
+    },
+    {
+      "module": "a",
+      "field": "sb",
+      "kind": 0,
+      "name": "_emscripten_set_main_loop_timing",
+      "category": "runtime",
+      "type_index": 101
+    },
+    {
+      "module": "a",
+      "field": "tb",
+      "kind": 0,
+      "name": "_emscripten_set_main_loop_arg",
+      "category": "runtime",
+      "type_index": 34
+    },
+    {
+      "module": "a",
+      "field": "ub",
+      "kind": 0,
+      "name": "_emscripten_runtime_keepalive_check",
+      "category": "runtime",
+      "type_index": 39
+    },
+    {
+      "module": "a",
+      "field": "vb",
+      "kind": 0,
+      "name": "_emscripten_resize_heap",
+      "category": "runtime",
+      "type_index": 3
+    },
+    {
+      "module": "a",
+      "field": "wb",
+      "kind": 0,
+      "name": "_emscripten_request_fullscreen_strategy",
+      "category": "runtime",
+      "type_index": 82
+    },
+    {
+      "module": "a",
+      "field": "xb",
+      "kind": 0,
+      "name": "_emscripten_out",
+      "category": "runtime",
+      "type_index": 0
+    },
+    {
+      "module": "a",
+      "field": "yb",
+      "kind": 0,
+      "name": "_emscripten_num_logical_cores",
+      "category": "runtime",
+      "type_index": 39
+    },
+    {
+      "module": "a",
+      "field": "zb",
+      "kind": 0,
+      "name": "_emscripten_glWaitSync",
+      "category": "graphics",
+      "type_index": 32
+    },
+    {
+      "module": "a",
+      "field": "Ab",
+      "kind": 0,
+      "name": "_emscripten_glViewport",
+      "category": "graphics",
+      "type_index": 54
+    },
+    {
+      "module": "a",
+      "field": "Bb",
+      "kind": 0,
+      "name": "_emscripten_glVertexAttribPointer",
+      "category": "graphics",
+      "type_index": 132
+    },
+    {
+      "module": "a",
+      "field": "Cb",
+      "kind": 0,
+      "name": "_emscripten_glVertexAttribIPointer",
+      "category": "graphics",
+      "type_index": 17
+    },
+    {
+      "module": "a",
+      "field": "Db",
+      "kind": 0,
+      "name": "_emscripten_glVertexAttribI4uiv",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Eb",
+      "kind": 0,
+      "name": "_emscripten_glVertexAttribI4ui",
+      "category": "graphics",
+      "type_index": 60
+    },
+    {
+      "module": "a",
+      "field": "Fb",
+      "kind": 0,
+      "name": "_emscripten_glVertexAttribI4iv",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Gb",
+      "kind": 0,
+      "name": "_emscripten_glVertexAttribI4i",
+      "category": "graphics",
+      "type_index": 60
+    },
+    {
+      "module": "a",
+      "field": "Hb",
+      "kind": 0,
+      "name": "_emscripten_glVertexAttribDivisorNV",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "Ib",
+      "kind": 0,
+      "name": "_emscripten_glVertexAttribDivisorEXT",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "Jb",
+      "kind": 0,
+      "name": "_emscripten_glVertexAttribDivisorARB",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "Kb",
+      "kind": 0,
+      "name": "_emscripten_glVertexAttribDivisorANGLE",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "Lb",
+      "kind": 0,
+      "name": "_emscripten_glVertexAttribDivisor",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "Mb",
+      "kind": 0,
+      "name": "_emscripten_glVertexAttrib4fv",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Nb",
+      "kind": 0,
+      "name": "_emscripten_glVertexAttrib4f",
+      "category": "graphics",
+      "type_index": 24
+    },
+    {
+      "module": "a",
+      "field": "Ob",
+      "kind": 0,
+      "name": "_emscripten_glVertexAttrib3fv",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Pb",
+      "kind": 0,
+      "name": "_emscripten_glVertexAttrib3f",
+      "category": "graphics",
+      "type_index": 23
+    },
+    {
+      "module": "a",
+      "field": "Qb",
+      "kind": 0,
+      "name": "_emscripten_glVertexAttrib2fv",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Rb",
+      "kind": 0,
+      "name": "_emscripten_glVertexAttrib2f",
+      "category": "graphics",
+      "type_index": 22
+    },
+    {
+      "module": "a",
+      "field": "Sb",
+      "kind": 0,
+      "name": "_emscripten_glVertexAttrib1fv",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Tb",
+      "kind": 0,
+      "name": "_emscripten_glVertexAttrib1f",
+      "category": "graphics",
+      "type_index": 100
+    },
+    {
+      "module": "a",
+      "field": "Ub",
+      "kind": 0,
+      "name": "_emscripten_glValidateProgram",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "Vb",
+      "kind": 0,
+      "name": "_emscripten_glUseProgram",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "Wb",
+      "kind": 0,
+      "name": "_emscripten_glUniformMatrix4x3fv",
+      "category": "graphics",
+      "type_index": 12
+    },
+    {
+      "module": "a",
+      "field": "Xb",
+      "kind": 0,
+      "name": "_emscripten_glUniformMatrix4x2fv",
+      "category": "graphics",
+      "type_index": 12
+    },
+    {
+      "module": "a",
+      "field": "Yb",
+      "kind": 0,
+      "name": "_emscripten_glUniformMatrix4fv",
+      "category": "graphics",
+      "type_index": 12
+    },
+    {
+      "module": "a",
+      "field": "Zb",
+      "kind": 0,
+      "name": "_emscripten_glUniformMatrix3x4fv",
+      "category": "graphics",
+      "type_index": 12
+    },
+    {
+      "module": "a",
+      "field": "_b",
+      "kind": 0,
+      "name": "_emscripten_glUniformMatrix3x2fv",
+      "category": "graphics",
+      "type_index": 12
+    },
+    {
+      "module": "a",
+      "field": "$b",
+      "kind": 0,
+      "name": "_emscripten_glUniformMatrix3fv",
+      "category": "graphics",
+      "type_index": 12
+    },
+    {
+      "module": "a",
+      "field": "ac",
+      "kind": 0,
+      "name": "_emscripten_glUniformMatrix2x4fv",
+      "category": "graphics",
+      "type_index": 12
+    },
+    {
+      "module": "a",
+      "field": "bc",
+      "kind": 0,
+      "name": "_emscripten_glUniformMatrix2x3fv",
+      "category": "graphics",
+      "type_index": 12
+    },
+    {
+      "module": "a",
+      "field": "cc",
+      "kind": 0,
+      "name": "_emscripten_glUniformMatrix2fv",
+      "category": "graphics",
+      "type_index": 12
+    },
+    {
+      "module": "a",
+      "field": "dc",
+      "kind": 0,
+      "name": "_emscripten_glUniformBlockBinding",
+      "category": "graphics",
+      "type_index": 36
+    },
+    {
+      "module": "a",
+      "field": "ec",
+      "kind": 0,
+      "name": "_emscripten_glUniform4uiv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "fc",
+      "kind": 0,
+      "name": "_emscripten_glUniform4ui",
+      "category": "graphics",
+      "type_index": 60
+    },
+    {
+      "module": "a",
+      "field": "gc",
+      "kind": 0,
+      "name": "_emscripten_glUniform4iv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "hc",
+      "kind": 0,
+      "name": "_emscripten_glUniform4i",
+      "category": "graphics",
+      "type_index": 60
+    },
+    {
+      "module": "a",
+      "field": "ic",
+      "kind": 0,
+      "name": "_emscripten_glUniform4fv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "jc",
+      "kind": 0,
+      "name": "_emscripten_glUniform4f",
+      "category": "graphics",
+      "type_index": 24
+    },
+    {
+      "module": "a",
+      "field": "kc",
+      "kind": 0,
+      "name": "_emscripten_glUniform3uiv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "lc",
+      "kind": 0,
+      "name": "_emscripten_glUniform3ui",
+      "category": "graphics",
+      "type_index": 54
+    },
+    {
+      "module": "a",
+      "field": "mc",
+      "kind": 0,
+      "name": "_emscripten_glUniform3iv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "nc",
+      "kind": 0,
+      "name": "_emscripten_glUniform3i",
+      "category": "graphics",
+      "type_index": 54
+    },
+    {
+      "module": "a",
+      "field": "oc",
+      "kind": 0,
+      "name": "_emscripten_glUniform3fv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "pc",
+      "kind": 0,
+      "name": "_emscripten_glUniform3f",
+      "category": "graphics",
+      "type_index": 23
+    },
+    {
+      "module": "a",
+      "field": "qc",
+      "kind": 0,
+      "name": "_emscripten_glUniform2uiv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "rc",
+      "kind": 0,
+      "name": "_emscripten_glUniform2ui",
+      "category": "graphics",
+      "type_index": 36
+    },
+    {
+      "module": "a",
+      "field": "sc",
+      "kind": 0,
+      "name": "_emscripten_glUniform2iv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "tc",
+      "kind": 0,
+      "name": "_emscripten_glUniform2i",
+      "category": "graphics",
+      "type_index": 36
+    },
+    {
+      "module": "a",
+      "field": "uc",
+      "kind": 0,
+      "name": "_emscripten_glUniform2fv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "vc",
+      "kind": 0,
+      "name": "_emscripten_glUniform2f",
+      "category": "graphics",
+      "type_index": 22
+    },
+    {
+      "module": "a",
+      "field": "wc",
+      "kind": 0,
+      "name": "_emscripten_glUniform1uiv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "xc",
+      "kind": 0,
+      "name": "_emscripten_glUniform1ui",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "yc",
+      "kind": 0,
+      "name": "_emscripten_glUniform1iv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "zc",
+      "kind": 0,
+      "name": "_emscripten_glUniform1i",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "Ac",
+      "kind": 0,
+      "name": "_emscripten_glUniform1fv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "Bc",
+      "kind": 0,
+      "name": "_emscripten_glUniform1f",
+      "category": "graphics",
+      "type_index": 100
+    },
+    {
+      "module": "a",
+      "field": "Cc",
+      "kind": 0,
+      "name": "_emscripten_glTransformFeedbackVaryings",
+      "category": "graphics",
+      "type_index": 59
+    },
+    {
+      "module": "a",
+      "field": "Dc",
+      "kind": 0,
+      "name": "_emscripten_glTexSubImage3D",
+      "category": "graphics",
+      "type_index": 197
+    },
+    {
+      "module": "a",
+      "field": "Ec",
+      "kind": 0,
+      "name": "_emscripten_glTexSubImage2D",
+      "category": "graphics",
+      "type_index": 111
+    },
+    {
+      "module": "a",
+      "field": "Fc",
+      "kind": 0,
+      "name": "_emscripten_glTexStorage3D",
+      "category": "graphics",
+      "type_index": 217
+    },
+    {
+      "module": "a",
+      "field": "Gc",
+      "kind": 0,
+      "name": "_emscripten_glTexStorage2D",
+      "category": "graphics",
+      "type_index": 60
+    },
+    {
+      "module": "a",
+      "field": "Hc",
+      "kind": 0,
+      "name": "_emscripten_glTexParameteriv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "Ic",
+      "kind": 0,
+      "name": "_emscripten_glTexParameteri",
+      "category": "graphics",
+      "type_index": 36
+    },
+    {
+      "module": "a",
+      "field": "Jc",
+      "kind": 0,
+      "name": "_emscripten_glTexParameterfv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "Kc",
+      "kind": 0,
+      "name": "_emscripten_glTexParameterf",
+      "category": "graphics",
+      "type_index": 110
+    },
+    {
+      "module": "a",
+      "field": "Lc",
+      "kind": 0,
+      "name": "_emscripten_glTexImage3D",
+      "category": "graphics",
+      "type_index": 387
+    },
+    {
+      "module": "a",
+      "field": "Mc",
+      "kind": 0,
+      "name": "_emscripten_glTexImage2D",
+      "category": "graphics",
+      "type_index": 111
+    },
+    {
+      "module": "a",
+      "field": "Nc",
+      "kind": 0,
+      "name": "_emscripten_glStencilOpSeparate",
+      "category": "graphics",
+      "type_index": 54
+    },
+    {
+      "module": "a",
+      "field": "Oc",
+      "kind": 0,
+      "name": "_emscripten_glStencilOp",
+      "category": "graphics",
+      "type_index": 36
+    },
+    {
+      "module": "a",
+      "field": "Pc",
+      "kind": 0,
+      "name": "_emscripten_glStencilMaskSeparate",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "Qc",
+      "kind": 0,
+      "name": "_emscripten_glStencilMask",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "Rc",
+      "kind": 0,
+      "name": "_emscripten_glStencilFuncSeparate",
+      "category": "graphics",
+      "type_index": 54
+    },
+    {
+      "module": "a",
+      "field": "Sc",
+      "kind": 0,
+      "name": "_emscripten_glStencilFunc",
+      "category": "graphics",
+      "type_index": 36
+    },
+    {
+      "module": "a",
+      "field": "Tc",
+      "kind": 0,
+      "name": "_emscripten_glShaderSource",
+      "category": "graphics",
+      "type_index": 93
+    },
+    {
+      "module": "a",
+      "field": "Uc",
+      "kind": 0,
+      "name": "_emscripten_glShaderBinary",
+      "category": "graphics",
+      "type_index": 388
+    },
+    {
+      "module": "a",
+      "field": "Vc",
+      "kind": 0,
+      "name": "_emscripten_glScissor",
+      "category": "graphics",
+      "type_index": 54
+    },
+    {
+      "module": "a",
+      "field": "Wc",
+      "kind": 0,
+      "name": "_emscripten_glSamplerParameteriv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "Xc",
+      "kind": 0,
+      "name": "_emscripten_glSamplerParameteri",
+      "category": "graphics",
+      "type_index": 36
+    },
+    {
+      "module": "a",
+      "field": "Yc",
+      "kind": 0,
+      "name": "_emscripten_glSamplerParameterfv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "Zc",
+      "kind": 0,
+      "name": "_emscripten_glSamplerParameterf",
+      "category": "graphics",
+      "type_index": 110
+    },
+    {
+      "module": "a",
+      "field": "_c",
+      "kind": 0,
+      "name": "_emscripten_glSampleCoverage",
+      "category": "graphics",
+      "type_index": 389
+    },
+    {
+      "module": "a",
+      "field": "$c",
+      "kind": 0,
+      "name": "_emscripten_glResumeTransformFeedback",
+      "category": "graphics",
+      "type_index": 29
+    },
+    {
+      "module": "a",
+      "field": "ad",
+      "kind": 0,
+      "name": "_emscripten_glRenderbufferStorageMultisample",
+      "category": "graphics",
+      "type_index": 60
+    },
+    {
+      "module": "a",
+      "field": "bd",
+      "kind": 0,
+      "name": "_emscripten_glRenderbufferStorage",
+      "category": "graphics",
+      "type_index": 54
+    },
+    {
+      "module": "a",
+      "field": "cd",
+      "kind": 0,
+      "name": "_emscripten_glReleaseShaderCompiler",
+      "category": "graphics",
+      "type_index": 29
+    },
+    {
+      "module": "a",
+      "field": "dd",
+      "kind": 0,
+      "name": "_emscripten_glReadPixels",
+      "category": "graphics",
+      "type_index": 250
+    },
+    {
+      "module": "a",
+      "field": "ed",
+      "kind": 0,
+      "name": "_emscripten_glReadBuffer",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "fd",
+      "kind": 0,
+      "name": "_emscripten_glQueryCounterEXT",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "gd",
+      "kind": 0,
+      "name": "_emscripten_glProgramParameteri",
+      "category": "graphics",
+      "type_index": 36
+    },
+    {
+      "module": "a",
+      "field": "hd",
+      "kind": 0,
+      "name": "_emscripten_glProgramBinary",
+      "category": "graphics",
+      "type_index": 59
+    },
+    {
+      "module": "a",
+      "field": "id",
+      "kind": 0,
+      "name": "_emscripten_glPolygonOffsetClampEXT",
+      "category": "graphics",
+      "type_index": 390
+    },
+    {
+      "module": "a",
+      "field": "jd",
+      "kind": 0,
+      "name": "_emscripten_glPolygonOffset",
+      "category": "graphics",
+      "type_index": 119
+    },
+    {
+      "module": "a",
+      "field": "kd",
+      "kind": 0,
+      "name": "_emscripten_glPolygonModeWEBGL",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "ld",
+      "kind": 0,
+      "name": "_emscripten_glPixelStorei",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "md",
+      "kind": 0,
+      "name": "_emscripten_glPauseTransformFeedback",
+      "category": "graphics",
+      "type_index": 29
+    },
+    {
+      "module": "a",
+      "field": "nd",
+      "kind": 0,
+      "name": "_emscripten_glLinkProgram",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "od",
+      "kind": 0,
+      "name": "_emscripten_glLineWidth",
+      "category": "graphics",
+      "type_index": 120
+    },
+    {
+      "module": "a",
+      "field": "pd",
+      "kind": 0,
+      "name": "_emscripten_glIsVertexArrayOES",
+      "category": "graphics",
+      "type_index": 49
+    },
+    {
+      "module": "a",
+      "field": "qd",
+      "kind": 0,
+      "name": "_emscripten_glIsVertexArray",
+      "category": "graphics",
+      "type_index": 49
+    },
+    {
+      "module": "a",
+      "field": "rd",
+      "kind": 0,
+      "name": "_emscripten_glIsTransformFeedback",
+      "category": "graphics",
+      "type_index": 49
+    },
+    {
+      "module": "a",
+      "field": "sd",
+      "kind": 0,
+      "name": "_emscripten_glIsTexture",
+      "category": "graphics",
+      "type_index": 49
+    },
+    {
+      "module": "a",
+      "field": "td",
+      "kind": 0,
+      "name": "_emscripten_glIsSync",
+      "category": "graphics",
+      "type_index": 3
+    },
+    {
+      "module": "a",
+      "field": "ud",
+      "kind": 0,
+      "name": "_emscripten_glIsShader",
+      "category": "graphics",
+      "type_index": 49
+    },
+    {
+      "module": "a",
+      "field": "vd",
+      "kind": 0,
+      "name": "_emscripten_glIsSampler",
+      "category": "graphics",
+      "type_index": 49
+    },
+    {
+      "module": "a",
+      "field": "wd",
+      "kind": 0,
+      "name": "_emscripten_glIsRenderbuffer",
+      "category": "graphics",
+      "type_index": 49
+    },
+    {
+      "module": "a",
+      "field": "xd",
+      "kind": 0,
+      "name": "_emscripten_glIsQueryEXT",
+      "category": "graphics",
+      "type_index": 49
+    },
+    {
+      "module": "a",
+      "field": "yd",
+      "kind": 0,
+      "name": "_emscripten_glIsQuery",
+      "category": "graphics",
+      "type_index": 49
+    },
+    {
+      "module": "a",
+      "field": "zd",
+      "kind": 0,
+      "name": "_emscripten_glIsProgram",
+      "category": "graphics",
+      "type_index": 49
+    },
+    {
+      "module": "a",
+      "field": "Ad",
+      "kind": 0,
+      "name": "_emscripten_glIsFramebuffer",
+      "category": "graphics",
+      "type_index": 49
+    },
+    {
+      "module": "a",
+      "field": "Bd",
+      "kind": 0,
+      "name": "_emscripten_glIsEnabled",
+      "category": "graphics",
+      "type_index": 49
+    },
+    {
+      "module": "a",
+      "field": "Cd",
+      "kind": 0,
+      "name": "_emscripten_glIsBuffer",
+      "category": "graphics",
+      "type_index": 49
+    },
+    {
+      "module": "a",
+      "field": "Dd",
+      "kind": 0,
+      "name": "_emscripten_glInvalidateSubFramebuffer",
+      "category": "graphics",
+      "type_index": 391
+    },
+    {
+      "module": "a",
+      "field": "Ed",
+      "kind": 0,
+      "name": "_emscripten_glInvalidateFramebuffer",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "Fd",
+      "kind": 0,
+      "name": "_emscripten_glHint",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "Gd",
+      "kind": 0,
+      "name": "_emscripten_glGetVertexAttribiv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "Hd",
+      "kind": 0,
+      "name": "_emscripten_glGetVertexAttribfv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "Id",
+      "kind": 0,
+      "name": "_emscripten_glGetVertexAttribPointerv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "Jd",
+      "kind": 0,
+      "name": "_emscripten_glGetVertexAttribIuiv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "Kd",
+      "kind": 0,
+      "name": "_emscripten_glGetVertexAttribIiv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "Ld",
+      "kind": 0,
+      "name": "_emscripten_glGetUniformuiv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "Md",
+      "kind": 0,
+      "name": "_emscripten_glGetUniformiv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "Nd",
+      "kind": 0,
+      "name": "_emscripten_glGetUniformfv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "Od",
+      "kind": 0,
+      "name": "_emscripten_glGetUniformLocation",
+      "category": "graphics",
+      "type_index": 95
+    },
+    {
+      "module": "a",
+      "field": "Pd",
+      "kind": 0,
+      "name": "_emscripten_glGetUniformIndices",
+      "category": "graphics",
+      "type_index": 93
+    },
+    {
+      "module": "a",
+      "field": "Qd",
+      "kind": 0,
+      "name": "_emscripten_glGetUniformBlockIndex",
+      "category": "graphics",
+      "type_index": 95
+    },
+    {
+      "module": "a",
+      "field": "Rd",
+      "kind": 0,
+      "name": "_emscripten_glGetTransformFeedbackVarying",
+      "category": "graphics",
+      "type_index": 218
+    },
+    {
+      "module": "a",
+      "field": "Sd",
+      "kind": 0,
+      "name": "_emscripten_glGetTexParameteriv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "Td",
+      "kind": 0,
+      "name": "_emscripten_glGetTexParameterfv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "Ud",
+      "kind": 0,
+      "name": "_emscripten_glGetSynciv",
+      "category": "graphics",
+      "type_index": 198
+    },
+    {
+      "module": "a",
+      "field": "Vd",
+      "kind": 0,
+      "name": "_emscripten_glGetStringi",
+      "category": "graphics",
+      "type_index": 187
+    },
+    {
+      "module": "a",
+      "field": "Wd",
+      "kind": 0,
+      "name": "_emscripten_glGetString",
+      "category": "graphics",
+      "type_index": 71
+    },
+    {
+      "module": "a",
+      "field": "Xd",
+      "kind": 0,
+      "name": "_emscripten_glGetShaderiv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "Yd",
+      "kind": 0,
+      "name": "_emscripten_glGetShaderSource",
+      "category": "graphics",
+      "type_index": 93
+    },
+    {
+      "module": "a",
+      "field": "Zd",
+      "kind": 0,
+      "name": "_emscripten_glGetShaderPrecisionFormat",
+      "category": "graphics",
+      "type_index": 93
+    },
+    {
+      "module": "a",
+      "field": "_d",
+      "kind": 0,
+      "name": "_emscripten_glGetShaderInfoLog",
+      "category": "graphics",
+      "type_index": 93
+    },
+    {
+      "module": "a",
+      "field": "$d",
+      "kind": 0,
+      "name": "_emscripten_glGetSamplerParameteriv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "ae",
+      "kind": 0,
+      "name": "_emscripten_glGetSamplerParameterfv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "be",
+      "kind": 0,
+      "name": "_emscripten_glGetRenderbufferParameteriv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "ce",
+      "kind": 0,
+      "name": "_emscripten_glGetQueryivEXT",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "de",
+      "kind": 0,
+      "name": "_emscripten_glGetQueryiv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "ee",
+      "kind": 0,
+      "name": "_emscripten_glGetQueryObjectuivEXT",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "fe",
+      "kind": 0,
+      "name": "_emscripten_glGetQueryObjectuiv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "ge",
+      "kind": 0,
+      "name": "_emscripten_glGetQueryObjectui64vEXT",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "he",
+      "kind": 0,
+      "name": "_emscripten_glGetQueryObjectivEXT",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "ie",
+      "kind": 0,
+      "name": "_emscripten_glGetQueryObjecti64vEXT",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "je",
+      "kind": 0,
+      "name": "_emscripten_glGetProgramiv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "ke",
+      "kind": 0,
+      "name": "_emscripten_glGetProgramInfoLog",
+      "category": "graphics",
+      "type_index": 93
+    },
+    {
+      "module": "a",
+      "field": "le",
+      "kind": 0,
+      "name": "_emscripten_glGetProgramBinary",
+      "category": "graphics",
+      "type_index": 199
+    },
+    {
+      "module": "a",
+      "field": "me",
+      "kind": 0,
+      "name": "_emscripten_glGetInternalformativ",
+      "category": "graphics",
+      "type_index": 17
+    },
+    {
+      "module": "a",
+      "field": "ne",
+      "kind": 0,
+      "name": "_emscripten_glGetIntegerv",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "oe",
+      "kind": 0,
+      "name": "_emscripten_glGetIntegeri_v",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "pe",
+      "kind": 0,
+      "name": "_emscripten_glGetInteger64v",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "qe",
+      "kind": 0,
+      "name": "_emscripten_glGetInteger64i_v",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "re",
+      "kind": 0,
+      "name": "_emscripten_glGetFramebufferAttachmentParameteriv",
+      "category": "graphics",
+      "type_index": 12
+    },
+    {
+      "module": "a",
+      "field": "se",
+      "kind": 0,
+      "name": "_emscripten_glGetFragDataLocation",
+      "category": "graphics",
+      "type_index": 95
+    },
+    {
+      "module": "a",
+      "field": "te",
+      "kind": 0,
+      "name": "_emscripten_glGetFloatv",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "ue",
+      "kind": 0,
+      "name": "_emscripten_glGetError",
+      "category": "graphics",
+      "type_index": 39
+    },
+    {
+      "module": "a",
+      "field": "ve",
+      "kind": 0,
+      "name": "_emscripten_glGetBufferParameteriv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "we",
+      "kind": 0,
+      "name": "_emscripten_glGetBufferParameteri64v",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "xe",
+      "kind": 0,
+      "name": "_emscripten_glGetBooleanv",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "ye",
+      "kind": 0,
+      "name": "_emscripten_glGetAttribLocation",
+      "category": "graphics",
+      "type_index": 95
+    },
+    {
+      "module": "a",
+      "field": "ze",
+      "kind": 0,
+      "name": "_emscripten_glGetAttachedShaders",
+      "category": "graphics",
+      "type_index": 93
+    },
+    {
+      "module": "a",
+      "field": "Ae",
+      "kind": 0,
+      "name": "_emscripten_glGetActiveUniformsiv",
+      "category": "graphics",
+      "type_index": 392
+    },
+    {
+      "module": "a",
+      "field": "Be",
+      "kind": 0,
+      "name": "_emscripten_glGetActiveUniformBlockiv",
+      "category": "graphics",
+      "type_index": 12
+    },
+    {
+      "module": "a",
+      "field": "Ce",
+      "kind": 0,
+      "name": "_emscripten_glGetActiveUniformBlockName",
+      "category": "graphics",
+      "type_index": 173
+    },
+    {
+      "module": "a",
+      "field": "De",
+      "kind": 0,
+      "name": "_emscripten_glGetActiveUniform",
+      "category": "graphics",
+      "type_index": 218
+    },
+    {
+      "module": "a",
+      "field": "Ee",
+      "kind": 0,
+      "name": "_emscripten_glGetActiveAttrib",
+      "category": "graphics",
+      "type_index": 218
+    },
+    {
+      "module": "a",
+      "field": "Fe",
+      "kind": 0,
+      "name": "_emscripten_glGenerateMipmap",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "Ge",
+      "kind": 0,
+      "name": "_emscripten_glGenVertexArraysOES",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "He",
+      "kind": 0,
+      "name": "_emscripten_glGenVertexArrays",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Ie",
+      "kind": 0,
+      "name": "_emscripten_glGenTransformFeedbacks",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Je",
+      "kind": 0,
+      "name": "_emscripten_glGenTextures",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Ke",
+      "kind": 0,
+      "name": "_emscripten_glGenSamplers",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Le",
+      "kind": 0,
+      "name": "_emscripten_glGenRenderbuffers",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Me",
+      "kind": 0,
+      "name": "_emscripten_glGenQueriesEXT",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Ne",
+      "kind": 0,
+      "name": "_emscripten_glGenQueries",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Oe",
+      "kind": 0,
+      "name": "_emscripten_glGenFramebuffers",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Pe",
+      "kind": 0,
+      "name": "_emscripten_glGenBuffers",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Qe",
+      "kind": 0,
+      "name": "_emscripten_glFrontFace",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "Re",
+      "kind": 0,
+      "name": "_emscripten_glFramebufferTextureLayer",
+      "category": "graphics",
+      "type_index": 60
+    },
+    {
+      "module": "a",
+      "field": "Se",
+      "kind": 0,
+      "name": "_emscripten_glFramebufferTexture2D",
+      "category": "graphics",
+      "type_index": 60
+    },
+    {
+      "module": "a",
+      "field": "Te",
+      "kind": 0,
+      "name": "_emscripten_glFramebufferRenderbuffer",
+      "category": "graphics",
+      "type_index": 54
+    },
+    {
+      "module": "a",
+      "field": "Ue",
+      "kind": 0,
+      "name": "_emscripten_glFlush",
+      "category": "graphics",
+      "type_index": 29
+    },
+    {
+      "module": "a",
+      "field": "Ve",
+      "kind": 0,
+      "name": "_emscripten_glFinish",
+      "category": "graphics",
+      "type_index": 29
+    },
+    {
+      "module": "a",
+      "field": "We",
+      "kind": 0,
+      "name": "_emscripten_glFenceSync",
+      "category": "graphics",
+      "type_index": 187
+    },
+    {
+      "module": "a",
+      "field": "Xe",
+      "kind": 0,
+      "name": "_emscripten_glEndTransformFeedback",
+      "category": "graphics",
+      "type_index": 29
+    },
+    {
+      "module": "a",
+      "field": "Ye",
+      "kind": 0,
+      "name": "_emscripten_glEndQueryEXT",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "Ze",
+      "kind": 0,
+      "name": "_emscripten_glEndQuery",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "_e",
+      "kind": 0,
+      "name": "_emscripten_glEnableVertexAttribArray",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "$e",
+      "kind": 0,
+      "name": "_emscripten_glEnable",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "af",
+      "kind": 0,
+      "name": "_emscripten_glDrawRangeElements",
+      "category": "graphics",
+      "type_index": 132
+    },
+    {
+      "module": "a",
+      "field": "bf",
+      "kind": 0,
+      "name": "_emscripten_glDrawElementsInstancedNV",
+      "category": "graphics",
+      "type_index": 200
+    },
+    {
+      "module": "a",
+      "field": "cf",
+      "kind": 0,
+      "name": "_emscripten_glDrawElementsInstancedEXT",
+      "category": "graphics",
+      "type_index": 200
+    },
+    {
+      "module": "a",
+      "field": "df",
+      "kind": 0,
+      "name": "_emscripten_glDrawElementsInstancedARB",
+      "category": "graphics",
+      "type_index": 200
+    },
+    {
+      "module": "a",
+      "field": "ef",
+      "kind": 0,
+      "name": "_emscripten_glDrawElementsInstancedANGLE",
+      "category": "graphics",
+      "type_index": 200
+    },
+    {
+      "module": "a",
+      "field": "ff",
+      "kind": 0,
+      "name": "_emscripten_glDrawElementsInstanced",
+      "category": "graphics",
+      "type_index": 200
+    },
+    {
+      "module": "a",
+      "field": "gf",
+      "kind": 0,
+      "name": "_emscripten_glDrawElements",
+      "category": "graphics",
+      "type_index": 12
+    },
+    {
+      "module": "a",
+      "field": "hf",
+      "kind": 0,
+      "name": "_emscripten_glDrawBuffersWEBGL",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "jf",
+      "kind": 0,
+      "name": "_emscripten_glDrawBuffersEXT",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "kf",
+      "kind": 0,
+      "name": "_emscripten_glDrawBuffers",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "lf",
+      "kind": 0,
+      "name": "_emscripten_glDrawArraysInstancedNV",
+      "category": "graphics",
+      "type_index": 54
+    },
+    {
+      "module": "a",
+      "field": "mf",
+      "kind": 0,
+      "name": "_emscripten_glDrawArraysInstancedEXT",
+      "category": "graphics",
+      "type_index": 54
+    },
+    {
+      "module": "a",
+      "field": "nf",
+      "kind": 0,
+      "name": "_emscripten_glDrawArraysInstancedARB",
+      "category": "graphics",
+      "type_index": 54
+    },
+    {
+      "module": "a",
+      "field": "of",
+      "kind": 0,
+      "name": "_emscripten_glDrawArraysInstancedANGLE",
+      "category": "graphics",
+      "type_index": 54
+    },
+    {
+      "module": "a",
+      "field": "pf",
+      "kind": 0,
+      "name": "_emscripten_glDrawArraysInstanced",
+      "category": "graphics",
+      "type_index": 54
+    },
+    {
+      "module": "a",
+      "field": "qf",
+      "kind": 0,
+      "name": "_emscripten_glDrawArrays",
+      "category": "graphics",
+      "type_index": 36
+    },
+    {
+      "module": "a",
+      "field": "rf",
+      "kind": 0,
+      "name": "_emscripten_glDisableVertexAttribArray",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "sf",
+      "kind": 0,
+      "name": "_emscripten_glDisable",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "tf",
+      "kind": 0,
+      "name": "_emscripten_glDetachShader",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "uf",
+      "kind": 0,
+      "name": "_emscripten_glDepthRangef",
+      "category": "graphics",
+      "type_index": 119
+    },
+    {
+      "module": "a",
+      "field": "vf",
+      "kind": 0,
+      "name": "_emscripten_glDepthMask",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "wf",
+      "kind": 0,
+      "name": "_emscripten_glDepthFunc",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "xf",
+      "kind": 0,
+      "name": "_emscripten_glDeleteVertexArraysOES",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "yf",
+      "kind": 0,
+      "name": "_emscripten_glDeleteVertexArrays",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "zf",
+      "kind": 0,
+      "name": "_emscripten_glDeleteTransformFeedbacks",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Af",
+      "kind": 0,
+      "name": "_emscripten_glDeleteTextures",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Bf",
+      "kind": 0,
+      "name": "_emscripten_glDeleteSync",
+      "category": "graphics",
+      "type_index": 0
+    },
+    {
+      "module": "a",
+      "field": "Cf",
+      "kind": 0,
+      "name": "_emscripten_glDeleteShader",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "Df",
+      "kind": 0,
+      "name": "_emscripten_glDeleteSamplers",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Ef",
+      "kind": 0,
+      "name": "_emscripten_glDeleteRenderbuffers",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Ff",
+      "kind": 0,
+      "name": "_emscripten_glDeleteQueriesEXT",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Gf",
+      "kind": 0,
+      "name": "_emscripten_glDeleteQueries",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Hf",
+      "kind": 0,
+      "name": "_emscripten_glDeleteProgram",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "If",
+      "kind": 0,
+      "name": "_emscripten_glDeleteFramebuffers",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Jf",
+      "kind": 0,
+      "name": "_emscripten_glDeleteBuffers",
+      "category": "graphics",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Kf",
+      "kind": 0,
+      "name": "_emscripten_glCullFace",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "Lf",
+      "kind": 0,
+      "name": "_emscripten_glCreateShader",
+      "category": "graphics",
+      "type_index": 49
+    },
+    {
+      "module": "a",
+      "field": "Mf",
+      "kind": 0,
+      "name": "_emscripten_glCreateProgram",
+      "category": "graphics",
+      "type_index": 39
+    },
+    {
+      "module": "a",
+      "field": "Nf",
+      "kind": 0,
+      "name": "_emscripten_glCopyTexSubImage3D",
+      "category": "graphics",
+      "type_index": 393
+    },
+    {
+      "module": "a",
+      "field": "Of",
+      "kind": 0,
+      "name": "_emscripten_glCopyTexSubImage2D",
+      "category": "graphics",
+      "type_index": 251
+    },
+    {
+      "module": "a",
+      "field": "Pf",
+      "kind": 0,
+      "name": "_emscripten_glCopyTexImage2D",
+      "category": "graphics",
+      "type_index": 251
+    },
+    {
+      "module": "a",
+      "field": "Qf",
+      "kind": 0,
+      "name": "_emscripten_glCopyBufferSubData",
+      "category": "graphics",
+      "type_index": 199
+    },
+    {
+      "module": "a",
+      "field": "Rf",
+      "kind": 0,
+      "name": "_emscripten_glCompressedTexSubImage3D",
+      "category": "graphics",
+      "type_index": 197
+    },
+    {
+      "module": "a",
+      "field": "Sf",
+      "kind": 0,
+      "name": "_emscripten_glCompressedTexSubImage2D",
+      "category": "graphics",
+      "type_index": 111
+    },
+    {
+      "module": "a",
+      "field": "Tf",
+      "kind": 0,
+      "name": "_emscripten_glCompressedTexImage3D",
+      "category": "graphics",
+      "type_index": 111
+    },
+    {
+      "module": "a",
+      "field": "Uf",
+      "kind": 0,
+      "name": "_emscripten_glCompressedTexImage2D",
+      "category": "graphics",
+      "type_index": 394
+    },
+    {
+      "module": "a",
+      "field": "Vf",
+      "kind": 0,
+      "name": "_emscripten_glCompileShader",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "Wf",
+      "kind": 0,
+      "name": "_emscripten_glColorMask",
+      "category": "graphics",
+      "type_index": 54
+    },
+    {
+      "module": "a",
+      "field": "Xf",
+      "kind": 0,
+      "name": "_emscripten_glClipControlEXT",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "Yf",
+      "kind": 0,
+      "name": "_emscripten_glClientWaitSync",
+      "category": "graphics",
+      "type_index": 82
+    },
+    {
+      "module": "a",
+      "field": "Zf",
+      "kind": 0,
+      "name": "_emscripten_glClearStencil",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "_f",
+      "kind": 0,
+      "name": "_emscripten_glClearDepthf",
+      "category": "graphics",
+      "type_index": 120
+    },
+    {
+      "module": "a",
+      "field": "$f",
+      "kind": 0,
+      "name": "_emscripten_glClearColor",
+      "category": "graphics",
+      "type_index": 104
+    },
+    {
+      "module": "a",
+      "field": "ag",
+      "kind": 0,
+      "name": "_emscripten_glClearBufferuiv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "bg",
+      "kind": 0,
+      "name": "_emscripten_glClearBufferiv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "cg",
+      "kind": 0,
+      "name": "_emscripten_glClearBufferfv",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "dg",
+      "kind": 0,
+      "name": "_emscripten_glClearBufferfi",
+      "category": "graphics",
+      "type_index": 395
+    },
+    {
+      "module": "a",
+      "field": "eg",
+      "kind": 0,
+      "name": "_emscripten_glClear",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "fg",
+      "kind": 0,
+      "name": "_emscripten_glCheckFramebufferStatus",
+      "category": "graphics",
+      "type_index": 49
+    },
+    {
+      "module": "a",
+      "field": "gg",
+      "kind": 0,
+      "name": "_emscripten_glBufferSubData",
+      "category": "graphics",
+      "type_index": 172
+    },
+    {
+      "module": "a",
+      "field": "hg",
+      "kind": 0,
+      "name": "_emscripten_glBufferData",
+      "category": "graphics",
+      "type_index": 144
+    },
+    {
+      "module": "a",
+      "field": "ig",
+      "kind": 0,
+      "name": "_emscripten_glBlitFramebuffer",
+      "category": "graphics",
+      "type_index": 252
+    },
+    {
+      "module": "a",
+      "field": "jg",
+      "kind": 0,
+      "name": "_emscripten_glBlendFuncSeparate",
+      "category": "graphics",
+      "type_index": 54
+    },
+    {
+      "module": "a",
+      "field": "kg",
+      "kind": 0,
+      "name": "_emscripten_glBlendFunc",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "lg",
+      "kind": 0,
+      "name": "_emscripten_glBlendEquationSeparate",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "mg",
+      "kind": 0,
+      "name": "_emscripten_glBlendEquation",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "ng",
+      "kind": 0,
+      "name": "_emscripten_glBlendColor",
+      "category": "graphics",
+      "type_index": 104
+    },
+    {
+      "module": "a",
+      "field": "og",
+      "kind": 0,
+      "name": "_emscripten_glBindVertexArrayOES",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "pg",
+      "kind": 0,
+      "name": "_emscripten_glBindVertexArray",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "qg",
+      "kind": 0,
+      "name": "_emscripten_glBindTransformFeedback",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "rg",
+      "kind": 0,
+      "name": "_emscripten_glBindTexture",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "sg",
+      "kind": 0,
+      "name": "_emscripten_glBindSampler",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "tg",
+      "kind": 0,
+      "name": "_emscripten_glBindRenderbuffer",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "ug",
+      "kind": 0,
+      "name": "_emscripten_glBindFramebuffer",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "vg",
+      "kind": 0,
+      "name": "_emscripten_glBindBufferRange",
+      "category": "graphics",
+      "type_index": 173
+    },
+    {
+      "module": "a",
+      "field": "wg",
+      "kind": 0,
+      "name": "_emscripten_glBindBufferBase",
+      "category": "graphics",
+      "type_index": 36
+    },
+    {
+      "module": "a",
+      "field": "xg",
+      "kind": 0,
+      "name": "_emscripten_glBindBuffer",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "yg",
+      "kind": 0,
+      "name": "_emscripten_glBindAttribLocation",
+      "category": "graphics",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "zg",
+      "kind": 0,
+      "name": "_emscripten_glBeginTransformFeedback",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "Ag",
+      "kind": 0,
+      "name": "_emscripten_glBeginQueryEXT",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "Bg",
+      "kind": 0,
+      "name": "_emscripten_glBeginQuery",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "Cg",
+      "kind": 0,
+      "name": "_emscripten_glAttachShader",
+      "category": "graphics",
+      "type_index": 20
+    },
+    {
+      "module": "a",
+      "field": "Dg",
+      "kind": 0,
+      "name": "_emscripten_glActiveTexture",
+      "category": "graphics",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "Eg",
+      "kind": 0,
+      "name": "_emscripten_get_screen_size",
+      "category": "runtime",
+      "type_index": 4
+    },
+    {
+      "module": "a",
+      "field": "Fg",
+      "kind": 0,
+      "name": "_emscripten_get_num_gamepads",
+      "category": "runtime",
+      "type_index": 39
+    },
+    {
+      "module": "a",
+      "field": "Gg",
+      "kind": 0,
+      "name": "_emscripten_get_heap_max",
+      "category": "runtime",
+      "type_index": 31
+    },
+    {
+      "module": "a",
+      "field": "Hg",
+      "kind": 0,
+      "name": "_emscripten_force_exit",
+      "category": "runtime",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "Ig",
+      "kind": 0,
+      "name": "_emscripten_exit_pointerlock",
+      "category": "runtime",
+      "type_index": 39
+    },
+    {
+      "module": "a",
+      "field": "Jg",
+      "kind": 0,
+      "name": "_emscripten_exit_fullscreen",
+      "category": "runtime",
+      "type_index": 39
+    },
+    {
+      "module": "a",
+      "field": "Kg",
+      "kind": 0,
+      "name": "_emscripten_asm_const_ptr_sync_on_main_thread",
+      "category": "threads",
+      "type_index": 2
+    },
+    {
+      "module": "a",
+      "field": "Lg",
+      "kind": 0,
+      "name": "_emscripten_asm_const_int",
+      "category": "runtime",
+      "type_index": 21
+    },
+    {
+      "module": "a",
+      "field": "Mg",
+      "kind": 0,
+      "name": "_eglWaitNative",
+      "category": "runtime",
+      "type_index": 49
+    },
+    {
+      "module": "a",
+      "field": "Ng",
+      "kind": 0,
+      "name": "_eglWaitGL",
+      "category": "runtime",
+      "type_index": 39
+    },
+    {
+      "module": "a",
+      "field": "Og",
+      "kind": 0,
+      "name": "_eglTerminate",
+      "category": "runtime",
+      "type_index": 3
+    },
+    {
+      "module": "a",
+      "field": "Pg",
+      "kind": 0,
+      "name": "_eglSwapInterval",
+      "category": "runtime",
+      "type_index": 19
+    },
+    {
+      "module": "a",
+      "field": "Qg",
+      "kind": 0,
+      "name": "_eglSwapBuffers",
+      "category": "runtime",
+      "type_index": 10
+    },
+    {
+      "module": "a",
+      "field": "Rg",
+      "kind": 0,
+      "name": "_eglQueryString",
+      "category": "runtime",
+      "type_index": 15
+    },
+    {
+      "module": "a",
+      "field": "Sg",
+      "kind": 0,
+      "name": "_eglMakeCurrent",
+      "category": "runtime",
+      "type_index": 46
+    },
+    {
+      "module": "a",
+      "field": "Tg",
+      "kind": 0,
+      "name": "_eglInitialize",
+      "category": "runtime",
+      "type_index": 21
+    },
+    {
+      "module": "a",
+      "field": "Ug",
+      "kind": 0,
+      "name": "_eglGetError",
+      "category": "runtime",
+      "type_index": 39
+    },
+    {
+      "module": "a",
+      "field": "Vg",
+      "kind": 0,
+      "name": "_eglGetConfigAttrib",
+      "category": "runtime",
+      "type_index": 85
+    },
+    {
+      "module": "a",
+      "field": "Wg",
+      "kind": 0,
+      "name": "_eglDestroySurface",
+      "category": "runtime",
+      "type_index": 10
+    },
+    {
+      "module": "a",
+      "field": "Xg",
+      "kind": 0,
+      "name": "_eglDestroyContext",
+      "category": "runtime",
+      "type_index": 10
+    },
+    {
+      "module": "a",
+      "field": "Yg",
+      "kind": 0,
+      "name": "_eglCreateWindowSurface",
+      "category": "runtime",
+      "type_index": 150
+    },
+    {
+      "module": "a",
+      "field": "Zg",
+      "kind": 0,
+      "name": "_eglCreateContext",
+      "category": "runtime",
+      "type_index": 41
+    },
+    {
+      "module": "a",
+      "field": "_g",
+      "kind": 0,
+      "name": "_eglChooseConfig",
+      "category": "runtime",
+      "type_index": 201
+    },
+    {
+      "module": "a",
+      "field": "$g",
+      "kind": 0,
+      "name": "_eglBindAPI",
+      "category": "runtime",
+      "type_index": 49
+    },
+    {
+      "module": "a",
+      "field": "ah",
+      "kind": 0,
+      "name": "_alcGetError",
+      "category": "audio",
+      "type_index": 3
+    },
+    {
+      "module": "a",
+      "field": "bh",
+      "kind": 0,
+      "name": "_alSourceUnqueueBuffers",
+      "category": "audio",
+      "type_index": 26
+    },
+    {
+      "module": "a",
+      "field": "ch",
+      "kind": 0,
+      "name": "_alSource3f",
+      "category": "audio",
+      "type_index": 25
+    },
+    {
+      "module": "a",
+      "field": "dh",
+      "kind": 0,
+      "name": "_alIsSource",
+      "category": "audio",
+      "type_index": 49
+    },
+    {
+      "module": "a",
+      "field": "eh",
+      "kind": 0,
+      "name": "_alGetString",
+      "category": "audio",
+      "type_index": 71
+    },
+    {
+      "module": "a",
+      "field": "fh",
+      "kind": 0,
+      "name": "_alGenSources",
+      "category": "audio",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "gh",
+      "kind": 0,
+      "name": "_alGenBuffers",
+      "category": "audio",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "hh",
+      "kind": 0,
+      "name": "_alDeleteSources",
+      "category": "audio",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "ih",
+      "kind": 0,
+      "name": "_alDeleteBuffers",
+      "category": "audio",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "jh",
+      "kind": 0,
+      "name": "__wasmfs_thread_utils_heartbeat",
+      "category": "filesystem",
+      "type_index": 0
+    },
+    {
+      "module": "a",
+      "field": "kh",
+      "kind": 0,
+      "name": "__wasmfs_stdin_get_char",
+      "category": "filesystem",
+      "type_index": 39
+    },
+    {
+      "module": "a",
+      "field": "lh",
+      "kind": 0,
+      "name": "__wasmfs_opfs_write_access",
+      "category": "filesystem",
+      "type_index": 304
+    },
+    {
+      "module": "a",
+      "field": "mh",
+      "kind": 0,
+      "name": "__wasmfs_opfs_set_size_file",
+      "category": "filesystem",
+      "type_index": 37
+    },
+    {
+      "module": "a",
+      "field": "nh",
+      "kind": 0,
+      "name": "__wasmfs_opfs_set_size_access",
+      "category": "filesystem",
+      "type_index": 37
+    },
+    {
+      "module": "a",
+      "field": "oh",
+      "kind": 0,
+      "name": "__wasmfs_opfs_remove_child",
+      "category": "filesystem",
+      "type_index": 37
+    },
+    {
+      "module": "a",
+      "field": "ph",
+      "kind": 0,
+      "name": "__wasmfs_opfs_read_blob",
+      "category": "filesystem",
+      "type_index": 305
+    },
+    {
+      "module": "a",
+      "field": "qh",
+      "kind": 0,
+      "name": "__wasmfs_opfs_read_access",
+      "category": "filesystem",
+      "type_index": 304
+    },
+    {
+      "module": "a",
+      "field": "rh",
+      "kind": 0,
+      "name": "__wasmfs_opfs_open_blob",
+      "category": "filesystem",
+      "type_index": 32
+    },
+    {
+      "module": "a",
+      "field": "sh",
+      "kind": 0,
+      "name": "__wasmfs_opfs_move_file",
+      "category": "filesystem",
+      "type_index": 198
+    },
+    {
+      "module": "a",
+      "field": "th",
+      "kind": 0,
+      "name": "__wasmfs_opfs_insert_file",
+      "category": "filesystem",
+      "type_index": 37
+    },
+    {
+      "module": "a",
+      "field": "uh",
+      "kind": 0,
+      "name": "__wasmfs_opfs_insert_directory",
+      "category": "filesystem",
+      "type_index": 37
+    },
+    {
+      "module": "a",
+      "field": "vh",
+      "kind": 0,
+      "name": "__wasmfs_opfs_init_root_directory",
+      "category": "filesystem",
+      "type_index": 0
+    },
+    {
+      "module": "a",
+      "field": "wh",
+      "kind": 0,
+      "name": "__wasmfs_opfs_get_size_file",
+      "category": "filesystem",
+      "type_index": 32
+    },
+    {
+      "module": "a",
+      "field": "xh",
+      "kind": 0,
+      "name": "__wasmfs_opfs_get_size_blob",
+      "category": "filesystem",
+      "type_index": 71
+    },
+    {
+      "module": "a",
+      "field": "yh",
+      "kind": 0,
+      "name": "__wasmfs_opfs_get_size_access",
+      "category": "filesystem",
+      "type_index": 32
+    },
+    {
+      "module": "a",
+      "field": "zh",
+      "kind": 0,
+      "name": "__wasmfs_opfs_get_entries",
+      "category": "filesystem",
+      "type_index": 37
+    },
+    {
+      "module": "a",
+      "field": "Ah",
+      "kind": 0,
+      "name": "__wasmfs_opfs_get_child",
+      "category": "filesystem",
+      "type_index": 74
+    },
+    {
+      "module": "a",
+      "field": "Bh",
+      "kind": 0,
+      "name": "__wasmfs_opfs_free_file",
+      "category": "filesystem",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "Ch",
+      "kind": 0,
+      "name": "__wasmfs_opfs_free_directory",
+      "category": "filesystem",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "Dh",
+      "kind": 0,
+      "name": "__wasmfs_opfs_flush_access",
+      "category": "filesystem",
+      "type_index": 32
+    },
+    {
+      "module": "a",
+      "field": "Eh",
+      "kind": 0,
+      "name": "__wasmfs_opfs_close_blob",
+      "category": "filesystem",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "Fh",
+      "kind": 0,
+      "name": "__wasmfs_opfs_close_access",
+      "category": "filesystem",
+      "type_index": 32
+    },
+    {
+      "module": "a",
+      "field": "Gh",
+      "kind": 0,
+      "name": "__wasmfs_get_preloaded_path_name",
+      "category": "filesystem",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Hh",
+      "kind": 0,
+      "name": "__wasmfs_get_preloaded_parent_path",
+      "category": "filesystem",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Ih",
+      "kind": 0,
+      "name": "__wasmfs_get_preloaded_file_size",
+      "category": "filesystem",
+      "type_index": 71
+    },
+    {
+      "module": "a",
+      "field": "Jh",
+      "kind": 0,
+      "name": "__wasmfs_get_preloaded_file_mode",
+      "category": "filesystem",
+      "type_index": 49
+    },
+    {
+      "module": "a",
+      "field": "Kh",
+      "kind": 0,
+      "name": "__wasmfs_get_preloaded_child_path",
+      "category": "filesystem",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Lh",
+      "kind": 0,
+      "name": "__wasmfs_get_num_preloaded_files",
+      "category": "filesystem",
+      "type_index": 39
+    },
+    {
+      "module": "a",
+      "field": "Mh",
+      "kind": 0,
+      "name": "__wasmfs_get_num_preloaded_dirs",
+      "category": "filesystem",
+      "type_index": 39
+    },
+    {
+      "module": "a",
+      "field": "Nh",
+      "kind": 0,
+      "name": "__wasmfs_copy_preloaded_file_data",
+      "category": "filesystem",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Oh",
+      "kind": 0,
+      "name": "__tzset_js",
+      "category": "runtime",
+      "type_index": 6
+    },
+    {
+      "module": "a",
+      "field": "Ph",
+      "kind": 0,
+      "name": "__mktime_js",
+      "category": "runtime",
+      "type_index": 1
+    },
+    {
+      "module": "a",
+      "field": "Qh",
+      "kind": 0,
+      "name": "__localtime_js",
+      "category": "runtime",
+      "type_index": 10
+    },
+    {
+      "module": "a",
+      "field": "Rh",
+      "kind": 0,
+      "name": "__gmtime_js",
+      "category": "runtime",
+      "type_index": 10
+    },
+    {
+      "module": "a",
+      "field": "Sh",
+      "kind": 0,
+      "name": "__emscripten_thread_mailbox_await",
+      "category": "threads",
+      "type_index": 0
+    },
+    {
+      "module": "a",
+      "field": "Th",
+      "kind": 0,
+      "name": "__emscripten_system",
+      "category": "runtime",
+      "type_index": 3
+    },
+    {
+      "module": "a",
+      "field": "Uh",
+      "kind": 0,
+      "name": "__emscripten_runtime_keepalive_clear",
+      "category": "runtime",
+      "type_index": 29
+    },
+    {
+      "module": "a",
+      "field": "Vh",
+      "kind": 0,
+      "name": "__emscripten_notify_mailbox_postmessage",
+      "category": "threads",
+      "type_index": 4
+    },
+    {
+      "module": "a",
+      "field": "Wh",
+      "kind": 0,
+      "name": "__emscripten_lookup_name",
+      "category": "runtime",
+      "type_index": 3
+    },
+    {
+      "module": "a",
+      "field": "Xh",
+      "kind": 0,
+      "name": "__emscripten_log_formatted",
+      "category": "runtime",
+      "type_index": 40
+    },
+    {
+      "module": "a",
+      "field": "Yh",
+      "kind": 0,
+      "name": "__emscripten_init_main_thread_js",
+      "category": "threads",
+      "type_index": 0
+    },
+    {
+      "module": "a",
+      "field": "Zh",
+      "kind": 0,
+      "name": "__abort_js",
+      "category": "runtime",
+      "type_index": 29
+    },
+    {
+      "module": "a",
+      "field": "_h",
+      "kind": 0,
+      "name": "_random_get",
+      "category": "runtime",
+      "type_index": 10
+    },
+    {
+      "module": "a",
+      "field": "$h",
+      "kind": 0,
+      "name": "_proc_exit",
+      "category": "runtime",
+      "type_index": 13
+    },
+    {
+      "module": "a",
+      "field": "ai",
+      "kind": 0,
+      "name": "_environ_sizes_get",
+      "category": "runtime",
+      "type_index": 10
+    },
+    {
+      "module": "a",
+      "field": "bi",
+      "kind": 0,
+      "name": "_environ_get",
+      "category": "runtime",
+      "type_index": 10
+    },
+    {
+      "module": "a",
+      "field": "ci",
+      "kind": 0,
+      "name": "_clock_time_get",
+      "category": "runtime",
+      "type_index": 121
+    },
+    {
+      "module": "a",
+      "field": "di",
+      "kind": 0,
+      "name": "___pthread_create_js",
+      "category": "threads",
+      "type_index": 46
+    },
+    {
+      "module": "a",
+      "field": "ei",
+      "kind": 0,
+      "name": "___call_sighandler",
+      "category": "runtime",
+      "type_index": 7
+    }
+  ],
+  "exports": [
+    {
+      "field": "fi",
+      "kind": 0,
+      "index": 35341
+    },
+    {
+      "field": "gi",
+      "kind": 0,
+      "index": 8518
+    },
+    {
+      "field": "hi",
+      "kind": 1,
+      "index": 0
+    },
+    {
+      "field": "ii",
+      "kind": 0,
+      "index": 6412
+    },
+    {
+      "field": "ji",
+      "kind": 0,
+      "index": 570
+    },
+    {
+      "field": "ki",
+      "kind": 0,
+      "index": 35347
+    },
+    {
+      "field": "li",
+      "kind": 0,
+      "index": 538
+    },
+    {
+      "field": "mi",
+      "kind": 0,
+      "index": 491
+    },
+    {
+      "field": "ni",
+      "kind": 0,
+      "index": 491
+    },
+    {
+      "field": "oi",
+      "kind": 0,
+      "index": 570
+    },
+    {
+      "field": "pi",
+      "kind": 0,
+      "index": 491
+    },
+    {
+      "field": "qi",
+      "kind": 0,
+      "index": 904
+    },
+    {
+      "field": "ri",
+      "kind": 0,
+      "index": 12300
+    },
+    {
+      "field": "si",
+      "kind": 0,
+      "index": 34226
+    },
+    {
+      "field": "ti",
+      "kind": 0,
+      "index": 12300
+    },
+    {
+      "field": "ui",
+      "kind": 0,
+      "index": 491
+    },
+    {
+      "field": "vi",
+      "kind": 0,
+      "index": 35328
+    },
+    {
+      "field": "wi",
+      "kind": 0,
+      "index": 35338
+    },
+    {
+      "field": "xi",
+      "kind": 0,
+      "index": 35337
+    },
+    {
+      "field": "yi",
+      "kind": 0,
+      "index": 35334
+    },
+    {
+      "field": "zi",
+      "kind": 0,
+      "index": 491
+    },
+    {
+      "field": "Ai",
+      "kind": 0,
+      "index": 538
+    },
+    {
+      "field": "Bi",
+      "kind": 0,
+      "index": 35329
+    },
+    {
+      "field": "Ci",
+      "kind": 0,
+      "index": 35346
+    },
+    {
+      "field": "Di",
+      "kind": 0,
+      "index": 35331
+    },
+    {
+      "field": "Ei",
+      "kind": 0,
+      "index": 538
+    },
+    {
+      "field": "Fi",
+      "kind": 0,
+      "index": 4724
+    },
+    {
+      "field": "Gi",
+      "kind": 0,
+      "index": 6140
+    },
+    {
+      "field": "Hi",
+      "kind": 0,
+      "index": 35335
+    },
+    {
+      "field": "Ii",
+      "kind": 0,
+      "index": 35336
+    },
+    {
+      "field": "Ji",
+      "kind": 0,
+      "index": 35330
+    },
+    {
+      "field": "Ki",
+      "kind": 0,
+      "index": 12769
+    },
+    {
+      "field": "Li",
+      "kind": 0,
+      "index": 22358
+    },
+    {
+      "field": "Mi",
+      "kind": 0,
+      "index": 35339
+    },
+    {
+      "field": "Ni",
+      "kind": 0,
+      "index": 6412
+    },
+    {
+      "field": "Oi",
+      "kind": 0,
+      "index": 8490
+    },
+    {
+      "field": "Pi",
+      "kind": 0,
+      "index": 8490
+    },
+    {
+      "field": "Qi",
+      "kind": 0,
+      "index": 904
+    },
+    {
+      "field": "Ri",
+      "kind": 0,
+      "index": 951
+    },
+    {
+      "field": "Si",
+      "kind": 0,
+      "index": 904
+    },
+    {
+      "field": "Ti",
+      "kind": 0,
+      "index": 951
+    },
+    {
+      "field": "Ui",
+      "kind": 0,
+      "index": 8481
+    },
+    {
+      "field": "Vi",
+      "kind": 0,
+      "index": 8481
+    },
+    {
+      "field": "Wi",
+      "kind": 0,
+      "index": 22359
+    },
+    {
+      "field": "Xi",
+      "kind": 0,
+      "index": 16015
+    },
+    {
+      "field": "Yi",
+      "kind": 0,
+      "index": 34949
+    },
+    {
+      "field": "Zi",
+      "kind": 0,
+      "index": 35332
+    },
+    {
+      "field": "_i",
+      "kind": 0,
+      "index": 35333
+    },
+    {
+      "field": "$i",
+      "kind": 0,
+      "index": 34950
+    },
+    {
+      "field": "aj",
+      "kind": 0,
+      "index": 35254
+    }
+  ],
+  "categories": {
+    "graphics": 331,
+    "runtime": 66,
+    "threads": 31,
+    "audio": 29,
+    "filesystem": 32
+  }
+}

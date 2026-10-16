@@ -1,0 +1,6 @@
+[0/2] Re-checking globbed directories...
+[1/6] Building C object CMakeFiles/zone_atomics_test.dir/Host/Atomics.c.o
+[2/6] Building C object CMakeFiles/zone_atomics_test.dir/tmp/cop-research-wabt/wasm2c/wasm-rt-impl.c.o
+[3/6] Building C object CMakeFiles/zone_atomics_test.dir/workspace/scratch/708e372d35b5/zone-ios/Tests/atomics_test.c.o
+[4/6] Building C object CMakeFiles/zone_atomics_test.dir/tmp/cop-research-wabt/wasm2c/wasm-rt-mem-impl.c.o
+[5/6] Linking C executable zone_atomics_test

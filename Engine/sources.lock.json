@@ -1,0 +1,25 @@
+{
+  "openxray": {
+    "repository": "https://github.com/x8BitRain/xray-16-wasm.git",
+    "commit": "9947ed2015646a69a7ab0e782aeff4a6a8a24f31"
+  },
+  "gta_ui_reference": {
+    "repository": "https://github.com/kevinerikjs/gta5-ios-port.git",
+    "commit": "097c5effd91756a88182dca7a7667de571d07929"
+  },
+  "wabt": {
+    "repository": "https://github.com/WebAssembly/wabt.git",
+    "commit": "ff0ef7e0009402740c805a9744c09b05be063e48",
+    "tag": "1.0.42"
+  },
+  "engine_snapshot": {
+    "wasm": {
+      "url": "https://zonevm.btr.pm/xray/xr_3da.wasm",
+      "sha256": "db894e66ec1b60c8c52bb1b3764e83f3e2131fbc6d56e0b309f5af1e08cf0b42"
+    },
+    "javascript": {
+      "url": "https://zonevm.btr.pm/xray/xr_3da.js",
+      "sha256": "dc1f13f044850c05683371642013dc44bd17c0384d74f7238ad6215356a6b9f6"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+name: Build iOS app
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+    paths: [App/**, Native/**, Resources/**, Scripts/**, project.yml, .github/workflows/ios.yml]
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  ios:
+    runs-on: macos-15
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Show Xcode
+        run: xcodebuild -version
+      - name: Install project generator
+        run: brew install xcodegen
+      - name: Check native input and source syntax
+        run: bash Scripts/check.sh
+      - name: Build unsigned device IPA
+        run: bash Scripts/build_ios.sh
+      - name: Compile simulator application
+        run: |
+          xcodebuild -project ZonePort.xcodeproj -scheme ZonePort -configuration Debug \
+            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath Build/Simulator CODE_SIGNING_ALLOWED=NO build
+      - name: Capture launcher on simulator
+        run: python3 Scripts/simulator_capture.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ZonePort-iOS
+          path: |
+            Build/ZonePort.ipa
+            Build/launcher.png
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: ZonePort-build-diagnostics
+          path: Build/**/*.log
+          if-no-files-found: ignore

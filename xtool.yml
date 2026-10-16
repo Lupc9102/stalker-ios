@@ -1,0 +1,5 @@
+version: 1
+bundleID: io.github.lupc9102.zoneport
+product: ZonePort
+infoPath: Resources/Info.plist
+skipLSP: true

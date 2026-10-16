@@ -1,0 +1,137 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "ZonePort",
+  "packageKind" : {
+    "root" : [
+      "/workspace/scratch/708e372d35b5/zone-ios"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "17.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "ZonePort",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "ZonePort"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : [
+    "5"
+  ],
+  "targets" : [
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+        "Zone-Bridging-Header.h"
+      ],
+      "name" : "ZoneNative",
+      "packageAccess" : true,
+      "path" : "Native",
+      "publicHeadersPath" : "include",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ZoneNative",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Native",
+        "Scripts",
+        "Tests",
+        "Engine",
+        "Docs",
+        "Licenses",
+        "project.yml",
+        "xtool.yml",
+        "README.md",
+        "LICENSE",
+        "STATUS.md",
+        ".github"
+      ],
+      "name" : "ZonePort",
+      "packageAccess" : true,
+      "path" : ".",
+      "resources" : [
+        {
+          "path" : "Resources/ZoneBackdrop.png",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "UIKit"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "GameController"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "UniformTypeIdentifiers"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "sources" : [
+        "App"
+      ],
+      "type" : "regular"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.0.0"
+  },
+  "traits" : [
+
+  ]
+}

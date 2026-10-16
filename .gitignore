@@ -1,0 +1,15 @@
+.DS_Store
+.build/
+.swiftpm/
+.bsp/
+Build/
+Generated/
+Tools/
+*.xcodeproj/
+*.ipa
+*.xcresult/
+Engine/Inputs/
+Engine/Generated/
+Engine/Build/
+__pycache__/
+*.pyc
