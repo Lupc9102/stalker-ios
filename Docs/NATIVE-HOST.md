@@ -3,8 +3,10 @@
 The engine now executes its real constructors and main on Linux x86_64 without
 JIT. With an empty game folder it exits at missing `fsgame.ltx`. With the source
 repository's filesystem config it mounts the native folder, enumerates files,
-writes an OpenXRay log into a separate app-data overlay and exits at missing
-`gamedata/configs/system.ltx`. No game frame has been rendered.
+writes an OpenXRay log into a separate app-data overlay. With the official free
+CoP benchmark and the source project's GL shaders it reads four archives,
+enumerates about 48,000 files, selects the renderer and creates a native GLES
+context. No game frame has been rendered yet.
 
 ## Reproduce
 
@@ -31,7 +33,8 @@ input delivery are required before safe app integration and engine restarts.
 
 - Typed bindings match the pinned Wasm64 ABI. Unsupported imports trap by name;
   there are no graphics success stubs. The generated coverage file currently
-  identifies 124 implemented entry points and 365 unsupported imports.
+  identifies 451 implemented entry points and 38 unsupported imports when the
+  optional GLES backend is enabled. Coverage is not gameplay validation.
 - POSIX clocks, entropy, timezone data, heap growth, native logging and exit.
 - Per-thread module instances, guest stack/TLS initialization, actual pthreads,
   mailbox checks and WasmFS worker proxy queues. Shared memory is imported once.
@@ -55,6 +58,34 @@ real OpenAL context/PCM/source queue operations using the null backend.
 engine main against an empty directory, and cross-compiles the engine and host
 archives for iPhone ARM64. That workflow must pass before claiming Apple
 compilation. Its diagnostic artifact is not an IPA.
+
+## Native graphics test
+
+On Linux, install EGL/GLES development headers plus a working Mesa driver, then:
+
+```sh
+python3 Scripts/native_host.py Engine/Generated Engine/Inputs/xr_3da.js --gles
+cmake -S Engine -B Engine/Build -DZONE_NATIVE_GLES=ON
+cmake --build Engine/Build --target zone_native_gles_test zone_native_boot -j 3
+Engine/Build/zone_native_gles_test /tmp/triangle.ppm
+```
+
+The test uses the actual memory64 module and native EGL/GLES, compiles and links
+shaders, uploads vertices and uniforms, draws a triangle, checks pixels read from
+the framebuffer, and tests opaque GPU sync handles. Mesa llvmpipe passed this
+test. This validates the graphics bridge, not an engine-rendered game frame or
+iPhone GPU performance. GLES bindings are generated from the Khronos header in
+`Engine/ABI/GLES3.h`; pointer-bearing calls require explicit bounds recipes.
+
+Imported procedures in WABT 1.0.42's static function table receive the wrong
+namespace context. `patch_generated.py` corrects the 291 imported entries from
+their emitted metadata while preserving internal engine function contexts. The
+graphics test calls through that real table, as GLAD does, to catch regressions.
+
+Only reviewed native extensions are exposed. Browser-only base-vertex, polygon
+mode and timer-query APIs remain unsupported; they are not advertised. Native
+GLES is the initial iOS provider; ANGLE/Metal is a possible later provider. DXT
+fallbacks and real game shader/texture compatibility still need validation.
 
 The existing app still links only its input layer. Native graphics, engine
 lifetime, game-file access grants and touch/controller delivery are still

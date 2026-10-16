@@ -18,6 +18,10 @@ u32 z_asm(struct w2c_a *h,u64 code,const long double *args,unsigned count) {
         z_pointer(h,a,8);h->runtime->mouse_pointer=a;h->runtime->mouse_scale=count>1?(double)args[1]:1;return 0;
     case 5916334:case 5916481:
         return 0; // Browser audio/capture unavailable in this headless boot host.
+    case 5924907:return h->runtime->width;
+    case 5924937:return h->runtime->height;
+    case 5924755:h->runtime->cursor_visible=strcmp(z_string(h,a),"none")!=0;return 0;
+    case 5924838:h->runtime->cursor_visible=false;return 0;
     default:fprintf(stderr,"[engine] EM_ASM address: %llu\n",(unsigned long long)code);z_missing(h,"unported EM_ASM code address");
     }
 }

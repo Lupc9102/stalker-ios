@@ -1,5 +1,6 @@
 #include "Host.h"
 #include <string.h>
+#include <stdio.h>
 
 // Dimensions belong to the native surface configuration. These functions do
 // not create a context or claim that any graphics operation has succeeded.
@@ -22,6 +23,16 @@ u32 Z_IMPORT_emscripten_set_element_css_size(struct w2c_a *h,u64 target,f64 widt
 }
 u32 Z_IMPORT_emscripten_get_num_gamepads(struct w2c_a *h) { (void)h;return 0; }
 u32 Z_IMPORT_emscripten_sample_gamepad_data(struct w2c_a *h) { (void)h;return 0; }
+u32 Z_IMPORT_emscripten_get_gamepad_status(struct w2c_a *h,u32 index,u64 status) {
+    (void)h;(void)index;(void)status;return (u32)-7; // No connected gamepad.
+}
+u32 Z_IMPORT_emscripten_request_pointerlock(struct w2c_a *h,u64 target,u32 defer) {
+    (void)h;(void)target;(void)defer;return (u32)-1; // Native touch surface has no browser pointer lock.
+}
+u32 Z_IMPORT_emscripten_exit_pointerlock(struct w2c_a *h) { (void)h;return (u32)-1; }
+void Z_IMPORT_emscripten_set_window_title(struct w2c_a *h,u64 title) {
+    snprintf(h->runtime->window_title,sizeof h->runtime->window_title,"%s",z_string(h,title));
+}
 u32 z_register_event(struct w2c_a *h,u32 type,u64 user,u64 callback,u64 target) {
     if(type>=64)return (u32)-5;
     pthread_mutex_lock(&h->runtime->lock);

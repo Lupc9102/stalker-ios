@@ -8,7 +8,7 @@ from pathlib import Path
 import re
 
 
-def generate(directory, javascript, host):
+def generate(directory, javascript, host, gles=False):
     report = json.loads((directory / 'imports.json').read_text())
     header = (directory / 'xray.h').read_text()
     names = {(i['module'], i['field']): i['name'] for i in report['imports']}
@@ -18,7 +18,12 @@ def generate(directory, javascript, host):
         raise ValueError('Native host requires the reviewed engine snapshot')
     implementations = set()
     for path in host.glob('*.c'):
+        if path.stem in ('Graphics', 'GraphicsEGL') and not gles:
+            continue
         implementations.update(re.findall(r'\b(?:void|u32|u64|f32|f64)\s+Z_IMPORT(\w+)\s*\(', path.read_text()))
+    if gles:
+        from gles_bindings import generate as generate_gles
+        implementations.update(generate_gles(directory, functions, host.parent / 'ABI/GLES3.h'))
     event_codes = {'keypress': 1, 'keydown': 2, 'keyup': 3, 'mousedown': 5,
                    'mouseup': 6, 'mousemove': 8, 'wheel': 9, 'resize': 10,
                    'blur': 12, 'focus': 13, 'fullscreenchange': 19,
@@ -35,6 +40,12 @@ def generate(directory, javascript, host):
             implementations.add(name)
     aliases = ['/* Generated typed ABI aliases. */\n#pragma once\n#include "xray.h"\n']
     for name, (_, fn, _) in functions.items(): aliases.append(f'#define Z_IMPORT{name} {fn}\n')
+    segment = re.search(r'elem_segment_exprs_\w+\[\] = \{(.*?)\n\};\n\nstatic void init_tables', (directory / 'xray_0.c').read_text(), re.S)
+    if not segment: raise ValueError('Missing reviewed function-table segment')
+    by_symbol = {fn: name for name, (_, fn, _) in functions.items()}
+    for index, entry in enumerate(line for line in segment[1].splitlines() if line.lstrip().startswith('{')):
+        imported = re.search(r'wrap_(w2c_a_\w+)', entry)
+        if imported: aliases.append(f'#define Z_TABLE{by_symbol[imported[1]]} {index+1}\n')
     js = javascript.read_text()
     for name, field in re.findall(r'(\w+)=(?:Module\["[^\"]+"\]=)?wasmExports\["([^\"]+)"\]', js):
         export = re.search(r"/\* export: '" + re.escape(field) + r"' \*/\n\w+ (w2c_\w+)\(", header)
@@ -82,6 +93,7 @@ def generate(directory, javascript, host):
     (directory / 'native-coverage.json').write_text(json.dumps({
         'implemented': sorted(implementations),
         'unsupported': sorted(set(functions) - implementations),
+        'gles': gles,
     }, indent=2) + '\n')
     print(f'Native host: {len(implementations)} typed implementations; {len(functions)-len(implementations)} explicit unsupported traps')
 
@@ -91,5 +103,6 @@ if __name__ == '__main__':
     parser.add_argument('directory', type=Path)
     parser.add_argument('javascript', type=Path)
     parser.add_argument('--host', type=Path, default=Path(__file__).resolve().parents[1] / 'Engine/Host')
+    parser.add_argument('--gles', action='store_true', help='Generate the real native GLES 3 backend')
     args = parser.parse_args()
-    generate(args.directory, args.javascript, args.host)
+    generate(args.directory, args.javascript, args.host, args.gles)

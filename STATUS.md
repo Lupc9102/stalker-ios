@@ -34,6 +34,10 @@
 - Native host tests pass for 64-bit file offsets above 4 GiB, parallel reads,
   read-only originals with copy-on-write data, symlink/path containment, shared
   access handles, 70,000 open/close cycles and native OpenAL PCM/source queues.
+- The optional native GLES bridge renders and verifies a real triangle through
+  memory64 import bindings using EGL/Mesa. Shader compilation, uniforms,
+  reflection, buffers, readback/packing and GPU sync handles pass. This is a
+  bridge test, not a rendered game frame.
 - Both workflow YAML files, the xtool configuration and Info.plist parse.
 
 ## Not implemented / not verified
@@ -41,10 +45,10 @@
 - **The compiled IPA is a launcher and controls-practice build, not a playable
   STALKER port.**
 - The translated engine is not connected to the app. Campaign Play is disabled.
-- Native graphics, the iOS engine lifecycle and SDL input delivery are still
-  outstanding. Filesystem/pthread/OpenAL services now work in the Linux host;
-  they have not yet been integrated into UIKit.
-- The native host implements 124 typed import entry points. The other 365 imports
+- iOS graphics surface integration, the engine lifecycle and SDL input delivery
+  are still outstanding. Filesystem/pthread/OpenAL/GLES services now work in
+  Linux host tests; they have not yet been integrated into UIKit.
+- The native host implements 451 typed import entry points with GLES. The other 38 imports
   remain explicit traps. Event registration is stored; UI event delivery is not
   connected. See `Docs/NATIVE-HOST.md` for the exact scope.
 - No menu, level, save, combat, game memory-budget or sustained frame-rate test
@@ -73,5 +77,6 @@ Artifact details and verification limits are in
 ## Next action
 
 Continue the native engine host in the order documented in `Docs/ENGINE-HOST.md`.
-A native rendering test is the next engine milestone. Physical-device controls
-testing remains outstanding; the app still contains no linked engine.
+The native rendering test passes. A real game frame and the iOS engine surface
+are next. Physical-device controls testing remains outstanding; the existing
+controls IPA still contains no linked engine.

@@ -55,10 +55,11 @@ jobs:
           echo 'Real main reached the expected missing-data boundary. This is not a gameplay test.'
       - name: Cross-compile the engine and host for iPhone ARM64
         run: |
+          python3 Scripts/native_host.py Engine/Generated Engine/Inputs/xr_3da.js --gles
           cmake -S Engine -B Engine/Build-iOS \
             -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphoneos \
             -DCMAKE_OSX_ARCHITECTURES=arm64 -DCMAKE_OSX_DEPLOYMENT_TARGET=17.0 \
-            -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER_LAUNCHER=ccache
+            -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER_LAUNCHER=ccache -DZONE_NATIVE_GLES=ON
           cmake --build Engine/Build-iOS --target zone_native_host -j 3
           xcrun lipo -info Engine/Build-iOS/libxray_aot.a
           xcrun lipo -info Engine/Build-iOS/libzone_native_host.a

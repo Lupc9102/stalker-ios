@@ -24,6 +24,7 @@ struct ZRuntime {
     wasm_rt_shared_memory_t memory;
     ZFilesystem *files;
     void *audio;
+    void *graphics;
     pthread_mutex_t lock;
     struct w2c_a *threads;
     atomic_bool stopping;
@@ -32,6 +33,8 @@ struct ZRuntime {
     ZEvent events[64];
     u64 frame_time_pointer, mouse_pointer;
     double mouse_scale;
+    bool cursor_visible;
+    char window_title[256];
 };
 extern _Thread_local struct w2c_a *z_current_thread;
 void *z_pointer(struct w2c_a *, u64, u64);
