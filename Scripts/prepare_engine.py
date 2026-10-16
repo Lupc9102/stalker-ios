@@ -10,6 +10,7 @@ import shutil
 import subprocess
 import sys
 import urllib.request
+import urllib.parse
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -42,7 +43,12 @@ def main():
             destination = inputs / ('xr_3da.wasm' if name == 'wasm' else 'xr_3da.js')
             if not destination.exists() or hashlib.sha256(destination.read_bytes()).hexdigest() != artifact['sha256']:
                 temporary = destination.with_suffix(destination.suffix + '.part')
-                with urllib.request.urlopen(artifact['url'], timeout=90) as response, temporary.open('wb') as output:
+                origin = urllib.parse.urlsplit(artifact['url'])
+                request = urllib.request.Request(artifact['url'], headers={
+                    'User-Agent': 'Mozilla/5.0 ZonePort/0.1',
+                    'Referer': f'{origin.scheme}://{origin.netloc}/',
+                })
+                with urllib.request.urlopen(request, timeout=90) as response, temporary.open('wb') as output:
                     shutil.copyfileobj(response, output)
                 if hashlib.sha256(temporary.read_bytes()).hexdigest() != artifact['sha256']:
                     temporary.unlink(); raise SystemExit('Upstream engine changed. Review and repin sources.lock.json before proceeding.')
