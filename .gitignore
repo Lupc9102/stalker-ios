@@ -1,5 +1,6 @@
 .DS_Store
 .build/
+.ccache/
 .swiftpm/
 .bsp/
 Build/
@@ -9,6 +10,7 @@ Tools/
 *.ipa
 *.xcresult/
 Engine/Inputs/
+Engine/Benchmark/
 Engine/Generated/
 Engine/Build/
 __pycache__/

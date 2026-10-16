@@ -27,6 +27,13 @@
 - A diagnostic native executable successfully initializes the translated Wasm
   module without JIT or retail game files. Its console output is preserved in
   `Docs/verification/module-startup.log`.
+- The newer native host executes the engine's constructors and real main on
+  Linux. It reads the filesystem config, mounts a native folder, writes a log
+  into a separate app-data overlay and stops at missing `system.ltx`. The exact
+  output is in `Docs/verification/native-engine-main.log`.
+- Native host tests pass for 64-bit file offsets above 4 GiB, parallel reads,
+  read-only originals with copy-on-write data, symlink/path containment, shared
+  access handles, 70,000 open/close cycles and native OpenAL PCM/source queues.
 - Both workflow YAML files, the xtool configuration and Info.plist parse.
 
 ## Not implemented / not verified
@@ -34,12 +41,14 @@
 - **The compiled IPA is a launcher and controls-practice build, not a playable
   STALKER port.**
 - The translated engine is not connected to the app. Campaign Play is disabled.
-- Native GLES/ANGLE → Metal renderer, filesystem host, worker/TLS integration,
-  audio host and SDL input bridge are still outstanding.
-- The 489 imported functions have been inventoried, not implemented. The native
-  probe's import bodies are diagnostic traps, never gameplay substitutes.
-- Engine main is not called by the probe. No menu, level, save, combat, memory
-  budget or sustained frame-rate test has been performed.
+- Native graphics, the iOS engine lifecycle and SDL input delivery are still
+  outstanding. Filesystem/pthread/OpenAL services now work in the Linux host;
+  they have not yet been integrated into UIKit.
+- The native host implements 124 typed import entry points. The other 365 imports
+  remain explicit traps. Event registration is stored; UI event delivery is not
+  connected. See `Docs/NATIVE-HOST.md` for the exact scope.
+- No menu, level, save, combat, game memory-budget or sustained frame-rate test
+  has been performed. Reaching missing game data is a startup test only.
 - No ARM64 engine compile, automated UI interaction test or physical-device test
   has completed. The ARM64 app build does not contain the translated engine.
 - No retail game archives or textures have been compressed, resized or modified.

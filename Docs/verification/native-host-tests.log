@@ -1,0 +1,36 @@
+Start testing: Oct 16 13:50 EDT
+----------------------------------------------------------
+1/2 Testing: wasm_atomics
+1/2 Test: wasm_atomics
+Command: "/workspace/scratch/708e372d35b5/zone-ios/Engine/Build/zone_atomics_test"
+Directory: /workspace/scratch/708e372d35b5/zone-ios/Engine/Build
+"wasm_atomics" start time: Oct 16 13:50 EDT
+Output:
+----------------------------------------------------------
+Wasm host: timeout, mismatch, two waiters, exact notify count and unaligned SIMD passed.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"wasm_atomics" end time: Oct 16 13:50 EDT
+"wasm_atomics" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/2 Testing: native_host
+2/2 Test: native_host
+Command: "/workspace/scratch/708e372d35b5/zone-ios/Engine/Build/zone_native_host_test"
+Directory: /workspace/scratch/708e372d35b5/zone-ios/Engine/Build
+"native_host" start time: Oct 16 13:50 EDT
+Output:
+----------------------------------------------------------
+Native filesystem: read-only originals, shared copy-on-write handles, 4-GiB offsets, parallel reads, path containment and 70,000 handle cycles passed.
+Native OpenAL: context, PCM upload, source queue, playback, stop, unqueue and cleanup passed.
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"native_host" end time: Oct 16 13:50 EDT
+"native_host" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 16 13:50 EDT

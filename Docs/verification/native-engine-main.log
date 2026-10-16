@@ -1,0 +1,29 @@
+[engine] Allocating imported memory64; no JIT
+[engine] Running static constructors
+[engine] ENTERING REAL ENGINE MAIN
+OpenXRay Release build 10079, Sep 12 2026 (Web wasm64, static)
+Custom build from commit[fd5baa6859561a2968098f829aeeb33975929c7e] branch[wasm]
+! Failed to get user name
+ 
+command line -nosplash -nointro -nogameintro -fsltx /opfs/fsgame.ltx 
+
+* CPU features: 
+* CPU threads: 9
+
+Starting INPUT device...
+SOUND: OpenAL: enumerate devices...
+SOUND: OpenAL: system default sound device name is No Output
+Initializing File System...
+$fs_root$ = /opfs
+using fs-ltx /opfs/fsgame.ltx
+SOUND: OpenAL: All available devices:
+1. No Output, Spec Version 1.1 (default) eax[0] efx[yes]
+FS: 6 files cached 0 archives, 0Kb memory used.
+Init FileSystem 0.200216 sec
+-----loading \opfs\gamedata\configs\system.ltx
+OpenXRay: Cannot find file \opfs\gamedata\configs\system.ltx.
+Reinstalling application may fix this problem.
+[engine] OpenXRay
+Cannot find file \opfs\gamedata\configs\system.ltx.
+Reinstalling application may fix this problem.
+[engine] Main yielded: reason 2, status 1

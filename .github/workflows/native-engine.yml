@@ -1,0 +1,70 @@
+name: Build native engine host
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, engine-native-host]
+    paths: [Engine/**, Scripts/native_host.py, Scripts/prepare_engine.py, Scripts/patch_*.py, Tests/native_host.c, .github/workflows/native-engine.yml]
+permissions:
+  contents: read
+concurrency:
+  group: native-engine-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  engine:
+    runs-on: macos-15
+    timeout-minutes: 45
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CCACHE_MAXSIZE: 1G
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install compiler cache
+        run: brew install ccache
+      - uses: actions/cache@v4
+        with:
+          path: .ccache
+          key: native-engine-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('Engine/sources.lock.json', 'Engine/Host/Atomics.*', 'Engine/Host/SharedSIMD.h', 'Engine/Host/NativeRuntime.h', 'Scripts/patch_*.py') }}
+      - name: Show native and Apple toolchains
+        run: |
+          uname -m
+          xcodebuild -version
+          cmake --version
+      - name: Generate the pinned native engine and host ABI
+        run: |
+          python3 Scripts/prepare_engine.py
+          python3 Scripts/native_host.py Engine/Generated Engine/Inputs/xr_3da.js
+      - name: Compile the engine and run native host tests
+        run: |
+          cmake -S Engine -B Engine/Build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER_LAUNCHER=ccache
+          cmake --build Engine/Build --target zone_native_boot zone_native_host_test zone_atomics_test -j 3
+          ctest --test-dir Engine/Build --output-on-failure
+      - name: Run real engine startup without game data
+        run: |
+          mkdir -p Build/BootGame Build/BootUser
+          set +e
+          Engine/Build/zone_native_boot Build/BootGame Build/BootUser > Build/native-boot.log 2>&1
+          result=$?
+          cat Build/native-boot.log
+          test "$result" -eq 1 || exit 1
+          grep -q 'ENTERING REAL ENGINE MAIN' Build/native-boot.log || exit 1
+          grep -q 'Cannot open file' Build/native-boot.log || exit 1
+          if grep -Eq 'UNIMPLEMENTED|trapped' Build/native-boot.log; then exit 1; fi
+          echo 'Real main reached the expected missing-data boundary. This is not a gameplay test.'
+      - name: Cross-compile the engine and host for iPhone ARM64
+        run: |
+          cmake -S Engine -B Engine/Build-iOS \
+            -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphoneos \
+            -DCMAKE_OSX_ARCHITECTURES=arm64 -DCMAKE_OSX_DEPLOYMENT_TARGET=17.0 \
+            -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER_LAUNCHER=ccache
+          cmake --build Engine/Build-iOS --target zone_native_host -j 3
+          xcrun lipo -info Engine/Build-iOS/libxray_aot.a
+          xcrun lipo -info Engine/Build-iOS/libzone_native_host.a
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Native-engine-diagnostics
+          path: |
+            Build/native-boot.log
+            Engine/Generated/native-coverage.json
+            Engine/Build/Testing/Temporary/LastTest.log
+          if-no-files-found: warn

@@ -82,6 +82,11 @@ The generated diagnostic host traps unsupported browser imports. A successful
 module-instantiation message does not mean the engine main, renderer or game
 works. This diagnostic archive is not linked into the iOS app.
 
+The newer [native host](Docs/NATIVE-HOST.md) goes further: it runs constructors
+and real engine main on Linux, mounts files through a native OPFS replacement,
+and uses native pthreads and OpenAL. It reaches the expected missing game-config
+boundary. Native graphics and app integration are outstanding.
+
 `prepare_engine.py --wasm /path/to/custom.wasm --javascript /path/to/custom.js`
 accepts an explicitly supplied custom engine build. Shared-memory assumptions
 are checked by the postprocessor and must be reviewed if the module changes.
