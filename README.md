@@ -3,9 +3,10 @@
 An early engine-port project with a native landscape UIKit launcher and an
 editable touch layout adapted from the MIT-licensed GTA V iOS port.
 
-**This checkpoint does not run Call of Pripyat. No playable IPA has been built.**
-The app contains a controls-practice screen; gameplay stays disabled until a
-real engine host is linked. See [STATUS.md](STATUS.md) for verification and gaps.
+**The native launcher and controls compile for iPhone; Call of Pripyat does not
+run yet.** The unsigned IPA contains a controls-practice screen. Gameplay stays
+disabled until a real engine host is linked. See [STATUS.md](STATUS.md) for
+verification and gaps.
 
 ## App and controls
 
@@ -40,9 +41,15 @@ This SwiftPM/xtool configuration has not yet completed an iOS compile here.
 
 ## Build with GitHub Actions (no Mac at home)
 
-Put this source at a dedicated repository root and run **Build iOS app** under
-Actions. The macOS job runs Xcode, builds an unsigned `ZonePort.ipa`, compiles a
-simulator app and captures the real launcher. Those steps have not been run yet.
+Run **Build iOS app** under [Actions](https://github.com/Lupc9102/stalker-ios/actions/workflows/ios.yml).
+The macOS job runs Xcode, builds an unsigned `ZonePort.ipa`, compiles a simulator
+app and captures the launcher, controls editor and controls-practice screen.
+The device and simulator builds have passed with Xcode 16.4 on macOS 15.
+All three screens have been inspected on an iPhone 16 Pro simulator.
+See the [build record](Docs/verification/ios-build.md) for the exact source,
+artifact and verification limits.
+Download the `ZonePort-iOS` artifact from a successful run, extract the IPA, and
+sign/install it with your sideloading tool. Minimum iOS version: 17.0.
 The workflow never requests an Apple ID, certificate or game data. Public and
 private repositories use GitHub's respective runner usage rules.
 
@@ -86,9 +93,10 @@ bash Scripts/check.sh
 ```
 
 The local C tests cover input edges, cancellation, queue overflow and bounds.
-The engine CMake tests cover shared-memory wait/notify and SIMD helpers. UIKit
-type checking, app layout inspection and physical-device testing require an iOS
-SDK/build runner. The source syntax check alone does not establish those.
+The engine CMake tests cover shared-memory wait/notify and SIMD helpers. The
+macOS workflow compiles UIKit against the iOS SDK and captures simulator screens.
+Physical-device testing is still outstanding; the Linux syntax check alone
+does not establish iOS compatibility.
 
 ## Game content and later optimization
 

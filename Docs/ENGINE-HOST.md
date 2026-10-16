@@ -30,8 +30,10 @@ not a completed SDL bridge. Fire/aim and weapon scrolling need mouse semantics.
 
 ## Next integration order
 
-1. Acquire a working iOS compiler environment. Compile the app and inspect its
-   actual UIKit screens in simulator and on the user's iPhone.
+1. The native app now compiles for iPhone and simulator using Xcode 16.4 through
+   GitHub Actions. Launcher, editor and practice screenshots have been inspected
+   on an iPhone 16 Pro simulator. Verify touch behavior on the user's iPhone;
+   no physical-device test has been performed yet.
 2. Build/import ANGLE for iOS, render a real triangle through GLES → Metal, then
    validate STALKER's shader paths. This has not been implemented yet.
 3. Build the engine for ARM64 with the host helpers; implement boot-time runtime,
