@@ -37,7 +37,7 @@ if(EXISTS "${ZONE_GENERATED_DIR}/native_imports.c")
     Host/Audio.c "${ZONE_GENERATED_DIR}/native_imports.c")
   target_include_directories(zone_native_host PRIVATE ${OPENAL_INCLUDE_DIR})
   target_link_libraries(zone_native_host PUBLIC xray_aot ${OPENAL_LIBRARY})
-  target_compile_definitions(zone_native_host PRIVATE _DEFAULT_SOURCE _DARWIN_C_SOURCE=1)
+  target_compile_definitions(zone_native_host PUBLIC _DARWIN_C_SOURCE=1 PRIVATE _DEFAULT_SOURCE)
   target_compile_options(zone_native_host PRIVATE -Wall -Wextra -Werror=incompatible-pointer-types -Werror=implicit-function-declaration)
   add_executable(zone_native_boot Host/Boot.c)
   target_link_libraries(zone_native_boot PRIVATE zone_native_host)
@@ -46,7 +46,8 @@ if(EXISTS "${ZONE_GENERATED_DIR}/native_imports.c")
   target_compile_options(zone_native_host_test PRIVATE -UNDEBUG)
   target_link_libraries(zone_native_host_test PRIVATE zone_native_host)
   add_test(NAME native_host COMMAND zone_native_host_test)
-  set_tests_properties(native_host PROPERTIES ENVIRONMENT "ALSOFT_DRIVERS=null")
+  set_tests_properties(native_host PROPERTIES ENVIRONMENT "ALSOFT_DRIVERS=null"
+    PASS_REGULAR_EXPRESSION "Native filesystem:.*70,000 handle cycles passed")
 endif()
 # This archive still has unresolved browser imports. It is intentionally NOT
 # linked into the iOS target until a real host exists for every required call.
