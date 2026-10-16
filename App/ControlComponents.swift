@@ -111,9 +111,12 @@ final class FloatingStick: UIView {
     private(set) var origin = CGPoint.zero
     private(set) var value = CGPoint.zero
     private var engaged = false
+    var displayOpacity: CGFloat = 1 {
+        didSet { alpha = displayOpacity * (engaged ? 1 : 0.55) }
+    }
     var idleOrigin: CGPoint? { didSet { if !engaged { showIdle() } } }
     private func showIdle() {
-        if let idleOrigin { origin = idleOrigin; layoutParts(); alpha = 0.55 }
+        if let idleOrigin { origin = idleOrigin; layoutParts(); alpha = 0.55 * displayOpacity }
         else { alpha = 0 }
     }
     var sprinting = false { didSet { if sprinting != oldValue { sprintHalo.alpha = sprinting ? 1 : 0 } } }
@@ -141,7 +144,7 @@ final class FloatingStick: UIView {
         origin = point
         value = .zero
         layoutParts()
-        UIView.animate(withDuration: 0.08) { self.alpha = 1 }
+        UIView.animate(withDuration: 0.08) { self.alpha = self.displayOpacity }
     }
     /// The base stays where the thumb landed until it lifts; dragging past
     /// the edge holds full deflection in that direction.

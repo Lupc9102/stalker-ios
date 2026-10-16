@@ -62,7 +62,8 @@ final class PracticeController: UIViewController {
         // Drain the edge queue in practice; the engine adapter will own it in gameplay.
         var edge = ZButtonEvent(); while ZHostPollButton(&edge) {}
         let pressed = StalkerAction.allCases.filter { input.held & (UInt64(1) << $0.rawValue) != 0 }.map(\.title)
-        status.text = "CONTROLS PRACTICE\n" + (pressed.isEmpty ? "Move with your left thumb · swipe to look" : pressed.joined(separator: " · "))
+        let thumb = GameSettings.shared.leftHanded ? "right" : "left"
+        status.text = "CONTROLS PRACTICE\n" + (pressed.isEmpty ? "Move with your \(thumb) thumb · swipe to look" : pressed.joined(separator: " · "))
             + String(format: "\nMove %.2f, %.2f   Look %.0f, %.0f", input.move_x, input.move_y, input.look_x, input.look_y)
     }
     private func pause() {

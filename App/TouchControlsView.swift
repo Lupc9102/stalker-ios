@@ -24,6 +24,7 @@ final class TouchControlsView: UIView {
         for spec in ControlSpec.all {
             let label = UILabel(); label.font = .systemFont(ofSize: 10, weight: .semibold)
             label.textColor = .white; label.textAlignment = .center
+            label.adjustsFontSizeToFitWidth = true; label.minimumScaleFactor = 0.8
             label.layer.shadowColor = UIColor.black.cgColor; label.layer.shadowOpacity = 1; label.layer.shadowRadius = 3
             label.text = spec.title; label.isUserInteractionEnabled = false; labels[spec.id] = label
         }
@@ -66,6 +67,8 @@ final class TouchControlsView: UIView {
             let center = CGPoint(x: min(safe.maxX - d / 2, max(safe.minX + d / 2, safe.minX + fx * safe.width)),
                                  y: min(safe.maxY - d / 2 - 12, max(safe.minY + d / 2, safe.minY + CGFloat(entry.y) * safe.height)))
             button.frame = CGRect(x: center.x - d / 2, y: center.y - d / 2, width: d, height: d)
+            let binding = action(for: spec)
+            button.setIcon(binding.flatMap { action in ControlSpec.all.first { $0.action == action }?.id } ?? spec.id)
             captions[spec.id]?.frame = CGRect(x: center.x - d * 0.7, y: button.frame.maxY + 2, width: d * 1.4, height: 13)
             captions[spec.id]?.text = action(for: spec)?.title ?? spec.title
             if spec.id == "move" { stick.idleOrigin = center; stick.baseDiameter = d; stick.travel = d * 0.4 }
@@ -79,12 +82,15 @@ final class TouchControlsView: UIView {
             let hidden = !editing && ((entry.hidden && !ControlsLayout.essential.contains(spec.id)) || (spec.utility && !toolsVisible))
             button.isHidden = hidden || (spec.id == "move" && !editing)
             button.alpha = editing ? (entry.hidden ? 0.28 : 0.85) : CGFloat(GameSettings.shared.controlOpacity * entry.opacity)
-            button.active = highlighted == spec.id || (spec.id == "aim" && aimLatched)
+            button.active = highlighted == spec.id || (action(for: spec) == .aim && aimLatched)
             button.accessibilityLabel = action(for: spec)?.title ?? spec.title
             captions[spec.id]?.isHidden = hidden || (!editing && !GameSettings.shared.showLabels)
             captions[spec.id]?.alpha = button.alpha
         }
         stick.isHidden = editing
+        if let move = ControlSpec.all.first(where: { $0.id == "move" }) {
+            stick.displayOpacity = CGFloat(GameSettings.shared.controlOpacity * ControlsLayout.entry(for: move).opacity)
+        }
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard !editing else { return }
@@ -96,7 +102,7 @@ final class TouchControlsView: UIView {
                 guard let action = action(for: spec) else { continue }
                 if action == .aim && GameSettings.shared.toggleAim {
                     aimLatched.toggle(); InputHub.shared.button(.aim, down: aimLatched, source: "aim-toggle")
-                    buttons[id]?.active = aimLatched; fingers[touch] = .utility
+                    updateAppearance(); fingers[touch] = .utility
                 } else {
                     fingers[touch] = .action(action, id)
                     heldCounts[action, default: 0] += 1; visualCounts[id, default: 0] += 1

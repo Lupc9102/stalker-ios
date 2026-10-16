@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main, master]
-    paths: [App/**, Native/**, Resources/**, Scripts/**, project.yml, .github/workflows/ios.yml]
+    paths: [App/**, Native/**, Resources/**, Scripts/**, Tests/**, project.yml, .github/workflows/ios.yml]
   pull_request:
 permissions:
   contents: read

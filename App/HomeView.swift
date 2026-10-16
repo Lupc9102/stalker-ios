@@ -247,6 +247,8 @@ private final class ModeCard: UIControl {
         icon.image = UIImage(systemName: symbol, withConfiguration: UIImage.SymbolConfiguration(pointSize: 17, weight: .semibold))
         label.text = title
         label.font = Theme.body(15, .semibold)
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.8
         let row = UIStackView(arrangedSubviews: [icon, label])
         row.spacing = 8
         row.alignment = .center
