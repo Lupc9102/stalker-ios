@@ -21,9 +21,13 @@ def main():
     run('xcrun', 'simctl', 'bootstatus', device['udid'], '-b')
     app = Path('Build/Simulator/Build/Products/Debug-iphonesimulator/ZonePort.app').resolve()
     run('xcrun', 'simctl', 'install', device['udid'], str(app))
-    run('xcrun', 'simctl', 'launch', device['udid'], 'io.github.lupc9102.zoneport')
-    time.sleep(3)
-    run('xcrun', 'simctl', 'io', device['udid'], 'screenshot', str(Path('Build/launcher.png').resolve()))
+    for name, arguments in [('launcher', []), ('controls-editor', ['--controls-editor']),
+                            ('controls-practice', ['--controls-practice'])]:
+        subprocess.run(['xcrun', 'simctl', 'terminate', device['udid'], 'io.github.lupc9102.zoneport'],
+                       check=False, capture_output=True)
+        run('xcrun', 'simctl', 'launch', device['udid'], 'io.github.lupc9102.zoneport', *arguments)
+        time.sleep(3)
+        run('xcrun', 'simctl', 'io', device['udid'], 'screenshot', str(Path(f'Build/{name}.png').resolve()))
 
 
 if __name__ == '__main__':

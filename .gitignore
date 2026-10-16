@@ -13,3 +13,4 @@ Engine/Generated/
 Engine/Build/
 __pycache__/
 *.pyc
+Resources/ZoneBackdrop.png

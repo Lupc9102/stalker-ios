@@ -44,6 +44,19 @@ final class LauncherController: UIViewController, UIDocumentPickerDelegate {
         home.helpButton.addAction(UIAction { [weak self] _ in self?.help() }, for: .touchUpInside)
         refresh(); scan(GameFiles.saved() ?? GameFiles.documents, remember: false)
     }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        #if DEBUG
+        let arguments = ProcessInfo.processInfo.arguments
+        if presentedViewController == nil && arguments.contains("--controls-editor") {
+            let editor = ControlsEditorController(); editor.modalPresentationStyle = .fullScreen
+            present(editor, animated: false)
+        } else if presentedViewController == nil && arguments.contains("--controls-practice") {
+            let practice = PracticeController(); practice.modalPresentationStyle = .fullScreen
+            present(practice, animated: false)
+        }
+        #endif
+    }
     private func refresh() {
         home.setMode(mode.rawValue, detail: mode.detail, enabled: true)
         home.playButton.configuration?.title = mode == .practice ? "Try controls" : "Play"

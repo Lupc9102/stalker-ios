@@ -37,6 +37,8 @@ jobs:
           path: |
             Build/ZonePort.ipa
             Build/launcher.png
+            Build/controls-editor.png
+            Build/controls-practice.png
           if-no-files-found: error
       - uses: actions/upload-artifact@v4
         if: failure()
