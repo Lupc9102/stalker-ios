@@ -82,6 +82,17 @@ namespace context. `patch_generated.py` corrects the 291 imported entries from
 their emitted metadata while preserving internal engine function contexts. The
 graphics test calls through that real table, as GLAD does, to catch regressions.
 
+The default 500-call generated limit stops during Lua binding registration.
+Generated prologues now check the native thread's actual stack boundary, with
+128 KiB kept for trap handling, and retain a 4096-call cap. Live-runtime yields
+restore the call-depth baseline. The higher limit is being tested along the
+real startup path; raising it alone does not establish scripting correctness.
+
+`GraphicsIOS.m` supplies an EAGL/ES 3 provider for a caller-owned CAEAGLLayer.
+It draws at game resolution into a separate framebuffer, scales into the phone
+drawable at presentation and restores framebuffer/scissor state. It is not yet
+connected to the app and still requires an Apple compile/device check.
+
 Only reviewed native extensions are exposed. Browser-only base-vertex, polygon
 mode and timer-query APIs remain unsupported; they are not advertised. Native
 GLES is the initial iOS provider; ANGLE/Metal is a possible later provider. DXT

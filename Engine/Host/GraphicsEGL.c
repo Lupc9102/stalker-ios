@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct { EGLDisplay display; EGLContext context; EGLSurface surface; } ZEGL;
+typedef struct { EGLDisplay display; EGLContext context; EGLSurface surface; EGLConfig config; } ZEGL;
 static bool create(void *user,u32 width,u32 height) {
     ZEGL *e=user;
     PFNEGLGETPLATFORMDISPLAYEXTPROC platform=(PFNEGLGETPLATFORMDISPLAYEXTPROC)eglGetProcAddress("eglGetPlatformDisplayEXT");
@@ -14,6 +14,7 @@ static bool create(void *user,u32 width,u32 height) {
       EGL_RED_SIZE,8,EGL_GREEN_SIZE,8,EGL_BLUE_SIZE,8,EGL_ALPHA_SIZE,8,EGL_DEPTH_SIZE,24,EGL_STENCIL_SIZE,8,EGL_NONE};
     EGLConfig config;EGLint count=0;
     if(!eglChooseConfig(e->display,attributes,&config,1,&count)||count!=1)return false;
+    e->config=config;
     EGLint dimensions[]={EGL_WIDTH,(EGLint)width,EGL_HEIGHT,(EGLint)height,EGL_NONE};
     EGLint version[]={EGL_CONTEXT_CLIENT_VERSION,3,EGL_NONE};
     e->surface=eglCreatePbufferSurface(e->display,config,dimensions);
@@ -26,8 +27,14 @@ static bool current(void *user,bool enabled) {
                                      enabled?e->surface:EGL_NO_SURFACE,enabled?e->context:EGL_NO_CONTEXT)==EGL_TRUE;
 }
 static bool present(void *user) { ZEGL *e=user;return eglSwapBuffers(e->display,e->surface)==EGL_TRUE; }
+static bool resize(void *user,u32 width,u32 height) {
+    ZEGL *e=user;EGLint dimensions[]={EGL_WIDTH,(EGLint)width,EGL_HEIGHT,(EGLint)height,EGL_NONE};
+    EGLSurface next=eglCreatePbufferSurface(e->display,e->config,dimensions);if(next==EGL_NO_SURFACE)return false;
+    if(!eglMakeCurrent(e->display,next,next,e->context)) { eglDestroySurface(e->display,next);return false; }
+    eglDestroySurface(e->display,e->surface);e->surface=next;return true;
+}
 static void destroy(void *user) {
-    ZEGL *e=user;eglMakeCurrent(e->display,EGL_NO_SURFACE,EGL_NO_SURFACE,EGL_NO_CONTEXT);
+    ZEGL *e=user;if(e->display)eglMakeCurrent(e->display,EGL_NO_SURFACE,EGL_NO_SURFACE,EGL_NO_CONTEXT);
     if(e->context)eglDestroyContext(e->display,e->context);
     if(e->surface)eglDestroySurface(e->display,e->surface);
     if(e->display)eglTerminate(e->display);
@@ -35,6 +42,6 @@ static void destroy(void *user) {
 }
 bool z_gl_egl_attach(ZRuntime *runtime) {
     ZEGL *e=calloc(1,sizeof *e);if(!e)return false;
-    if(!z_gl_attach(runtime,(ZGraphicsProvider){.user=e,.create=create,.current=current,.present=present,.destroy=destroy})) { free(e);return false; }
+    if(!z_gl_attach(runtime,(ZGraphicsProvider){.user=e,.create=create,.current=current,.present=present,.resize=resize,.destroy=destroy})) { free(e);return false; }
     return true;
 }

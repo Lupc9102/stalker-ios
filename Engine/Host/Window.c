@@ -1,6 +1,9 @@
 #include "Host.h"
 #include <string.h>
 #include <stdio.h>
+#if defined(ZONE_NATIVE_GLES)
+#include "Graphics.h"
+#endif
 
 // Dimensions belong to the native surface configuration. These functions do
 // not create a context or claim that any graphics operation has succeeded.
@@ -10,6 +13,9 @@ void Z_IMPORT_emscripten_get_screen_size(struct w2c_a *h,u64 width,u64 height) {
 f64 Z_IMPORT_emscripten_get_device_pixel_ratio(struct w2c_a *h) { (void)h;return 1; }
 u32 Z_IMPORT_emscripten_set_canvas_element_size(struct w2c_a *h,u64 target,u32 width,u32 height) {
     (void)target;if(!width||!height||width>16384||height>16384)return (u32)-5;
+#if defined(ZONE_NATIVE_GLES)
+    if(!z_gl_resize(h,width,height))return (u32)-6;
+#endif
     h->runtime->width=width;h->runtime->height=height;return 0;
 }
 u32 Z_IMPORT_emscripten_get_element_css_size(struct w2c_a *h,u64 target,u64 width,u64 height) {

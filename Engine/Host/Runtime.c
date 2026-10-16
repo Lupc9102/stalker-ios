@@ -31,6 +31,11 @@ _Noreturn void z_missing(struct w2c_a *h,const char *name) {
 }
 _Noreturn void z_leave(struct w2c_a *h,int reason,int status) {
     h->yield_reason=reason;h->status=status;
+#if WASM_RT_STACK_DEPTH_COUNT
+    // Emscripten's live-runtime yield unwinds C without function epilogues.
+    // Restore the same depth baseline as a caught Wasm runtime trap.
+    wasm_rt_call_stack_depth=wasm_rt_saved_call_stack_depth;
+#endif
     wasm_rt_set_unwind_target(NULL);
     longjmp(h->yielded,1);
 }
@@ -49,7 +54,12 @@ u32 Z_IMPORT_emscripten_resize_heap(struct w2c_a *h,u64 desired) {
     if(pages>m->max_pages)return 0;
     return wasm_rt_grow_memory_shared(m,pages-m->pages)!=UINT64_MAX;
 }
-void Z_IMPORT_emscripten_out(struct w2c_a *h,u64 p) { fprintf(stdout,"%s\n",z_string(h,p));fflush(stdout); }
+void Z_IMPORT_emscripten_out(struct w2c_a *h,u64 p) {
+#if WASM_RT_STACK_DEPTH_COUNT
+    if(getenv("ZONE_TRACE_STACK"))fprintf(stdout,"[native guest-call depth=%u] ",wasm_rt_call_stack_depth);
+#endif
+    fprintf(stdout,"%s\n",z_string(h,p));fflush(stdout);
+}
 void Z_IMPORT_emscripten_err(struct w2c_a *h,u64 p) { fprintf(stderr,"%s\n",z_string(h,p)); }
 void Z_IMPORT__emscripten_log_formatted(struct w2c_a *h,u32 flags,u64 p) { (void)flags;Z_IMPORT_emscripten_err(h,p); }
 void Z_IMPORT___assert_fail(struct w2c_a *h,u64 condition,u64 file,u32 line,u64 function) {

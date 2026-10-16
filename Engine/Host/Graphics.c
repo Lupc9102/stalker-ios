@@ -165,9 +165,13 @@ u32 Z_IMPORT_emscripten_webgl_destroy_context(struct w2c_a *h,u64 context) {
     z_gl_close(h->runtime);return 0;
 }
 bool z_gl_present(struct w2c_a *h) { z_gl_require(h);ZGraphics *g=graphics(h);return g->provider.present(g->provider.user); }
+bool z_gl_resize(struct w2c_a *h,u32 width,u32 height) {
+    ZGraphics *g=h->runtime->graphics;if(!g||!g->created)return true;
+    z_gl_require(h);return g->provider.resize&&g->provider.resize(g->provider.user,width,height);
+}
 void z_gl_close(ZRuntime *runtime) {
     ZGraphics *g=runtime->graphics;if(!g)return;
-    if(g->created)g->provider.destroy(g->provider.user);
+    g->provider.destroy(g->provider.user);
     for(unsigned i=0;i<g->extension_count;i++)free(g->extensions[i]);
     free(g->extension_string);
     for(ZGLString *s=g->strings;s;) { ZGLString *next=s->next;free(s);s=next; }

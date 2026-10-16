@@ -15,6 +15,11 @@ def patch(directory: Path, module='xray'):
         raise ValueError('Expected exactly one imported shared memory and no unshared memories.')
     path = directory / f'{module}-impl.h'
     source = path.read_text()
+    if 'ZONE_NATIVE_STACK_BOUND' not in source:
+        pattern = r'(#define FUNC_PROLOGUE[^\n]*\\\n)'
+        source, count = re.subn(pattern, lambda m: m[1] + '  zone_check_native_stack(); /* ZONE_NATIVE_STACK_BOUND */ \\\n', source)
+        if count != 1: raise ValueError('Expected one checked function prologue')
+        path.write_text(source)
     if 'ZONE_SHARED_BULK' in source:
         patch_simd_calls(directory, module)
         return

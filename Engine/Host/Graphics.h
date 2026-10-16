@@ -13,12 +13,14 @@ typedef struct {
     bool (*create)(void *, u32, u32);
     bool (*current)(void *, bool);
     bool (*present)(void *);
+    bool (*resize)(void *, u32, u32);
     void (*destroy)(void *);
     GLuint (*framebuffer)(void *);
 } ZGraphicsProvider;
 bool z_gl_attach(ZRuntime *, ZGraphicsProvider);
 void z_gl_close(ZRuntime *);
 bool z_gl_present(struct w2c_a *);
+bool z_gl_resize(struct w2c_a *, u32, u32);
 void z_gl_require(struct w2c_a *);
 u64 z_gl_count(struct w2c_a *, u64, u64);
 void *z_gl_optional(struct w2c_a *, u64, u64);
@@ -37,4 +39,8 @@ bool z_gl_sync_is(struct w2c_a *, u64);
 void z_gl_sync_delete(struct w2c_a *, u64);
 #if !defined(__APPLE__)
 bool z_gl_egl_attach(ZRuntime *);
+#else
+// Call on main with an already configured CAEAGLLayer. Rendering then belongs
+// to the native engine thread; this function does not start that thread.
+bool z_gl_ios_attach(ZRuntime *, void *caeagl_layer);
 #endif

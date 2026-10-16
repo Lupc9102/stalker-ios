@@ -84,8 +84,10 @@ works. This diagnostic archive is not linked into the iOS app.
 
 The newer [native host](Docs/NATIVE-HOST.md) goes further: it runs constructors
 and real engine main on Linux, mounts files through a native OPFS replacement,
-and uses native pthreads and OpenAL. It reaches the expected missing game-config
-boundary. Native graphics and app integration are outstanding.
+and uses native pthreads and OpenAL. With the official free benchmark it mounts
+four archives, selects the renderer and begins texture/script initialization.
+The optional GLES bridge passes a real rendering/readback test on Linux; iPhone
+surface integration and a rendered game frame are still unverified.
 
 `prepare_engine.py --wasm /path/to/custom.wasm --javascript /path/to/custom.js`
 accepts an explicitly supplied custom engine build. Shared-memory assumptions

@@ -1,3 +1,4 @@
+#define _DARWIN_C_SOURCE 1
 #define _POSIX_C_SOURCE 200809L
 // Adapted from GTA V iOS Port (MIT); see Licenses/GTA-iOS-MIT.txt.
 #include "Atomics.h"
