@@ -23,10 +23,9 @@ targets:
       - sdk: UIKit.framework
       - sdk: GameController.framework
       - sdk: UniformTypeIdentifiers.framework
-    info:
-      path: Resources/Info.plist
     settings:
       base:
+        INFOPLIST_FILE: Resources/Info.plist
         PRODUCT_BUNDLE_IDENTIFIER: io.github.lupc9102.zoneport
         PRODUCT_NAME: ZonePort
         TARGETED_DEVICE_FAMILY: "1,2"

@@ -32,6 +32,7 @@ jobs:
       - name: Capture launcher on simulator
         run: python3 Scripts/simulator_capture.py
       - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
         with:
           name: ZonePort-iOS
           path: |

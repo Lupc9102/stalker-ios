@@ -63,7 +63,7 @@ final class ControlsEditorController: UIViewController, UIGestureRecognizerDeleg
         panelToggle.translatesAutoresizingMaskIntoConstraints = false; view.addSubview(panelToggle)
         NSLayoutConstraint.activate([
             panelToggle.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            panelToggle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8)
+            panelToggle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 78)
         ])
         panelToggle.addAction(UIAction { [weak self, weak panelToggle] _ in
             guard let self else { return }

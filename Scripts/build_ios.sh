@@ -13,6 +13,7 @@ if [[ "$(uname -s)" == Darwin ]] && command -v xcodebuild >/dev/null; then
     ditto Build/Device/Build/Products/Release-iphoneos/ZonePort.app Build/Package/Payload/ZonePort.app
     rm -f Build/ZonePort.ipa
     (cd Build/Package && /usr/bin/zip -qry ../ZonePort.ipa Payload)
+    python3 Scripts/verify_ipa.py Build/ZonePort.ipa
     echo "Built: $PWD/Build/ZonePort.ipa (unsigned)"
 else
     command -v xtool >/dev/null || { echo 'xtool is required on Linux: https://xtool.sh/' >&2; exit 1; }

@@ -16,6 +16,7 @@ def main():
     if not phones:
         raise SystemExit('No available iPhone simulator runtime on this runner.')
     device = phones[0]
+    print(f"Simulator: {device['name']} ({device['udid']})", flush=True)
     if device['state'] != 'Booted':
         run('xcrun', 'simctl', 'boot', device['udid'])
     run('xcrun', 'simctl', 'bootstatus', device['udid'], '-b')
