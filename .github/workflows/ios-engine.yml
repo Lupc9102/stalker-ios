@@ -46,6 +46,7 @@ jobs:
           brew install innoextract
           python3 Scripts/prepare_benchmark.py
       - name: Run native UIKit engine and verify background resume
+        timeout-minutes: 8
         run: python3 Scripts/native_simulator_capture.py
       - uses: actions/upload-artifact@v4
         if: success()

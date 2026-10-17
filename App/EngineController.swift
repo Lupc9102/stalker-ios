@@ -115,7 +115,7 @@ final class EngineController: UIViewController {
     private func reportSmoke(_ info: ZEngineInfo) {
         guard ProcessInfo.processInfo.arguments.contains("--engine-smoke-test") else { return }
         smokeTicks += 1; guard smokeTicks % 15 == 0 else { return }
-        let report: [String: Any] = ["phase": Int(info.phase), "frames": info.frames, "width": info.width, "height": info.height, "status": engineStatus()]
+        let report: [String: Any] = ["phase": Int(info.phase), "frames": info.frames, "width": info.width, "height": info.height, "cursor": info.cursor, "status": engineStatus()]
         if let data = try? JSONSerialization.data(withJSONObject: report, options: [.sortedKeys]) {
             try? data.write(to: GameFiles.documents.appendingPathComponent("engine-smoke.json"), options: .atomic)
         }

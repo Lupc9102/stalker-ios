@@ -6,8 +6,9 @@ import subprocess
 import time
 
 
-def run(*args):
-    return subprocess.check_output(args, text=True).strip()
+def run(*args, timeout=120):
+    print('Simulator command:', ' '.join(args), flush=True)
+    return subprocess.check_output(args, text=True, timeout=timeout).strip()
 
 
 def main():
@@ -19,7 +20,7 @@ def main():
     print(f'Native engine simulator: {device["name"]} ({identifier})', flush=True)
     if device['state'] != 'Booted':
         run('xcrun', 'simctl', 'boot', identifier)
-    run('xcrun', 'simctl', 'bootstatus', identifier, '-b')
+    run('xcrun', 'simctl', 'bootstatus', identifier, '-b', timeout=180)
     app = Path('Build/NativeSimulator/Build/Products/Debug-iphonesimulator/ZonePort.app').resolve()
     run('xcrun', 'simctl', 'install', identifier, str(app))
     container = Path(run('xcrun', 'simctl', 'get_app_container', identifier, bundle, 'data'))
@@ -29,7 +30,6 @@ def main():
     report = documents / 'engine-smoke.json'
     report.unlink(missing_ok=True)
     diagnostics = Path('Build/NativeSimulatorDiagnostics'); diagnostics.mkdir(parents=True, exist_ok=True)
-    run('xcrun', 'simctl', 'launch', identifier, bundle, '--engine-smoke-test')
 
     def wait_frames(minimum, seconds=180):
         deadline = time.monotonic() + seconds; last = None
@@ -40,7 +40,7 @@ def main():
                     print('Engine state:', state, flush=True); last = state
                 if state['phase'] >= 4:
                     raise RuntimeError('Native engine stopped: ' + state['status'])
-                if state['phase'] == 2 and state['frames'] >= minimum:
+                if state['phase'] == 2 and state['frames'] >= minimum and state.get('cursor'):
                     return state
             except (FileNotFoundError, json.JSONDecodeError):
                 pass
@@ -48,6 +48,7 @@ def main():
         raise RuntimeError('Native engine frame timeout; last state: ' + str(last))
 
     try:
+        run('xcrun', 'simctl', 'launch', identifier, bundle, '--engine-smoke-test', timeout=60)
         state = wait_frames(60)
         run('xcrun', 'simctl', 'io', identifier, 'screenshot', str(Path('Build/native-ios-menu.png').resolve()))
         before = state['frames']
@@ -58,8 +59,16 @@ def main():
         run('xcrun', 'simctl', 'io', identifier, 'screenshot', str(Path('Build/native-ios-resumed.png').resolve()))
         print(f'Native UIKit engine rendered {state["frames"]} frame callbacks and resumed after backgrounding. This is simulator validation, not a physical-device or level test.')
     finally:
+        # A failed startup must still leave a visible app state for diagnosis.
+        try:
+            run('xcrun', 'simctl', 'io', identifier, 'screenshot', str((diagnostics / 'last-screen.png').resolve()), timeout=30)
+        except (subprocess.SubprocessError, OSError) as error:
+            print('Diagnostic screenshot unavailable:', error, flush=True)
         if report.exists():
             shutil.copy2(report, diagnostics / 'engine-smoke.json')
+        for name in ('engine-native.log', 'engine-frame.ppm'):
+            if (documents / name).exists():
+                shutil.copy2(documents / name, diagnostics / name)
         logs = documents / 'ZonePortData/_appdata_/logs'
         if logs.exists():
             shutil.copytree(logs, diagnostics / 'engine-logs', dirs_exist_ok=True)

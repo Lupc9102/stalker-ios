@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <TargetConditionals.h>
 
 typedef struct { float x,y;bool down; } Pointer;
 typedef struct {
@@ -27,6 +28,38 @@ typedef struct {
     int32_t mouse_x,mouse_y;
 } Session;
 static _Atomic(Session *) current_session;
+#if TARGET_OS_SIMULATOR
+static bool smoke_setup(void) {
+    if(![NSProcessInfo.processInfo.arguments containsObject:@"--engine-smoke-test"])return false;
+    NSString *path=[NSHomeDirectory() stringByAppendingPathComponent:@"Documents/engine-native.log"];
+    freopen(path.fileSystemRepresentation,"a",stdout);freopen(path.fileSystemRepresentation,"a",stderr);
+    setvbuf(stdout,NULL,_IONBF,0);setvbuf(stderr,NULL,_IONBF,0);setenv("ZONE_TRACE_EVENTS","1",1);
+    return true;
+}
+static void smoke_frame(Session *s) {
+    u32 width=s->runtime->width,height=s->runtime->height;
+    if(!width||!height||width>4096||height>4096)return;
+    unsigned char *pixels=calloc((size_t)width*height,4);if(!pixels)return;
+    GLint read,pack,alignment,row,skip_rows,skip_pixels;
+    glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING,&read);glGetIntegerv(GL_PIXEL_PACK_BUFFER_BINDING,&pack);
+    glGetIntegerv(GL_PACK_ALIGNMENT,&alignment);glGetIntegerv(GL_PACK_ROW_LENGTH,&row);
+    glGetIntegerv(GL_PACK_SKIP_ROWS,&skip_rows);glGetIntegerv(GL_PACK_SKIP_PIXELS,&skip_pixels);
+    GLenum previous=glGetError();
+    glBindFramebuffer(GL_READ_FRAMEBUFFER,z_gl_framebuffer(s->host,0));glBindBuffer(GL_PIXEL_PACK_BUFFER,0);
+    glPixelStorei(GL_PACK_ALIGNMENT,1);glPixelStorei(GL_PACK_ROW_LENGTH,0);
+    glPixelStorei(GL_PACK_SKIP_ROWS,0);glPixelStorei(GL_PACK_SKIP_PIXELS,0);
+    glReadPixels(0,0,width,height,GL_RGBA,GL_UNSIGNED_BYTE,pixels);GLenum error=glGetError();
+    glBindFramebuffer(GL_READ_FRAMEBUFFER,read);glBindBuffer(GL_PIXEL_PACK_BUFFER,pack);
+    glPixelStorei(GL_PACK_ALIGNMENT,alignment);glPixelStorei(GL_PACK_ROW_LENGTH,row);
+    glPixelStorei(GL_PACK_SKIP_ROWS,skip_rows);glPixelStorei(GL_PACK_SKIP_PIXELS,skip_pixels);
+    unsigned lit=0;for(size_t i=0;i<(size_t)width*height;i++)if(pixels[4*i]||pixels[4*i+1]||pixels[4*i+2])lit++;
+    fprintf(stderr,"[native app] framebuffer: cursor=%d lit=%u/%u previousGL=0x%x readGL=0x%x\n",s->runtime->cursor_visible,lit,width*height,previous,error);
+    NSString *path=[NSHomeDirectory() stringByAppendingPathComponent:@"Documents/engine-frame.ppm"];
+    FILE *file=fopen(path.fileSystemRepresentation,"wb");
+    if(file){fprintf(file,"P6\n%u %u\n255\n",width,height);for(u32 y=height;y>0;y--)for(u32 x=0;x<width;x++)fwrite(pixels+((size_t)(y-1)*width+x)*4,1,3,file);fclose(file);}
+    free(pixels);
+}
+#endif
 static void status(Session *s,int phase,const char *message) {
     pthread_mutex_lock(&s->lock);snprintf(s->status,sizeof s->status,"%s",message);
     atomic_store(&s->phase,phase);pthread_cond_broadcast(&s->changed);pthread_mutex_unlock(&s->lock);
@@ -106,6 +139,9 @@ static void fail(Session *s,const char *message) {
 static void *run(void *pointer) {
     @autoreleasepool {
         Session *s=pointer;struct w2c_a *h=s->host;z_current_thread=h;wasm_rt_init_thread();
+        #if TARGET_OS_SIMULATOR
+        bool smoke=smoke_setup();
+        #endif
         zone_native_checkpoint_handler=checkpoint;zone_native_checkpoint_context=s;
         pthread_setname_np("Zone native engine");
         s->runtime->files=z_files_open(s->game,s->overlay);
@@ -126,6 +162,9 @@ static void *run(void *pointer) {
         if(h->yield_reason==1&&h->main_loop) {
             z_input_focus(h,true);s->mouse_x=s->runtime->width/2;s->mouse_y=s->runtime->height/2;
             z_input_mouse(h,33,0,0,s->mouse_x,s->mouse_y,0,0);
+            #if TARGET_OS_SIMULATOR
+            if(smoke)fprintf(stderr,"[native app] main loop callback=%llu argument=%llu thread=%llu\n",(unsigned long long)h->main_loop,(unsigned long long)h->main_loop_arg,(unsigned long long)h->pthread);
+            #endif
             status(s,ZEngineRunning,"Native engine running");
             while(h->main_loop&&!atomic_load(&s->runtime->failures)) {
                 wasm_rt_trap_t trap=wasm_rt_impl_try();
@@ -133,6 +172,9 @@ static void *run(void *pointer) {
                 checkpoint(s);double start=Z_IMPORT_emscripten_get_now(h);
                 z_pump(h);input_frame(s);z_input_frame_time(h,1000.0/30);
                 z_call_void(h,h->main_loop,h->main_loop_arg);
+                #if TARGET_OS_SIMULATOR
+                if(smoke&&atomic_load(&s->frames)==59)smoke_frame(s);
+                #endif
                 if(!z_gl_present(h)){fail(s,"The iPhone graphics surface could not present a frame.");return NULL;}
                 atomic_store(&s->width,s->runtime->width);atomic_store(&s->height,s->runtime->height);
                 atomic_store(&s->cursor,s->runtime->cursor_visible);atomic_fetch_add(&s->frames,1);
