@@ -105,6 +105,7 @@ final class EngineController: UIViewController {
     private var loading: UIView!
     private var displayLink: CADisplayLink?
     private var started = false, finished = false, lastMenu = true
+    private var gameplayControls = false
     private var lastTime: CFTimeInterval = 0
     private var padPoint = CGPoint(x: 0.5, y: 0.5)
     private var openGameMenuWhenReady = false, inputSuppressed = false
@@ -201,7 +202,9 @@ final class EngineController: UIViewController {
         if info.phase != ZEngineIdle { information.text = engineStatus() }
         let ready = info.frames >= 30
         loading.isHidden = ready; information.isHidden = ready
-        let menu = info.cursor || !ready
+        // CoP draws its own UI cursor and can hide the system cursor while
+        // its menus are open. Let the player select the touch mode explicitly.
+        let menu = !gameplayControls || !ready
         if menu != lastMenu { reset(); lastMenu = menu }
         controls.isHidden = menu
         if UIApplication.shared.applicationState != .active || presentedViewController != nil {
@@ -235,10 +238,13 @@ final class EngineController: UIViewController {
     }
     private func pause() {
         guard presentedViewController == nil, !finished else { return }; reset(); ZEngineSetPaused(true)
-        let alert = UIAlertController(title: "Game controls", message: "Tap the game menus directly. During play, use the thumb controls or a connected controller.", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Game controls", message: "Tap game menus directly. Once a level has loaded, choose Show game controls for movement and aiming. Choose Use game menus when you need to tap a menu.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Resume", style: .cancel) { [weak self] _ in self?.resume() })
+        alert.addAction(UIAlertAction(title: gameplayControls ? "Use game menus" : "Show game controls", style: .default) { [weak self] _ in
+            guard let self else { return }; self.gameplayControls.toggle(); self.resume()
+        })
         alert.addAction(UIAlertAction(title: "Game menu", style: .default) { [weak self] _ in
-            self?.openGameMenuWhenReady = true; self?.resume()
+            self?.gameplayControls = false; self?.openGameMenuWhenReady = true; self?.resume()
         })
         alert.addAction(UIAlertAction(title: "Edit controls", style: .default) { [weak self] _ in
             guard let self else { return }; let editor = ControlsEditorController(); editor.modalPresentationStyle = .fullScreen

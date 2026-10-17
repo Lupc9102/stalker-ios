@@ -11,6 +11,24 @@ def run(*args, timeout=120):
     return subprocess.check_output(args, text=True, timeout=timeout).strip()
 
 
+def verify_engine_frame(path):
+    # Check the engine's readback, excluding UIKit buttons and loading art.
+    with path.open('rb') as source:
+        if source.readline() != b'P6\n':
+            raise RuntimeError('Missing native RGB framebuffer header')
+        width, height = map(int, source.readline().split())
+        if source.readline() != b'255\n' or not (1 <= width <= 4096 and 1 <= height <= 4096):
+            raise RuntimeError('Invalid native RGB framebuffer dimensions')
+        pixels = source.read()
+    if len(pixels) != width * height * 3:
+        raise RuntimeError('Incomplete native framebuffer readback')
+    lit = sum(any(pixels[i:i+3]) for i in range(0, len(pixels), 3))
+    colors = {pixels[i:i+3] for i in range(0, len(pixels), 3 * 31)}
+    if lit < width * height // 100 or len(colors) < 16:
+        raise RuntimeError(f'Native game framebuffer is blank: {lit} lit pixels, {len(colors)} sampled colors')
+    print(f'Native framebuffer verified: {width}x{height}, {lit} lit pixels, {len(colors)} sampled colors.', flush=True)
+
+
 def main():
     groups = json.loads(run('xcrun', 'simctl', 'list', 'devices', 'available', '--json'))['devices']
     phones = [d for runtime, devices in groups.items() if '.iOS-' in runtime for d in devices if d['name'].startswith('iPhone')]
@@ -29,6 +47,8 @@ def main():
     shutil.copytree('Build/Benchmark/app', documents / 'Benchmark', dirs_exist_ok=True)
     report = documents / 'engine-smoke.json'
     report.unlink(missing_ok=True)
+    framebuffer = documents / 'engine-frame.ppm'
+    framebuffer.unlink(missing_ok=True)
     diagnostics = Path('Build/NativeSimulatorDiagnostics'); diagnostics.mkdir(parents=True, exist_ok=True)
 
     def wait_frames(minimum, seconds=180):
@@ -40,7 +60,7 @@ def main():
                     print('Engine state:', state, flush=True); last = state
                 if state['phase'] >= 4:
                     raise RuntimeError('Native engine stopped: ' + state['status'])
-                if state['phase'] == 2 and state['frames'] >= minimum and state.get('cursor'):
+                if state['phase'] == 2 and state['frames'] >= minimum:
                     return state
             except (FileNotFoundError, json.JSONDecodeError):
                 pass
@@ -50,6 +70,7 @@ def main():
     try:
         run('xcrun', 'simctl', 'launch', identifier, bundle, '--engine-smoke-test', timeout=60)
         state = wait_frames(60)
+        verify_engine_frame(framebuffer)
         run('xcrun', 'simctl', 'io', identifier, 'screenshot', str(Path('Build/native-ios-menu.png').resolve()))
         before = state['frames']
         run('xcrun', 'simctl', 'launch', identifier, 'com.apple.Preferences')

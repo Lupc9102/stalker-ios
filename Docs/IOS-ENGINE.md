@@ -25,7 +25,10 @@ are constructed in the pinned guest ABI on the owning engine thread. A small
 native pointer queue preserves direct menu taps; action edges are retained
 across frames. Controller sticks/buttons feed the same input hub. Menu touches
 account for the game's letterboxed rectangle. The Controls button opens the
-editor/settings or sends Escape to the actual game menu.
+editor/settings or sends Escape to the actual game menu. The app starts in menu
+touch mode. Controls → Show game controls enables movement/aiming; Use game
+menus restores direct tapping. CoP draws its own menu cursor while hiding the
+system cursor, so the browser/system cursor flag cannot select these modes.
 
 Pause requests reach the engine at generated function checkpoints, graphics
 calls, sleep slices and periodic atomic-wait checkpoints. Atomic waits retain

@@ -63,11 +63,15 @@ static bool present(void *pointer) {
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER,s->drawableFramebuffer);
         GLfloat clear[4];GLboolean mask[4];glGetFloatv(GL_COLOR_CLEAR_VALUE,clear);glGetBooleanv(GL_COLOR_WRITEMASK,mask);
         glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);glClearColor(0,0,0,1);glClear(GL_COLOR_BUFFER_BIT);
-        glColorMask(mask[0],mask[1],mask[2],mask[3]);glClearColor(clear[0],clear[1],clear[2],clear[3]);
         double sx=(double)s->drawableWidth/s->gameWidth,sy=(double)s->drawableHeight/s->gameHeight,scale=sx<sy?sx:sy;
         GLint width=(GLint)(s->gameWidth*scale+0.5),height=(GLint)(s->gameHeight*scale+0.5);
         GLint x=(s->drawableWidth-width)/2,y=(s->drawableHeight-height)/2;
         glBlitFramebuffer(0,0,s->gameWidth,s->gameHeight,x,y,x+width,y+height,GL_COLOR_BUFFER_BIT,GL_LINEAR);
+        // The browser canvas is opaque. CoP's final pass can leave alpha zero;
+        // copying it into the iOS drawable can hide otherwise valid RGB pixels.
+        // Make only the presentation surface opaque, preserving game alpha.
+        glColorMask(GL_FALSE,GL_FALSE,GL_FALSE,GL_TRUE);glClear(GL_COLOR_BUFFER_BIT);
+        glColorMask(mask[0],mask[1],mask[2],mask[3]);glClearColor(clear[0],clear[1],clear[2],clear[3]);
         glBindRenderbuffer(GL_RENDERBUFFER,s->drawableColor);bool ok=[s.context presentRenderbuffer:GL_RENDERBUFFER];
         glBindRenderbuffer(GL_RENDERBUFFER,renderbuffer);glBindFramebuffer(GL_READ_FRAMEBUFFER,read);glBindFramebuffer(GL_DRAW_FRAMEBUFFER,draw);
         if(scissor)glEnable(GL_SCISSOR_TEST);

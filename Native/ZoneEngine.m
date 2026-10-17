@@ -52,8 +52,8 @@ static void smoke_frame(Session *s) {
     glBindFramebuffer(GL_READ_FRAMEBUFFER,read);glBindBuffer(GL_PIXEL_PACK_BUFFER,pack);
     glPixelStorei(GL_PACK_ALIGNMENT,alignment);glPixelStorei(GL_PACK_ROW_LENGTH,row);
     glPixelStorei(GL_PACK_SKIP_ROWS,skip_rows);glPixelStorei(GL_PACK_SKIP_PIXELS,skip_pixels);
-    unsigned lit=0;for(size_t i=0;i<(size_t)width*height;i++)if(pixels[4*i]||pixels[4*i+1]||pixels[4*i+2])lit++;
-    fprintf(stderr,"[native app] framebuffer: cursor=%d lit=%u/%u previousGL=0x%x readGL=0x%x\n",s->runtime->cursor_visible,lit,width*height,previous,error);
+    unsigned lit=0,transparent=0;for(size_t i=0;i<(size_t)width*height;i++){if(pixels[4*i]||pixels[4*i+1]||pixels[4*i+2])lit++;if(!pixels[4*i+3])transparent++;}
+    fprintf(stderr,"[native app] framebuffer: cursor=%d lit=%u/%u transparent=%u previousGL=0x%x readGL=0x%x\n",s->runtime->cursor_visible,lit,width*height,transparent,previous,error);
     NSString *path=[NSHomeDirectory() stringByAppendingPathComponent:@"Documents/engine-frame.ppm"];
     FILE *file=fopen(path.fileSystemRepresentation,"wb");
     if(file){fprintf(file,"P6\n%u %u\n255\n",width,height);for(u32 y=height;y>0;y--)for(u32 x=0;x<width;x++)fwrite(pixels+((size_t)(y-1)*width+x)*4,1,3,file);fclose(file);}

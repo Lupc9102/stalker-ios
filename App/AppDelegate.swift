@@ -116,7 +116,7 @@ final class LauncherController: UIViewController, UIDocumentPickerDelegate {
     }
     private func help() {
         #if ZONE_WITH_ENGINE
-        let message = "Choose your installed original Call of Pripyat folder using Game files, then select Call of Pripyat and Play. The GOG installer itself isn’t a game folder.\n\nTap game menus directly. During play, move with your left thumb and swipe the right side to look. Controls opens the layout editor and Settings. A connected controller also works.\n\nThis experimental native build supports one engine session per app launch. Relaunch after exiting the game."
+        let message = "Choose your installed original Call of Pripyat folder using Game files, then select Call of Pripyat and Play. The GOG installer itself isn’t a game folder.\n\nTap game menus directly. After a level loads, open Controls → Show game controls. Move with your left thumb and swipe the right side to look. Controls → Use game menus lets you tap menus again. You can also edit the layout, change Settings, or use a controller.\n\nThis experimental native build supports one engine session per app launch. Relaunch after exiting the game."
         #else
         let message = "Controls practice works without game files.\n\nMove: left thumb area. Look: swipe the right side. Tap Tools for more actions. Pause opens the editor and Settings.\n\nFor future gameplay, copy your installed original CoP folder into Files → On My iPhone → STALKER Port, or select it with Game files. The GOG installer itself isn’t a game folder.\n\nThis development build does not run CoP yet."
         #endif

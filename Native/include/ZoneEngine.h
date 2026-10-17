@@ -4,6 +4,7 @@
 #include <stddef.h>
 
 enum { ZEngineIdle,ZEngineStarting,ZEngineRunning,ZEnginePaused,ZEngineEnded,ZEngineFailed };
+// frames counts callbacks; cursor is the system cursor, not CoP's drawn UI cursor.
 typedef struct { int32_t phase;uint32_t width,height;uint64_t frames;bool cursor; } ZEngineInfo;
 // This first integration owns one engine session for the app process. Its
 // shared heap and worker records remain alive until the process exits.
