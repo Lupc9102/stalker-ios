@@ -86,11 +86,11 @@ int main(int argc,char **argv) {
                 fprintf(stderr,"[engine] Native input test: %s %s; handled=%d callback=%llu owner=%llu thread=%llu\n",name,down?"down":"up",accepted,
                   (unsigned long long)h->runtime->events[down?2:3].callback,(unsigned long long)h->runtime->events[down?2:3].owner,(unsigned long long)h->pthread);
             }
-            if(pointer_options&&frame>=40&&frame<=42) {
+            if(pointer_options&&(frame==40||frame==62||frame==63)) {
                 int32_t x=(int32_t)(runtime->width*0.178),y=(int32_t)(runtime->height*0.592);
-                bool handled=z_input_mouse(h,frame==40?8:(frame==41?5:6),0,frame==41?1:0,x,y,
+                bool handled=z_input_mouse(h,frame==40?8:(frame==62?5:6),0,frame==62?1:0,x,y,
                   frame==40?x-(int32_t)runtime->width/2:0,frame==40?y-(int32_t)runtime->height/2:0);
-                fprintf(stderr,"[engine] Native pointer test: %s; handled=%d at %d,%d\n",frame==40?"move":(frame==41?"down":"up"),handled,x,y);
+                fprintf(stderr,"[engine] Native pointer test: %s; handled=%d at %d,%d\n",frame==40?"move":(frame==62?"down":"up"),handled,x,y);
             }
             z_pump(h);z_call_void(h,h->main_loop,h->main_loop_arg);
             if(!z_gl_present(h)) { fprintf(stderr,"[engine] Present failed\n");return 78; }

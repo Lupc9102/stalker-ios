@@ -9,6 +9,7 @@ settings:
     CLANG_ENABLE_OBJC_ARC: YES
     SWIFT_OBJC_BRIDGING_HEADER: Native/Zone-Bridging-Header.h
     SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) ZONE_WITH_ENGINE"
+    ZONE_ENGINE_BUILD_DIR: "$(SRCROOT)/Engine/Build-iOS"
     HEADER_SEARCH_PATHS:
       - "$(SRCROOT)/Native/include"
       - "$(SRCROOT)/Engine/Host"
@@ -25,8 +26,8 @@ settings:
       - WASM_RT_MAX_CALL_STACK_DEPTH=4096
     OTHER_LDFLAGS:
       - "$(inherited)"
-      - "$(SRCROOT)/Engine/Build-iOS/libzone_native_host.a"
-      - "$(SRCROOT)/Engine/Build-iOS/libxray_aot.a"
+      - "$(ZONE_ENGINE_BUILD_DIR)/libzone_native_host.a"
+      - "$(ZONE_ENGINE_BUILD_DIR)/libxray_aot.a"
     CODE_SIGN_STYLE: Automatic
     DEVELOPMENT_TEAM: ""
 targets:

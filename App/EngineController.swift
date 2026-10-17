@@ -40,6 +40,8 @@ private final class EngineSurface: UIView {
     var gameSize = CGSize(width: 1280, height: 720)
     private var finger: UITouch?
     private var lastPoint = CGPoint.zero
+    private var pressTask: DispatchWorkItem?, releaseTask: DispatchWorkItem?
+    private var isDown = false
     var gameRect: CGRect {
         guard bounds.width > 0, bounds.height > 0, gameSize.width > 0, gameSize.height > 0 else { return bounds }
         let scale = min(bounds.width / gameSize.width, bounds.height / gameSize.height)
@@ -58,16 +60,39 @@ private final class EngineSurface: UIView {
         guard rect.width > 0, rect.height > 0 else { return }
         ZEnginePointer(Float((point.x - rect.minX) / rect.width), Float((point.y - rect.minY) / rect.height), down)
     }
-    func reset() { if finger != nil { send(lastPoint, down: false) }; finger = nil }
+    func reset() {
+        pressTask?.cancel(); releaseTask?.cancel(); pressTask = nil; releaseTask = nil
+        if finger != nil || isDown { send(lastPoint, down: false) }; finger = nil; isDown = false
+    }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard finger == nil, let touch = touches.first, gameRect.contains(touch.location(in: self)) else { return }
-        finger = touch; send(touch.location(in: self), down: true)
+        guard finger == nil, pressTask == nil, !isDown, let touch = touches.first, gameRect.contains(touch.location(in: self)) else { return }
+        finger = touch; send(touch.location(in: self), down: false)
+        // CoP's moving menu selector accepts a press only after reaching the
+        // hovered row (100–300 ms). Touch has no preceding mouse hover, so
+        // supply that hover before clicking. Gameplay thumb buttons bypass
+        // this surface and retain their immediate press/release behavior.
+        let task = DispatchWorkItem { [weak self] in
+            guard let self else { return }; self.pressTask = nil
+            guard UIApplication.shared.applicationState == .active, self.window != nil else { self.reset(); return }
+            self.isDown = true; self.send(self.lastPoint, down: true)
+            if self.finger == nil {
+                let release = DispatchWorkItem { [weak self] in
+                    guard let self else { return }; self.releaseTask = nil
+                    self.send(self.lastPoint, down: false); self.isDown = false
+                }
+                self.releaseTask = release; DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: release)
+            }
+        }
+        pressTask = task; DispatchQueue.main.asyncAfter(deadline: .now() + 0.35, execute: task)
     }
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let finger, touches.contains(finger) { send(finger.location(in: self), down: true) }
+        if let finger, touches.contains(finger) { send(finger.location(in: self), down: isDown) }
     }
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let finger, touches.contains(finger) { send(finger.location(in: self), down: false); self.finger = nil }
+        if let finger, touches.contains(finger) {
+            send(finger.location(in: self), down: false); self.finger = nil
+            if isDown { isDown = false }
+        }
     }
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) { reset() }
 }
@@ -84,6 +109,18 @@ final class EngineController: UIViewController {
     private var padPoint = CGPoint(x: 0.5, y: 0.5)
     private var openGameMenuWhenReady = false, inputSuppressed = false
     private var overlayToStart: URL?
+    private var observers: [NSObjectProtocol] = []
+    #if DEBUG
+    private var smokeTicks = 0
+    private func reportSmoke(_ info: ZEngineInfo) {
+        guard ProcessInfo.processInfo.arguments.contains("--engine-smoke-test") else { return }
+        smokeTicks += 1; guard smokeTicks % 15 == 0 else { return }
+        let report: [String: Any] = ["phase": Int(info.phase), "frames": info.frames, "width": info.width, "height": info.height, "status": engineStatus()]
+        if let data = try? JSONSerialization.data(withJSONObject: report, options: [.sortedKeys]) {
+            try? data.write(to: GameFiles.documents.appendingPathComponent("engine-smoke.json"), options: .atomic)
+        }
+    }
+    #endif
     init(root: URL) { self.root = root; super.init(nibName: nil, bundle: nil) }
     required init?(coder: NSCoder) { fatalError("init(coder:) is not used") }
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask { .landscape }
@@ -111,6 +148,9 @@ final class EngineController: UIViewController {
             menu.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -12),
             menu.widthAnchor.constraint(equalToConstant: 115), menu.heightAnchor.constraint(equalToConstant: 34)
         ])
+        for name in [UIApplication.willResignActiveNotification, Notification.Name.GCControllerDidDisconnect] {
+            observers.append(NotificationCenter.default.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in self?.reset() })
+        }
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated); ZEngineSetPaused(false)
@@ -128,7 +168,7 @@ final class EngineController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated); reset(); ZEngineSetPaused(true); displayLink?.invalidate(); displayLink = nil
     }
-    deinit { displayLink?.invalidate() }
+    deinit { displayLink?.invalidate(); for observer in observers { NotificationCenter.default.removeObserver(observer) } }
     private func start(overlay: URL) {
         guard UIApplication.shared.applicationState == .active, view.window != nil else { overlayToStart = overlay; return }
         let rect = surface.gameRect
@@ -147,6 +187,9 @@ final class EngineController: UIViewController {
     @objc private func tick(_ link: CADisplayLink) {
         let dt = lastTime == 0 ? 1.0 / 60 : min(0.05, link.timestamp - lastTime); lastTime = link.timestamp
         let info = ZEngineGetInfo()
+        #if DEBUG
+        reportSmoke(info)
+        #endif
         if let overlay = overlayToStart, UIApplication.shared.applicationState == .active, presentedViewController == nil {
             overlayToStart = nil; start(overlay: overlay)
         }

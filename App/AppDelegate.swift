@@ -66,6 +66,12 @@ final class LauncherController: UIViewController, UIDocumentPickerDelegate {
             let practice = PracticeController(); practice.modalPresentationStyle = .fullScreen
             present(practice, animated: false)
         }
+        #if ZONE_WITH_ENGINE
+        if presentedViewController == nil && arguments.contains("--engine-smoke-test") && ZEngineCanStart() {
+            let engine = EngineController(root: GameFiles.documents.appendingPathComponent("Benchmark", isDirectory: true))
+            engine.modalPresentationStyle = .fullScreen; present(engine, animated: false)
+        }
+        #endif
         #endif
     }
     override func viewWillAppear(_ animated: Bool) { super.viewWillAppear(animated); refresh() }

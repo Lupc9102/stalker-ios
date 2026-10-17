@@ -39,6 +39,22 @@ jobs:
           path: Build/ZonePort-Native.ipa
           compression-level: 0
           if-no-files-found: error
+      - name: Build the connected native engine simulator app
+        run: bash Scripts/build_native_simulator.sh
+      - name: Prepare external benchmark test data
+        run: |
+          brew install innoextract
+          python3 Scripts/prepare_benchmark.py
+      - name: Run native UIKit engine and verify background resume
+        run: python3 Scripts/native_simulator_capture.py
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: Native-iOS-Simulator-Screenshots
+          path: |
+            Build/native-ios-menu.png
+            Build/native-ios-resumed.png
+          if-no-files-found: error
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -46,6 +62,9 @@ jobs:
           path: |
             Build/native-engine-ios.log
             Build/native-ios-build.log
+            Build/native-engine-simulator.log
+            Build/native-simulator-build.log
+            Build/NativeSimulatorDiagnostics
             Engine/Generated/native-coverage.json
           if-no-files-found: ignore
       - uses: actions/cache/save@v4

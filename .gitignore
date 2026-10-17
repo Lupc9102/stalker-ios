@@ -16,6 +16,7 @@ Engine/Benchmark/
 Engine/Generated/
 Engine/SupportData/
 Engine/Build-iOS/
+Engine/Build-Simulator/
 Engine/Build/
 __pycache__/
 *.pyc
