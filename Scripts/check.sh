@@ -7,6 +7,9 @@ Build/Checks/input-test
 python3 -m unittest discover -s Tests -p 'test_*.py'
 if command -v swiftc >/dev/null; then
     swiftc -frontend -parse App/*.swift
+    if [[ "$(uname -s)" == Darwin ]]; then
+        swiftc -typecheck Scripts/verify_simulator_screen.swift
+    fi
 else
     echo 'Swift compiler unavailable: UIKit source syntax check skipped.'
 fi
