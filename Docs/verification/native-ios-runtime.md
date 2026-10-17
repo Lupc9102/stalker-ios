@@ -43,8 +43,16 @@ That test used a pre-background frame baseline, allowing earlier frames to
 satisfy its post-resume wait. The later diagnostic count establishes continued
 rendering in this run, but `a26a064` strengthens the automated gate: it compares
 simctl's process identity across background/resume and waits for 30 new
-callbacks beyond the count observed after foregrounding. Its result is recorded
-below when available.
+callbacks beyond the count observed after foregrounding.
+
+[Run 39028985702](https://github.com/Lupc9102/stalker-ios/actions/runs/39028985702)
+for `a26a064` passed that stronger gate. The same simctl-reported app process
+survived the Settings round trip, and frame callbacks advanced from the
+post-foreground baseline of 240 to 274 before the resumed screenshot. Both
+actual screenshot-content checks passed. Its game readback contained 779,808
+non-black pixels; its drawable contained 2,209,185. The verification-only source
+changes do not alter the engine/app code in the shared `ae1e908` test IPA.
+Selected CI output is preserved in [native-ios-resume.log](native-ios-resume.log).
 
 ## Earlier checks and control mode
 

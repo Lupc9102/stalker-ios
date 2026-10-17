@@ -1,0 +1,12 @@
+Source: https://github.com/Lupc9102/stalker-ios/actions/runs/39028985702
+Commit: a26a064
+Selected runtime output; full job passed, including process identity and screenshot-content checks.
+
+2026-10-17T11:35:09.8810050Z Simulator command: xcrun simctl launch DC4CD8B3-4457-4153-9087-A0D7A2F9BFD9 io.github.lupc9102.zoneport --engine-smoke-test
+2026-10-17T11:37:11.4061930Z Native framebuffer verified: 1280x720, 779808 lit pixels, 9216 sampled colors.
+2026-10-17T11:37:12.2334810Z Native framebuffer verified: 2622x1206, 2209185 lit pixels, 18930 sampled colors.
+2026-10-17T11:37:15.4798970Z Simulator command: swift Scripts/verify_simulator_screen.swift Build/native-ios-menu.png
+2026-10-17T11:37:27.5474120Z Simulator command: xcrun simctl launch DC4CD8B3-4457-4153-9087-A0D7A2F9BFD9 com.apple.Preferences
+2026-10-17T11:37:31.1484380Z Simulator command: xcrun simctl launch DC4CD8B3-4457-4153-9087-A0D7A2F9BFD9 io.github.lupc9102.zoneport
+2026-10-17T11:37:38.7229140Z Simulator command: swift Scripts/verify_simulator_screen.swift Build/native-ios-resumed.png
+2026-10-17T11:37:41.2276280Z Native UIKit engine resumed from 240 to 274 frame callbacks after backgrounding. This is simulator validation, not a physical-device or level test.

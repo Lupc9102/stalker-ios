@@ -44,3 +44,11 @@ passed the same package checks: 41,342,199 bytes, SHA-256
 `068c0cf628e0e083f43663cf3c5f3307659857ab889645ae318d24451ff595f3`.
 Its only source changes are in verification scripts. The run also compiles the simulator app and type-checks the screenshot
 verifier before running the engine.
+
+
+The stronger simulator check in
+[run 39028985702](https://github.com/Lupc9102/stalker-ios/actions/runs/39028985702)
+passed for `a26a064`: process identity stayed unchanged across backgrounding,
+30 or more new frame callbacks completed after foregrounding (240 → 274),
+and both actual screen checks passed. Engine/app source is unchanged from the
+shared `ae1e908` test IPA; these later changes only strengthen verification.

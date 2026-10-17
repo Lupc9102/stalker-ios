@@ -65,8 +65,7 @@
   unverified.
 - The UIKit engine surface, action/pointer delivery and background pause
   checkpoints are connected. Visible simulator menu rendering is verified; the
-  background/resume run passed. A stricter same-process/fresh-frame check is
-  in progress.
+  background/resume run and the stricter same-process/fresh-frame check passed.
   This first integration retains one session per app process; safe worker
   teardown/restart remains outstanding. See `Docs/IOS-ENGINE.md`.
 - The native host implements 452 typed import entry points with GLES. The other 37 imports
@@ -99,6 +98,7 @@ Artifact details and verification limits are in
 ## Next action
 
 Continue the native engine host in the order documented in `Docs/ENGINE-HOST.md`.
-The native engine renders the menu and responds to input. Complete the native
-UIKit simulator/resume test and verify the current unsigned device IPA.
-Physical-device controls and retail-level testing remain outstanding.
+The native engine renders the menu and responds to input. The native
+UIKit simulator/resume test and unsigned device package checks pass. Test the
+player's GOG files next: new game, retail-level loading, saves and physical-device
+controls remain outstanding.
