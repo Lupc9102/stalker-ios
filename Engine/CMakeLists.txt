@@ -22,6 +22,17 @@ endif()
 if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
   target_compile_options(xray_aot PRIVATE -O${ZONE_ENGINE_OPTIMIZATION} -Werror=incompatible-pointer-types -Werror=implicit-function-declaration
     -include "${CMAKE_CURRENT_SOURCE_DIR}/Host/NativeRuntime.h")
+  # A few very large generated units take disproportionate optimization time
+  # in GCC. Diagnostics can opt individual units out while retaining the
+  # existing objects and optimization of the rest of the engine.
+  set(ZONE_ENGINE_UNOPTIMIZED_UNITS "" CACHE STRING "Generated C basenames compiled at O0 for bring-up")
+  foreach(unit IN LISTS ZONE_ENGINE_UNOPTIMIZED_UNITS)
+    set(source "${ZONE_GENERATED_DIR}/${unit}")
+    if(NOT source IN_LIST ENGINE_C)
+      message(FATAL_ERROR "Unknown generated engine unit: ${unit}")
+    endif()
+    set_source_files_properties("${source}" PROPERTIES COMPILE_OPTIONS -O0)
+  endforeach()
 endif()
 target_link_libraries(xray_aot PUBLIC Threads::Threads m)
 add_executable(zone_atomics_test ../Tests/atomics_test.c Host/Atomics.c

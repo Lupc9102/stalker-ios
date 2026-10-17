@@ -14,6 +14,12 @@ The host needs a C compiler, CMake, pthreads and OpenAL development headers/libr
 On macOS it uses the system OpenAL framework. On Linux, OpenAL Soft provides the
 API; its `null` output driver is useful on runners without audio hardware.
 
+The GCC diagnostic build uses `ZONE_ENGINE_OPTIMIZATION=1` with
+`ZONE_ENGINE_UNOPTIMIZED_UNITS=xray_8.c;xray_9.c;xray_63.c`. Those three large
+generated units compile at O0 to keep bring-up iteration time manageable. This
+is not a production optimization setting or a performance measurement. The
+Apple verification currently builds the entire engine at O0.
+
 ```sh
 python3 Scripts/prepare_engine.py
 python3 Scripts/native_host.py Engine/Generated Engine/Inputs/xr_3da.js
@@ -28,6 +34,25 @@ Engine/Build/zone_native_boot /path/to/game-folder /path/to/separate-writable-ap
 The executable is a startup diagnostic. Worker records remain process-owned;
 process exit cleans them up. Cooperative shutdown, frame scheduling and UIKit
 input delivery are required before safe app integration and engine restarts.
+
+For the free official benchmark, install `innoextract`, then prepare its data
+and the matching source support files:
+
+```sh
+python3 Scripts/prepare_benchmark.py
+python3 Scripts/prepare_support_data.py
+mkdir -p Build/BenchmarkUser
+cp -a Engine/SupportData/gamedata Build/BenchmarkUser/
+cp Engine/SupportData/fsgame.ltx Build/BenchmarkUser/
+ALSOFT_DRIVERS=null Engine/Build/zone_native_boot \
+  Build/Benchmark/app Build/BenchmarkUser 3 Build/engine-frame.ppm
+```
+
+The installer size and SHA-256 are pinned in `Engine/benchmark.lock.json`.
+Extraction never executes Windows binaries. Keep these test assets out of app
+packages and diagnostic artifacts. They are insufficient for full retail
+campaign validation. The capture argument writes a framebuffer only if the
+actual engine reaches its frame loop; it does not manufacture a preview.
 
 ## Native services
 

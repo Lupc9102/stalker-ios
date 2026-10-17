@@ -1,0 +1,8 @@
+{
+  "page": "https://cop.stalker-game.com/?page=benchmark",
+  "url": "https://files.gsc-game.com/st/bench/stkcop-bench-setup.exe",
+  "filename": "stkcop-bench-setup.exe",
+  "bytes": 443790904,
+  "sha256": "8c810fba1bbb9c58fc01f4f602479886680c9f4b491dd0afe935e27083f54845",
+  "archives": ["resources/amd_demo.db1", "resources/amd_demo.db2", "resources/shaders.db", "resources/x_patch.db"]
+}
