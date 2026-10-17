@@ -61,7 +61,7 @@ endif()
 if(EXISTS "${ZONE_GENERATED_DIR}/native_imports.c")
   find_package(OpenAL REQUIRED)
   add_library(zone_native_host STATIC Host/Runtime.c Host/Threads.c Host/Files.c Host/Memory.c Host/Asm.c Host/Window.c
-    Host/Audio.c "${ZONE_GENERATED_DIR}/native_imports.c")
+    Host/Audio.c Host/Network.c "${ZONE_GENERATED_DIR}/native_imports.c")
   target_include_directories(zone_native_host PRIVATE ${OPENAL_INCLUDE_DIR})
   target_link_libraries(zone_native_host PUBLIC xray_aot ${OPENAL_LIBRARY})
   target_compile_definitions(zone_native_host PUBLIC _DARWIN_C_SOURCE=1 PRIVATE _DEFAULT_SOURCE)

@@ -46,7 +46,9 @@
   and file offsets above 4 GiB. See `Docs/verification/apple-engine-build.md`.
 - A reproducible compiler bug leaked the guest call-depth counter on caught
   exceptions. The patched generator passes the nested exception regression
-  fixture; full engine startup with the fix is being tested.
+  fixture and actual engine startup registers 251 script-export nodes, loads
+  game scripts, and renders three real main-menu frames. The official free
+  benchmark supplies the test archives; see `Docs/verification/native-engine-menu.log`.
 
 ## Not implemented / not verified
 
@@ -56,10 +58,10 @@
 - UIKit graphics surface integration, the engine lifecycle and SDL input delivery
   are still outstanding. An iOS EAGL provider compiles, while filesystem/pthread/OpenAL/GLES services work in
   Linux host tests; they have not yet been integrated into UIKit.
-- The native host implements 451 typed import entry points with GLES. The other 38 imports
+- The native host implements 452 typed import entry points with GLES. The other 37 imports
   remain explicit traps. Event registration is stored; UI event delivery is not
   connected. See `Docs/NATIVE-HOST.md` for the exact scope.
-- No menu, level, save, combat, game memory-budget or sustained frame-rate test
+- No level, save, combat, game memory-budget or sustained frame-rate test
   has been performed. Reaching missing game data is a startup test only.
 - No physical-device engine test has completed. The ARM64 app build does not
   contain the translated engine.
@@ -85,6 +87,6 @@ Artifact details and verification limits are in
 ## Next action
 
 Continue the native engine host in the order documented in `Docs/ENGINE-HOST.md`.
-The native rendering test passes. A real game frame and the iOS engine surface
-are next. Physical-device controls testing remains outstanding; the existing
+The native engine renders the main menu. UIKit integration, native input
+delivery and iPhone texture compatibility are next. Physical-device controls testing remains outstanding; the existing
 controls IPA still contains no linked engine.

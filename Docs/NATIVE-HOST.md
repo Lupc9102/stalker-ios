@@ -6,7 +6,9 @@ repository's filesystem config it mounts the native folder, enumerates files,
 writes an OpenXRay log into a separate app-data overlay. With the official free
 CoP benchmark and the source project's GL shaders it reads four archives,
 enumerates about 48,000 files, selects the renderer and creates a native GLES
-context. No game frame has been rendered yet.
+context. It now completes Lua registration and renders the actual main menu. The first
+three frames and framebuffer capture completed on Linux using Mesa llvmpipe.
+See `verification/native-engine-menu.log`. This is not iPhone or level validation.
 
 ## Reproduce
 
@@ -58,7 +60,7 @@ actual engine reaches its frame loop; it does not manufacture a preview.
 
 - Typed bindings match the pinned Wasm64 ABI. Unsupported imports trap by name;
   there are no graphics success stubs. The generated coverage file currently
-  identifies 451 implemented entry points and 38 unsupported imports when the
+  identifies 452 implemented entry points and 37 unsupported imports when the
   optional GLES backend is enabled. Coverage is not gameplay validation.
 - POSIX clocks, entropy, timezone data, heap growth, native logging and exit.
 - Per-thread module instances, guest stack/TLS initialization, actual pthreads,
@@ -112,13 +114,14 @@ unwind native C frames. A minimal module reproduced a leaked depth after its
 first catch. `patch_exception_depth.py` saves depth on entering a try region and
 restores it in its catch path, including unmatched tags and rethrows. The
 generated regression fixture passes 10,000 nested catch/rethrow rounds.
-Full-engine startup with this correction is being tested.
+With this correction the full engine registers 251 script-export nodes, loads
+the game scripts and reaches its real frame loop.
 
 The earlier default 500-call limit stopped during Lua binding registration.
 Generated prologues now check the native thread's actual stack boundary, with
 128 KiB kept for trap handling, and retain a 4096-call cap. Live-runtime yields
-restore the call-depth baseline. The higher limit is being tested along the
-real startup path; raising it alone does not establish scripting correctness.
+restore the call-depth baseline. The corrected exception accounting and native stack guard pass the real main-menu
+startup path; level and combat scripts remain untested.
 
 `GraphicsIOS.m` supplies an EAGL/ES 3 provider for a caller-owned CAEAGLLayer.
 It draws at game resolution into a separate framebuffer, scales into the phone

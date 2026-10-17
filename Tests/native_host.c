@@ -63,6 +63,12 @@ int main(void) {
     u64 high_guest=((u64)1<<32)+4096;
     assert(Z_IMPORT__wasmfs_opfs_read_access(h,(u32)large,high_guest,6,((u64)1<<32)+16)==6);
     assert(!memcmp(z_pointer(h,high_guest,6),"WASM64",6));
+    text(h,high_guest,"127.0.0.1");assert(Z_IMPORT__emscripten_lookup_name(h,high_guest)==0x0100007fu);
+    text(h,high_guest,"192.0.2.7");assert(Z_IMPORT__emscripten_lookup_name(h,high_guest)==0x070200c0u);
+    text(h,high_guest,"localhost");assert(Z_IMPORT__emscripten_lookup_name(h,high_guest)==0x0100007fu);
+    text(h,high_guest,"emscripten");assert(Z_IMPORT__emscripten_lookup_name(h,high_guest)==0x0100007fu);
+    text(h,high_guest,"");assert(!Z_IMPORT__emscripten_lookup_name(h,high_guest));
+    puts("Native IPv4 lookup: literal addresses, localhost, bundled hostname and empty-name failure passed.");
     assert(get(h,p,"../outside")<0);assert(get(h,p,"/etc/passwd")<0);assert(get(h,p,"link")<0);assert(get(h,p,"a\\b")<0);
     // A released access handle must not close its still-live file node. Handle
     // IDs are recycled instead of exhausting after repeated open/close cycles.

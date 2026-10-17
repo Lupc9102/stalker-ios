@@ -1,0 +1,269 @@
+[engine] Allocating imported memory64; no JIT
+[engine] Fixed native heap: 2048 MiB address space; no executable mapping
+[engine] Running static constructors
+[engine] ENTERING REAL ENGINE MAIN
+OpenXRay Release build 10079, Sep 12 2026 (Web wasm64, static)
+Custom build from commit[fd5baa6859561a2968098f829aeeb33975929c7e] branch[wasm]
+! Failed to get user name
+ 
+command line -nosplash -nointro -nogameintro -fsltx /opfs/fsgame.ltx 
+
+* CPU features: 
+* CPU threads: 9
+
+Initializing File System...
+$fs_root$ = /opfs
+using fs-ltx /opfs/fsgame.ltx
+Starting INPUT device...
+SOUND: OpenAL: enumerate devices...
+SOUND: OpenAL: system default sound device name is No Output
+SOUND: OpenAL: All available devices:
+1. No Output, Spec Version 1.1 (default) eax[0] efx[yes]
+FS: 48216 files cached 4 archives, 0Kb memory used.
+Init FileSystem 9.008378 sec
+-----loading \opfs\gamedata\configs\system.ltx
+-----loading \opfs\gamedata\configs\system.ltx
+Available render modes[1]:
+renderer_r3
+Executing config-script "user.ltx"...
+~ Invalid syntax in call to 'renderer'
+~ Valid arguments: renderer_r3
+[\opfs\user.ltx] successfully loaded.
+Selected renderer: renderer_r3
+! Player name registry key (InstallUserName) not found !
+StringTable: loaded 34 files
+Initializing Engine...
+Executing config-script "\opfs\gamedata\configs\default_controls.ltx"...
+[\opfs\gamedata\configs\default_controls.ltx] successfully loaded.
+Executing config-script "user.ltx"...
+Executing config-script "\opfs\gamedata\configs\rspec_high.ltx"...
+! Cannot open script file [\opfs\gamedata\configs\rspec_high.ltx]
+! Unknown command:  ai_animation_stats
+! Unknown command:  ai_dbg_alife
+! Unknown command:  ai_dbg_anim
+! Unknown command:  ai_dbg_brain
+! Unknown command:  ai_dbg_cover
+! Unknown command:  ai_dbg_destroy
+! Unknown command:  ai_dbg_dialogs
+! Unknown command:  ai_dbg_frustum
+! Unknown command:  ai_dbg_funcs
+! Unknown command:  ai_dbg_goap
+! Unknown command:  ai_dbg_goap_object
+! Unknown command:  ai_dbg_goap_script
+! Unknown command:  ai_dbg_inactive_time
+! Unknown command:  ai_dbg_infoportion
+! Unknown command:  ai_dbg_lua
+! Unknown command:  ai_dbg_monster
+! Unknown command:  ai_dbg_motion
+! Unknown command:  ai_dbg_serialize
+! Unknown command:  ai_dbg_stalker
+! Unknown command:  ai_dbg_vision
+! Unknown command:  ai_debug
+! Unknown command:  ai_draw_game_graph
+! Unknown command:  ai_draw_game_graph_objects
+! Unknown command:  ai_draw_game_graph_real_pos
+! Unknown command:  ai_draw_game_graph_stalkers
+! Unknown command:  ai_draw_visibility_rays
+! Unknown command:  ai_nil_object_access
+! Unknown command:  ai_smart_cover_animation_speed_factor
+! Unknown command:  ai_stats
+! Unknown command:  air_resistance_epsilon
+! Unknown command:  bemsg
+! Unknown command:  dbg_bones_snd_player
+! Unknown command:  dbg_destroy
+! Unknown command:  dbg_draw_actor_alive
+! Unknown command:  dbg_draw_actor_dead
+! Unknown command:  dbg_draw_actor_phys
+! Unknown command:  dbg_draw_animation_movement_controller
+! Unknown command:  dbg_draw_autopickupbox
+! Unknown command:  dbg_draw_bullet_hit
+! Unknown command:  dbg_draw_camera_collision
+! Unknown command:  dbg_draw_car_plots_all_trans
+! Unknown command:  dbg_draw_character_binds
+! Unknown command:  dbg_draw_character_bones
+! Unknown command:  dbg_draw_character_physics
+! Unknown command:  dbg_draw_character_physics_pones
+! Unknown command:  dbg_draw_climbable
+! Unknown command:  dbg_draw_customdetector
+! Unknown command:  dbg_draw_customzone
+! Unknown command:  dbg_draw_fb_crosshair
+! Unknown command:  dbg_draw_invitem
+! Unknown command:  dbg_draw_ph_car_dynamics
+! Unknown command:  dbg_draw_ph_car_plots
+! Unknown command:  dbg_draw_ph_cashed_tries_stats
+! Unknown command:  dbg_draw_ph_contacts
+! Unknown command:  dbg_draw_ph_death_boxes
+! Unknown command:  dbg_draw_ph_enabled_aabbs
+! Unknown command:  dbg_draw_ph_explosion_position
+! Unknown command:  dbg_draw_ph_explosions
+! Unknown command:  dbg_draw_ph_hit_anims
+! Unknown command:  dbg_draw_ph_hit_app_pos
+! Unknown command:  dbg_draw_ph_ik_blending
+! Unknown command:  dbg_draw_ph_ik_collision
+! Unknown command:  dbg_draw_ph_ik_goal
+! Unknown command:  dbg_draw_ph_ik_limits
+! Unknown command:  dbg_draw_ph_ik_predict
+! Unknown command:  dbg_draw_ph_ik_shift_object
+! Unknown command:  dbg_draw_ph_intersected_tries
+! Unknown command:  dbg_draw_ph_mass_centres
+! Unknown command:  dbg_draw_ph_negative_tries
+! Unknown command:  dbg_draw_ph_positive_tries
+! Unknown command:  dbg_draw_ph_ray_motions
+! Unknown command:  dbg_draw_ph_saved_tries
+! Unknown command:  dbg_draw_ph_statistics
+! Unknown command:  dbg_draw_ph_tri_point
+! Unknown command:  dbg_draw_ph_tri_test_aabb
+! Unknown command:  dbg_draw_ph_tri_trace
+! Unknown command:  dbg_draw_ph_tries_changes_sign
+! Unknown command:  dbg_draw_ph_zbuffer_disable
+! Unknown command:  dbg_draw_ragdoll_spawn
+! Unknown command:  dbg_draw_rp
+! Unknown command:  dbg_draw_skeleton
+! Unknown command:  dbg_draw_teamzone
+! Unknown command:  dbg_dump_physics_step
+! Unknown command:  dbg_imotion_collide_debug
+! Unknown command:  dbg_imotion_draw_skeleton
+! Unknown command:  dbg_imotion_draw_velocity
+! Unknown command:  dbg_imotion_draw_velocity_scale
+! Unknown command:  dbg_ph_actor_restriction
+! Unknown command:  dbg_ph_ai_always_phmove
+! Unknown command:  dbg_ph_ai_never_phmove
+! Unknown command:  dbg_ph_character_control
+! Unknown command:  dbg_ph_ik
+! Unknown command:  dbg_ph_ik_limits
+! Unknown command:  dbg_ph_ik_off
+! Unknown command:  dbg_ph_ladder
+! Unknown command:  dbg_ph_obj_collision_damage
+! Unknown command:  dbg_ph_vel_collid_damage_to_display
+! Unknown command:  dbg_show_ani_info
+! Unknown command:  dbg_text_height_scale
+! Unknown command:  dbg_track_obj
+! Unknown command:  dbg_track_obj_blends_ammount
+! Unknown command:  dbg_track_obj_blends_bp_0
+! Unknown command:  dbg_track_obj_blends_bp_1
+! Unknown command:  dbg_track_obj_blends_bp_2
+! Unknown command:  dbg_track_obj_blends_bp_3
+! Unknown command:  dbg_track_obj_blends_dump
+! Unknown command:  dbg_track_obj_blends_flags
+! Unknown command:  dbg_track_obj_blends_mix_params
+! Unknown command:  dbg_track_obj_blends_motion_name
+! Unknown command:  dbg_track_obj_blends_state
+! Unknown command:  dbg_track_obj_blends_time
+! Unknown command:  death_anim_debug
+! Unknown command:  death_anim_velocity
+! Unknown command:  debug_character_material_load
+! Unknown command:  debug_destroy
+! Unknown command:  debug_step_info
+! Unknown command:  debug_step_info_load
+! Unknown command:  error_line_count
+! Unknown command:  hit_anims_block_blend
+! Unknown command:  hit_anims_channel_factor
+! Unknown command:  hit_anims_power
+! Unknown command:  hit_anims_reduce_blend
+! Unknown command:  hit_anims_reduce_blend_factor
+! Unknown command:  hit_anims_rotational_power
+! Unknown command:  hit_anims_side_sensitivity_threshold
+! Unknown command:  hit_anims_tune
+! Unknown command:  inv_upgrades_log
+! Unknown command:  mm_net_filter_battleye
+! Unknown command:  mm_net_use_battleye
+! Unknown command:  mt_network
+! Unknown command:  mt_particles
+! Unknown command:  mt_physics
+! Unknown command:  mt_sound
+! Unknown command:  net_cl_pending_lim
+! Unknown command:  net_cl_update_rate
+! Unknown command:  net_dump_size
+! Unknown command:  ph_break_common_factor
+! Unknown command:  ph_gravity
+! Unknown command:  ph_rigid_break_weapon_factor
+! Unknown command:  ph_timefactor
+! Unknown command:  ph_tri_clear_disable_count
+! Unknown command:  ph_tri_query_ex_aabb_rate
+! Unknown command:  r1_no_detail_textures
+! Unknown command:  r2_hbao
+! Unknown command:  r2_mt
+! Unknown command:  r2_use_nvdbt
+! Unknown command:  r__d_tree_w_amp
+! Unknown command:  r__d_tree_w_rot
+! Unknown command:  r__d_tree_w_speed
+! Unknown command:  r__d_tree_wave
+! Unknown command:  r__detail_l_ambient
+! Unknown command:  r__detail_l_aniso
+! Unknown command:  r__lsleep_frames
+! Unknown command:  r__ssa_glod_end
+! Unknown command:  r__ssa_glod_start
+! Unknown command:  r__wallmark_shift_pp
+! Unknown command:  r__wallmark_shift_v
+~ Invalid syntax in call to 'renderer'
+~ Valid arguments: renderer_r3
+! Unknown command:  rs_clear_bb
+! Unknown command:  rs_constant_fps
+! Unknown command:  rs_occ_draw
+! Unknown command:  rs_occ_stats
+! Unknown command:  rs_occlusion
+! Unknown command:  show_wnd_rect_all
+~ Invalid syntax in call to 'snd_device'
+~ Valid arguments: No Output
+! Unknown command:  snd_stats
+! Unknown command:  snd_stats_ai_dist
+! Unknown command:  snd_stats_info_name
+! Unknown command:  snd_stats_info_object
+! Unknown command:  snd_stats_max_dist
+! Unknown command:  snd_stats_min_dist
+! Unknown command:  stalker_death_anim
+! Unknown command:  string_table_error_msg
+! Unknown command:  sv_console_update_rate
+! Unknown command:  sv_ignore_money_on_buy
+! Unknown command:  sv_skip_winner_waiting
+! Unknown command:  sv_wait_for_players_ready
+! Unknown command:  vid_bpp
+[\opfs\user.ltx] successfully loaded.
+SOUND: Selected device is No Output
+Starting RENDER device...
+[engine] Native GLES: llvmpipe (LLVM 20.1.2, 256 bits) / OpenGL ES 3.2 Mesa 25.2.8-0ubuntu0.24.04.2
+[engine] GLES make-current 1 guest=7675832 native=140620522203520
+* WebGL base vertex draws: attribute re-pointing
+* GPU vendor: [Mesa] device: [llvmpipe (LLVM 20.1.2, 256 bits)]
+* GPU OpenGL version: OpenGL ES 3.2 Mesa 25.2.8-0ubuntu0.24.04.2
+* GPU OpenGL shading language version: OpenGL ES GLSL ES 3.20
+* GPU OpenGL VTF units: [32] CTI units: [192]
+* DVB created: 4096K
+* DIB created: 512K
+! Renderer doesn't support blender 'effects\shadow_world'
+Processing 2736 .thm files in [$game_textures$]
+Load, texture descriptions loaded for 7064 ms
+* HWDST/PCF supported and used
+* Script exporter has 251 nodes registered.
+* Loading script: _G.script
+* Loading script: class_registrator.script
+* Loading script: ui_main_menu.script
+* Loading script: smart_terrain.script
+* Loading script: se_actor.script
+* Loading script: se_stalker.script
+* Loading script: se_heli.script
+* Loading script: se_zones.script
+* Loading script: se_item.script
+* Loading script: se_smart_cover.script
+* Loading script: se_artefact.script
+* Loading script: se_monster.script
+* Loading script: sim_squad_scripted.script
+* Loading script: game_registrator.script
+! Player name registry key (InstallUserName) not found !
+[engine] IPv4 lookup failed for stalkercoppc.available.gamegsc.com: Temporary failure in name resolution
+[engine] IPv4 lookup failed for stalkercoppc.available.gamegsc.com: Temporary failure in name resolution
+Starting engine...
+[engine] Main yielded: reason 1, status 0
+[engine] Running up to 3 real engine frames
+* Loading script: xr_s.script
+* [ Emscripten ]: free[0 K], reserved[0 K], committed[2097152 K]
+* [ render ]: textures[0 K]
+* [ x-ray  ]: process heap[2097152 K]
+* [ x-ray  ]: shared strings: memory[8663 K], count[39910]
+* [ x-ray  ]: shared memory[0 K]
+! Can't find texture 'ui\video_voroni_crop'
+! Can't find texture 'ui\video_water_crop'
+[engine] Rendered engine frame 1
+[engine] Rendered engine frame 2
+[engine] Rendered engine frame 3
+[engine] Captured actual engine framebuffer: /workspace/scratch/708e372d35b5/zone-ios/Build/engine-frame.ppm
