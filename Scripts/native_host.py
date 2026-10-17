@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 import re
+from patch_engine_snapshot import SOURCE_SHA256, OUTPUT_SHA256
 
 
 def generate(directory, javascript, host, gles=False):
@@ -14,7 +15,7 @@ def generate(directory, javascript, host, gles=False):
     names = {(i['module'], i['field']): i['name'] for i in report['imports']}
     matches = re.findall(r"/\* import: '([^']+)' '([^']+)' \*/\n(\w+) (w2c_\w+)\(([^;]+)\);", header)
     functions = {names[(m, f)]: (ret, fn, args.split(',')[1:]) for m, f, ret, fn, args in matches}
-    if len(functions) != 489 or report['sha256'] != 'db894e66ec1b60c8c52bb1b3764e83f3e2131fbc6d56e0b309f5af1e08cf0b42':
+    if len(functions) != 489 or report['sha256'] not in {SOURCE_SHA256, OUTPUT_SHA256}:
         raise ValueError('Native host requires the reviewed engine snapshot')
     implementations = set()
     for path in host.glob('*.c'):
@@ -91,6 +92,7 @@ def generate(directory, javascript, host, gles=False):
     output.append('default: z_missing(h,"unmapped Emscripten proxy index");\n }\n}\n')
     (directory / 'native_imports.c').write_text(''.join(output))
     (directory / 'native-coverage.json').write_text(json.dumps({
+        'engine_sha256': report['sha256'],
         'implemented': sorted(implementations),
         'unsupported': sorted(set(functions) - implementations),
         'gles': gles,
