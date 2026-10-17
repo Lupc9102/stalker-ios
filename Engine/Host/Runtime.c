@@ -48,11 +48,9 @@ u32 Z_IMPORT_emscripten_num_logical_cores(struct w2c_a *h) { (void)h;long n=sysc
 void Z_IMPORT_emscripten_check_blocking_allowed(struct w2c_a *h) { (void)h; /* Native engine threads may block. */ }
 u64 Z_IMPORT_emscripten_get_heap_max(struct w2c_a *h) { return w2c_a_a(h)->max_pages*WASM_DEFAULT_PAGE_SIZE; }
 u32 Z_IMPORT_emscripten_resize_heap(struct w2c_a *h,u64 desired) {
-    wasm_rt_shared_memory_t *m=w2c_a_a(h);
-    if(desired<=m->size)return 1;
-    u64 pages=(desired+65535)/65536;
-    if(pages>m->max_pages)return 0;
-    return wasm_rt_grow_memory_shared(m,pages-m->pages)!=UINT64_MAX;
+    // Beyond the configured cap, report ordinary allocation failure. Never
+    // relocate memory while another thread or native API retains a pointer.
+    return desired<=w2c_a_a(h)->size;
 }
 void Z_IMPORT_emscripten_out(struct w2c_a *h,u64 p) {
 #if WASM_RT_STACK_DEPTH_COUNT

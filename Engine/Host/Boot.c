@@ -7,6 +7,22 @@
 #include <unistd.h>
 #if defined(ZONE_NATIVE_GLES)
 #include "Graphics.h"
+static bool save_frame(struct w2c_a *h,const char *path) {
+    u32 width=h->runtime->width,height=h->runtime->height;
+    if(!width||!height||width>4096||height>4096)return false;
+    size_t size=(size_t)width*height*4;unsigned char *pixels=malloc(size);if(!pixels)return false;
+    glBindFramebuffer(GL_READ_FRAMEBUFFER,z_gl_framebuffer(h,0));glBindBuffer(GL_PIXEL_PACK_BUFFER,0);
+    glPixelStorei(GL_PACK_ALIGNMENT,1);glPixelStorei(GL_PACK_ROW_LENGTH,0);
+    glPixelStorei(GL_PACK_SKIP_ROWS,0);glPixelStorei(GL_PACK_SKIP_PIXELS,0);
+    glReadPixels(0,0,width,height,GL_RGBA,GL_UNSIGNED_BYTE,pixels);
+    if(glGetError()!=GL_NO_ERROR){free(pixels);return false;}
+    FILE *file=fopen(path,"wb");if(!file){free(pixels);return false;}
+    bool success=fprintf(file,"P6\n%u %u\n255\n",width,height)>0;
+    for(u32 y=height;y>0&&success;y--)for(u32 x=0;x<width;x++) {
+        if(fwrite(pixels+((size_t)(y-1)*width+x)*4,1,3,file)!=3){success=false;break;}
+    }
+    if(fclose(file))success=false;free(pixels);return success;
+}
 #endif
 
 // This executable deliberately runs the real constructors and main, unlike the
@@ -27,7 +43,9 @@ int main(int argc,char **argv) {
     if(!z_gl_egl_attach(runtime))return 1;
 #endif
     fprintf(stderr,"[engine] Allocating imported memory64; no JIT\n");
-    wasm_rt_allocate_memory_shared(&runtime->memory,32768,262144,true,WASM_DEFAULT_PAGE_SIZE);
+    const char *heap_setting=getenv("ZONE_HEAP_MB");
+    u32 heap_mb=heap_setting?(u32)strtoul(heap_setting,NULL,10):2048;
+    if(!z_memory_open(runtime,heap_mb))return 1;
     if(setjmp(h->yielded)==0) {
         wasm_rt_trap_t trap=wasm_rt_impl_try();
         if(trap) { fprintf(stderr,"[engine] Native boot trapped: %s\n",wasm_rt_strerror(trap));return 78; }
@@ -56,6 +74,10 @@ int main(int argc,char **argv) {
             z_pump(h);z_call_void(h,h->main_loop,h->main_loop_arg);
             if(!z_gl_present(h)) { fprintf(stderr,"[engine] Present failed\n");return 78; }
             fprintf(stderr,"[engine] Rendered engine frame %u\n",frame+1);
+        }
+        if(argc>4) {
+            if(!save_frame(h,argv[4])){fprintf(stderr,"[engine] Frame capture failed\n");return 78;}
+            fprintf(stderr,"[engine] Captured actual engine framebuffer: %s\n",argv[4]);
         }
     }
 #endif

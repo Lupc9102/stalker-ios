@@ -12,6 +12,8 @@ Tools/
 Engine/Inputs/
 Engine/Benchmark/
 Engine/Generated/
+Engine/SupportData/
+Engine/Build-iOS/
 Engine/Build/
 __pycache__/
 *.pyc

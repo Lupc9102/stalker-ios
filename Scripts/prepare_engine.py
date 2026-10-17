@@ -11,6 +11,7 @@ import subprocess
 import sys
 import urllib.request
 import urllib.parse
+import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -32,6 +33,7 @@ def main():
     if commit != lock['wabt']['commit']: raise SystemExit('WABT checkout does not match sources.lock.json')
     run('git', '-C', wabt, 'submodule', 'update', '--init', '--depth', '1', 'third_party/simde')
     run(sys.executable, ROOT / 'Scripts/patch_wasm2c.py', wabt / 'src/c-writer.cc')
+    run(sys.executable, ROOT / 'Scripts/patch_exception_depth.py', wabt / 'src/c-writer.cc')
     run('cmake', '-S', wabt, '-B', wabt / 'build', '-DBUILD_TESTS=OFF', '-DBUILD_LIBWASM=OFF', '-DCMAKE_BUILD_TYPE=Release')
     run('cmake', '--build', wabt / 'build', '--target', 'wasm2c', 'wat2wasm', '-j', '4')
     inputs = ROOT / 'Engine/Inputs'; inputs.mkdir(parents=True, exist_ok=True)
@@ -59,8 +61,14 @@ def main():
     command = [sys.executable, ROOT / 'Scripts/inspect_wasm.py', wasm, '--out', generated / 'imports.json']
     if javascript: command += ['--javascript', javascript]
     run(*command)
-    run(wabt / 'build/wasm2c', wasm, '--enable-threads', '--module-name=xray', '--num-outputs=64', '-o', generated / 'xray.c')
-    run(sys.executable, ROOT / 'Scripts/patch_generated.py', generated)
+    with tempfile.TemporaryDirectory(prefix='zone-translate-', dir=generated.parent) as temporary:
+        staging = Path(temporary)
+        run(wabt / 'build/wasm2c', wasm, '--enable-threads', '--module-name=xray', '--num-outputs=64', '-o', staging / 'xray.c')
+        run(sys.executable, ROOT / 'Scripts/patch_generated.py', staging)
+        for path in staging.iterdir():
+            target = generated / path.name
+            if not target.exists() or target.read_bytes() != path.read_bytes():
+                path.replace(target)
     print('Engine C generated. Next: cmake -S Engine -B Engine/Build -DWABT_ROOT=' + str(wabt))
 
 

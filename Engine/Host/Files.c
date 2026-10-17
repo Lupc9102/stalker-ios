@@ -20,7 +20,7 @@ typedef struct {
 struct ZFilesystem { pthread_mutex_t mutex; ZFile **handles;u32 *free_ids;size_t count, capacity, free_count; };
 static void finish(struct w2c_a *h,u64 ctx) { if(ctx)Z_EXPORT_emscripten_proxy_finish(&h->engine,ctx); }
 static int error_code(void) {
-    switch(errno) {case ENOENT:return -20;case ENOTDIR:return -54;case EISDIR:return -31;case EACCES:case EPERM:return -2;case ENOSPC:return -51;case EEXIST:return -20;default:return -29;}
+    switch(errno) {case ENOENT:return -44;case ENOTDIR:return -54;case EISDIR:return -31;case EACCES:case EPERM:return -2;case ENOSPC:return -51;case EEXIST:return -20;default:return -29;}
 }
 static bool component(const char *name) { return *name&&strcmp(name,".")&&strcmp(name,"..")&&!strchr(name,'/')&&!strchr(name,'\\'); }
 static int insert(ZFilesystem *fs,ZFile *entry) {

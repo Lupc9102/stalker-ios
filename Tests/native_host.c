@@ -38,10 +38,14 @@ int main(void) {
     wasm_rt_init();ZRuntime *rt=calloc(1,sizeof *rt);struct w2c_a *h=calloc(1,sizeof *h);assert(rt&&h);
     h->runtime=rt;rt->threads=h;pthread_mutex_init(&rt->lock,NULL);z_current_thread=h;
     rt->files=z_files_open(game,data);assert(rt->files);
-    wasm_rt_allocate_memory_shared(&rt->memory,32768,262144,true,WASM_DEFAULT_PAGE_SIZE);
+    assert(z_memory_open(rt,5120));void *heap=(void *)rt->memory.data;
+    assert(Z_IMPORT_emscripten_resize_heap(h,rt->memory.size));
+    assert(!Z_IMPORT_emscripten_resize_heap(h,rt->memory.size+65536));
+    assert((void *)rt->memory.data==heap);
     assert(wasm_rt_impl_try()==WASM_RT_TRAP_NONE);
     wasm2c_xray_instantiate(&h->engine,h);w2c_xray_fi(&h->engine);
     u64 p=Z_EXPORT_malloc(&h->engine,8192);assert(p);
+    assert(get(h,p,"missing.db")==-44);
     int original=get(h,p,"test.db");assert(original>0);
     Z_IMPORT__wasmfs_opfs_open_access(h,0,(u32)original,p+280);u32 access=word(h,p+280);assert((int32_t)access>0);
     assert(Z_IMPORT__wasmfs_opfs_read_access(h,access,p+512,8,0)==8);assert(!memcmp(z_pointer(h,p+512,8),"original",8));
@@ -56,6 +60,9 @@ int main(void) {
     for(int i=0;i<4;i++)assert(!pthread_join(workers[i],NULL));
     int large=get(h,p,"large.db");assert(large>0);Z_IMPORT__wasmfs_opfs_get_size_file(h,0,(u32)large,p+296);assert(z_read64(h,p+296)==((u64)1<<32)+32);
     assert(Z_IMPORT__wasmfs_opfs_read_access(h,(u32)large,p+512,6,((u64)1<<32)+16)==6);assert(!memcmp(z_pointer(h,p+512,6),"WASM64",6));
+    u64 high_guest=((u64)1<<32)+4096;
+    assert(Z_IMPORT__wasmfs_opfs_read_access(h,(u32)large,high_guest,6,((u64)1<<32)+16)==6);
+    assert(!memcmp(z_pointer(h,high_guest,6),"WASM64",6));
     assert(get(h,p,"../outside")<0);assert(get(h,p,"/etc/passwd")<0);assert(get(h,p,"link")<0);assert(get(h,p,"a\\b")<0);
     // A released access handle must not close its still-live file node. Handle
     // IDs are recycled instead of exhausting after repeated open/close cycles.
@@ -75,7 +82,7 @@ int main(void) {
         assert(Z_IMPORT_alcMakeContextCurrent(h,0));Z_IMPORT_alcDestroyContext(h,context);assert(Z_IMPORT_alcCloseDevice(h,device));
         puts("Native OpenAL: context, PCM upload, source queue, playback, stop, unqueue and cleanup passed.");
     } else puts("Native OpenAL playback test skipped: this runner has no available output device.");
-    Z_EXPORT_free(&h->engine,p);wasm2c_xray_free(&h->engine);z_files_close(rt->files);wasm_rt_free_memory_shared(&rt->memory);free(h);free(rt);wasm_rt_free();
+    Z_EXPORT_free(&h->engine,p);wasm2c_xray_free(&h->engine);z_files_close(rt->files);z_memory_close(rt);free(h);free(rt);wasm_rt_free();
     snprintf(file,sizeof file,"%s/test.db",game);unlink(file);snprintf(file,sizeof file,"%s/large.db",game);unlink(file);snprintf(file,sizeof file,"%s/link",game);unlink(file);snprintf(file,sizeof file,"%s/test.db",data);unlink(file);rmdir(game);rmdir(data);rmdir(base);
     return 0;
 }

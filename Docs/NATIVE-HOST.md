@@ -82,7 +82,14 @@ namespace context. `patch_generated.py` corrects the 291 imported entries from
 their emitted metadata while preserving internal engine function contexts. The
 graphics test calls through that real table, as GLAD does, to catch regressions.
 
-The default 500-call generated limit stops during Lua binding registration.
+The original generated runtime leaks its call-depth counter when exceptions
+unwind native C frames. A minimal module reproduced a leaked depth after its
+first catch. `patch_exception_depth.py` saves depth on entering a try region and
+restores it in its catch path, including unmatched tags and rethrows. The
+generated regression fixture passes 10,000 nested catch/rethrow rounds.
+Full-engine startup with this correction is being tested.
+
+The earlier default 500-call limit stopped during Lua binding registration.
 Generated prologues now check the native thread's actual stack boundary, with
 128 KiB kept for trap handling, and retain a 4096-call cap. Live-runtime yields
 restore the call-depth baseline. The higher limit is being tested along the

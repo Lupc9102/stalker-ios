@@ -3,8 +3,16 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <execinfo.h>
 
 _Thread_local uintptr_t zone_native_stack_floor;
+_Noreturn void zone_native_stack_exhausted(void) {
+    char current;
+    fprintf(stderr,"[engine] Native stack guard: guest depth=%u, bytes above reserve=%lld\n",
+            wasm_rt_call_stack_depth,(long long)((uintptr_t)&current-zone_native_stack_floor));
+    void *frames[64];int count=backtrace(frames,64);backtrace_symbols_fd(frames,count,2);
+    wasm_rt_trap(WASM_RT_TRAP_EXHAUSTION);
+}
 void zone_native_stack_init(void) {
     uintptr_t bottom=0;size_t size=0;
 #if defined(__APPLE__)

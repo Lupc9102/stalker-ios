@@ -54,3 +54,5 @@ u32 z_register_event(struct w2c_a *,u32,u64,u64,u64);
 bool z_dispatch_event(struct w2c_a *,u32,u64);
 ZFilesystem *z_files_open(const char *, const char *);
 void z_files_close(ZFilesystem *);
+bool z_memory_open(ZRuntime *,u32 megabytes);
+void z_memory_close(ZRuntime *);

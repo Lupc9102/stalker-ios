@@ -1,0 +1,6 @@
+{
+  "repository": "https://github.com/x8BitRain/xray-16-wasm.git",
+  "commit": "fd5baa6859561a2968098f829aeeb33975929c7e",
+  "engine_wasm_sha256": "db894e66ec1b60c8c52bb1b3764e83f3e2131fbc6d56e0b309f5af1e08cf0b42",
+  "paths": ["res/fsgame.ltx", "res/gamedata"]
+}
