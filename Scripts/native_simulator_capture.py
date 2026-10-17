@@ -70,7 +70,7 @@ def main():
         raise RuntimeError('Native engine frame timeout; last state: ' + str(last))
 
     try:
-        run('xcrun', 'simctl', 'launch', identifier, bundle, '--engine-smoke-test', timeout=60)
+        initial_process = run('xcrun', 'simctl', 'launch', identifier, bundle, '--engine-smoke-test', timeout=60)
         state = wait_frames(60)
         verify_engine_frame(framebuffer)
         verify_engine_frame(drawable)
@@ -78,14 +78,18 @@ def main():
             raise RuntimeError('Engine view is hidden or still covered by the loading screen')
         run('xcrun', 'simctl', 'io', identifier, 'screenshot', str(Path('Build/native-ios-menu.png').resolve()))
         run('swift', 'Scripts/verify_simulator_screen.swift', 'Build/native-ios-menu.png')
-        before = state['frames']
         run('xcrun', 'simctl', 'launch', identifier, 'com.apple.Preferences')
         time.sleep(2)
-        run('xcrun', 'simctl', 'launch', identifier, bundle)
-        state = wait_frames(before + 30, 60)
+        resumed_process = run('xcrun', 'simctl', 'launch', identifier, bundle)
+        if resumed_process != initial_process:
+            raise RuntimeError(f'App process changed across background/resume: {initial_process!r} -> {resumed_process!r}')
+        # The screenshot verifier may take time to compile. Frames rendered
+        # during that delay must not satisfy the post-resume requirement.
+        resumed_baseline = json.loads(report.read_text())['frames']
+        state = wait_frames(resumed_baseline + 30, 60)
         run('xcrun', 'simctl', 'io', identifier, 'screenshot', str(Path('Build/native-ios-resumed.png').resolve()))
         run('swift', 'Scripts/verify_simulator_screen.swift', 'Build/native-ios-resumed.png')
-        print(f'Native UIKit engine rendered {state["frames"]} frame callbacks and resumed after backgrounding. This is simulator validation, not a physical-device or level test.')
+        print(f'Native UIKit engine resumed from {resumed_baseline} to {state["frames"]} frame callbacks after backgrounding. This is simulator validation, not a physical-device or level test.')
     finally:
         # A failed startup must still leave a visible app state for diagnosis.
         try:
