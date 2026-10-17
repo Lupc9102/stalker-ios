@@ -53,18 +53,22 @@
 
 ## Not implemented / not verified
 
-- **The compiled IPA is a launcher and controls-practice build, not a playable
-  STALKER port.**
-- The translated engine is not connected to the app. Campaign Play is disabled.
-- UIKit graphics surface integration, the engine lifecycle and SDL input delivery
-  are still outstanding. An iOS EAGL provider compiles, while filesystem/pthread/OpenAL/GLES services work in
-  Linux host tests; they have not yet been integrated into UIKit.
+- The original `ZonePort.ipa` is the launcher/controls-practice variant. The new
+  `ZonePort-Native.ipa` links the real engine and enables campaign startup with
+  the player's own files. Device compilation/package checks passed; see
+  `Docs/verification/native-ios-build.md`. Physical-device gameplay remains
+  unverified.
+- The UIKit engine surface, action/pointer delivery and background pause
+  checkpoints are connected. The simulator runtime test is in progress.
+  This first integration retains one session per app process; safe worker
+  teardown/restart remains outstanding. See `Docs/IOS-ENGINE.md`.
 - The native host implements 452 typed import entry points with GLES. The other 37 imports
-  remain explicit traps. Event registration is stored; UI event delivery is not
-  connected. See `Docs/NATIVE-HOST.md` for the exact scope.
+  remain explicit traps. Native input tests cover the callback ABI, surface
+  listener removal and thread ownership. Real pointer input opens Options;
+  see `Docs/verification/native-engine-options.log` and `Docs/NATIVE-HOST.md`.
 - No level, save, combat, game memory-budget or sustained frame-rate test
   has been performed. Reaching missing game data is a startup test only.
-- No physical-device engine test has completed. The ARM64 app build does not
+- No physical-device engine test has completed. The new native app build does
   contain the translated engine.
 - No retail game archives or textures have been compressed, resized or modified.
 - Full archive integrity/compatibility checks are not implemented; the app checks
@@ -88,6 +92,6 @@ Artifact details and verification limits are in
 ## Next action
 
 Continue the native engine host in the order documented in `Docs/ENGINE-HOST.md`.
-The native engine renders the main menu. UIKit integration, native input
-delivery and iPhone texture compatibility are next. Physical-device controls testing remains outstanding; the existing
-controls IPA still contains no linked engine.
+The native engine renders the menu and responds to input. Complete the native
+UIKit simulator/resume test and verify the current unsigned device IPA.
+Physical-device controls and retail-level testing remain outstanding.
