@@ -125,6 +125,7 @@ static void *run(void *pointer) {
         }
         if(h->yield_reason==1&&h->main_loop) {
             z_input_focus(h,true);s->mouse_x=s->runtime->width/2;s->mouse_y=s->runtime->height/2;
+            z_input_mouse(h,33,0,0,s->mouse_x,s->mouse_y,0,0);
             status(s,ZEngineRunning,"Native engine running");
             while(h->main_loop&&!atomic_load(&s->runtime->failures)) {
                 wasm_rt_trap_t trap=wasm_rt_impl_try();

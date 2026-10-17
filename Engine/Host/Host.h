@@ -10,7 +10,7 @@
 
 typedef struct ZFilesystem ZFilesystem;
 typedef struct ZRuntime ZRuntime;
-typedef struct { u64 callback, user, target, owner; } ZEvent;
+typedef struct ZEvent { u64 callback,user,target,owner;bool capture;struct ZEvent *next; } ZEvent;
 struct w2c_a {
     ZRuntime *runtime;
     w2c_xray engine;
@@ -58,8 +58,9 @@ u32 z_asm(struct w2c_a *,u64,const long double *,unsigned);
 void z_call_void(struct w2c_a *, u64, u64);
 void z_pump(struct w2c_a *);
 void z_atomic_wait_pump(void);
-u32 z_register_event(struct w2c_a *,u32,u64,u64,u64);
+u32 z_register_event(struct w2c_a *,u32,u64,u64,u64,u64,bool);
 bool z_dispatch_event(struct w2c_a *,u32,u64);
+void z_events_close(ZRuntime *);
 ZFilesystem *z_files_open(const char *, const char *);
 void z_files_close(ZFilesystem *);
 bool z_memory_open(ZRuntime *,u32 megabytes);

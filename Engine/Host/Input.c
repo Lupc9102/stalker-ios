@@ -31,7 +31,7 @@ static unsigned char *mouse_buffer(struct w2c_a *h,u32 button,u32 buttons,int32_
     return event;
 }
 bool z_input_mouse(struct w2c_a *h,u32 type,u32 button,u32 buttons,int32_t x,int32_t y,double dx,double dy) {
-    if((type!=5&&type!=6&&type!=8)||button>4||buttons>31||!isfinite(dx)||!isfinite(dy))return false;
+    if((type!=5&&type!=6&&type!=8&&type!=33&&type!=34)||button>4||buttons>31||!isfinite(dx)||!isfinite(dy))return false;
     mouse_buffer(h,button,buttons,x,y,dx,dy);
     if(type==8&&h->runtime->mouse_pointer) {
         u64 pointer=h->runtime->mouse_pointer;if(pointer%4)wasm_rt_trap(WASM_RT_TRAP_UNALIGNED);

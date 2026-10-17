@@ -156,7 +156,7 @@ final class EngineController: UIViewController {
             if !finished && presentedViewController == nil { showFailure(engineStatus()) }; return
         }
         if info.phase != ZEngineIdle { information.text = engineStatus() }
-        let ready = info.frames > 0
+        let ready = info.frames >= 30
         loading.isHidden = ready; information.isHidden = ready
         let menu = info.cursor || !ready
         if menu != lastMenu { reset(); lastMenu = menu }

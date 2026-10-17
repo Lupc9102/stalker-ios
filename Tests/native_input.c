@@ -19,7 +19,7 @@ int main(void) {
     table->data[1].func_type=wasm2c_xray_get_func_type(3,1,WASM_RT_I32,WASM_RT_I64,WASM_RT_I64,WASM_RT_I32);
     table->data[1].func=(wasm_rt_function_ptr_t)capture;table->data[1].module_instance=h;
     const u32 types[]={2,3,5,6,8,9};
-    for(unsigned i=0;i<6;i++)assert(!z_register_event(h,types[i],0x12345678,1,2));
+    for(unsigned i=0;i<6;i++)assert(!z_register_event(h,types[i],0x12345678,1,2,2,true));
     assert(z_input_key(h,87,"w","KeyW",0,true,ZKeyControl|ZKeyShift));
     assert(type==2&&calls==1&&integer(24)==87&&integer(28)==87&&last[12]&&last[13]&&!last[14]);
     assert(!strcmp((char *)last+32,"w")&&!strcmp((char *)last+64,"KeyW"));
@@ -31,13 +31,24 @@ int main(void) {
     int32_t motion[2];memcpy(motion,z_pointer(h,rt->mouse_pointer,8),8);assert(motion[0]==2560&&motion[1]==-1280);
     assert(z_input_wheel(h,0,100,200,-1)&&type==9&&integer(88)==1);
     double delta;memcpy(&delta,last+72,8);assert(delta==-1);
-    unsigned before=calls;assert(!z_register_event(h,2,0x12345678,1,5678));
+    unsigned before=calls;assert(!z_register_event(h,2,0x12345678,1,5678,2,true));
     assert(!z_input_key(h,87,"w","KeyW",0,true,0)&&calls==before);
-    assert(!z_register_event(h,2,0x12345678,1,1));assert(z_input_key(h,87,"w","KeyW",0,true,0));
+    assert(!z_register_event(h,2,0x12345678,1,1,2,true));assert(z_input_key(h,87,"w","KeyW",0,true,0));
     rt->frame_time_pointer=rt->mouse_pointer+16;z_input_frame_time(h,16.6666667);
     u32 time;memcpy(&time,z_pointer(h,rt->frame_time_pointer,4),4);assert(time==16667);
-    assert(!z_register_event(h,13,0x12345678,1,2));
+    assert(!z_register_event(h,13,0x12345678,1,2,2,true));
     assert(z_input_focus(h,true)&&type==13&&!strcmp((char *)last,"CANVAS")&&!strcmp((char *)last+128,"canvas"));
+    // Removing a document listener must preserve an existing canvas listener.
+    // SDL registers these separately; treating the event type as its identity
+    // silently removes the actual mouse-down handler during window setup.
+    u64 canvas=Z_EXPORT_malloc(&h->engine,16);memcpy(z_pointer(h,canvas,8),"#canvas",8);
+    assert(!z_register_event(h,5,0x12345678,1,2,canvas,true));
+    assert(!z_register_event(h,5,0,0,2,1,true));
+    before=calls;assert(z_input_mouse(h,5,0,1,10,20,0,0)&&calls==before+2);
+    assert(!z_register_event(h,5,0,0,2,2,true));
+    before=calls;assert(z_input_mouse(h,5,0,1,10,20,0,0)&&calls==before+1);
+    assert(!z_register_event(h,5,0,0,2,canvas,true));assert(!z_input_mouse(h,5,0,1,10,20,0,0));
+    Z_EXPORT_free(&h->engine,canvas);z_events_close(rt);
     table->data[1]=saved;Z_EXPORT_free(&h->engine,h->input_buffer);wasm2c_xray_free(&h->engine);z_memory_close(rt);
     pthread_mutex_destroy(&rt->lock);free(h);free(rt);wasm_rt_free();
     puts("Engine input: typed guest callbacks, thread ownership, keyboard/mouse/wheel ABI, raw-look accumulation and frame timing passed.");

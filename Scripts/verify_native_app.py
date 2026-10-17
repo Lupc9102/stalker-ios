@@ -7,7 +7,9 @@ import subprocess
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('app', type=Path)
 app = parser.parse_args().app
-symbols = subprocess.check_output(['xcrun', 'nm', '-gU', str(app / 'ZonePort')], text=True)
+# Xcode's app preset gives Objective-C/C functions hidden visibility. They
+# remain defined in the executable but need not appear in the exports list.
+symbols = subprocess.check_output(['xcrun', 'nm', '-U', str(app / 'ZonePort')], text=True)
 for symbol in ('ZEngineStart', 'wasm2c_xray_instantiate', 'w2c_xray_fi'):
     if not re.search(r'\b_' + symbol + r'\s*$', symbols, re.M):
         raise SystemExit('Native app is missing its real engine symbol: ' + symbol)

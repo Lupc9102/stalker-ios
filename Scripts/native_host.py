@@ -61,11 +61,11 @@ def generate(directory, javascript, host, gles=False):
         declaration = ', '.join(['struct w2c_a *h'] + [f'{t} p{i}' for i, t in enumerate(types)])
         if name in registrations:
             unused = ''.join(f'(void)p{i};' for i in range(len(types)))
-            if len(types) == 5: user, callback, target = 'p1', 'p3', 'p4'
-            elif len(types) == 4: user, callback, target = 'p0', 'p2', 'p3'
-            elif len(types) == 3: user, callback, target = 'p0', 'p1', 'p2'
+            if len(types) == 5: user, callback, thread, surface, capture = 'p1', 'p3', 'p4', 'p0', 'p2'
+            elif len(types) == 4: user, callback, thread, surface, capture = 'p0', 'p2', 'p3', '1', 'p1'
+            elif len(types) == 3: user, callback, thread, surface, capture = 'p0', 'p1', 'p2', '2', '0'
             else: raise ValueError('Unexpected native event registration signature')
-            output.append(f'{ret} {fn}({declaration}) {{ {unused} return z_register_event(h,{registrations[name]},{user},{callback},{target}); }}\n')
+            output.append(f'{ret} {fn}({declaration}) {{ {unused} return z_register_event(h,{registrations[name]},{user},{callback},{thread},{surface},{capture}!=0); }}\n')
         elif name not in implementations:
             unused = ''.join(f'(void)p{i};' for i in range(len(types)))
             output.append(f'{ret} {fn}({declaration}) {{ {unused} z_missing(h, {json.dumps(name)}); }}\n')

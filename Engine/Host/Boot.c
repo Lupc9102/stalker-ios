@@ -70,23 +70,32 @@ int main(int argc,char **argv) {
         unsigned limit=argc>3?(unsigned)strtoul(argv[3],NULL,10):1;
         const char *input_test=getenv("ZONE_MENU_INPUT");
         bool options=input_test&&!strcmp(input_test,"options");
-        if(options&&limit<12)limit=12;
+        bool pointer_options=input_test&&!strcmp(input_test,"pointer-options");
+        if((options||pointer_options)&&limit<70)limit=70;
         if(limit>3600)limit=3600;
         z_input_focus(h,true);
+        z_input_mouse(h,33,0,0,runtime->width/2,runtime->height/2,0,0);
         fprintf(stderr,"[engine] Running up to %u real engine frames\n",limit);
         for(unsigned frame=0;frame<limit&&h->main_loop;frame++) {
             wasm_rt_trap_t trap=wasm_rt_impl_try();
             if(trap){fprintf(stderr,"[engine] Frame trapped: %s\n",wasm_rt_strerror(trap));return 78;}
             z_input_frame_time(h,1000.0/60);
-            if(options&&frame>=2&&frame<=9) {
-                u32 key=frame>=8?13:40;const char *name=frame>=8?"Enter":"ArrowDown";
+            if(options&&frame>=40&&frame<=47) {
+                u32 key=frame>=46?13:40;const char *name=frame>=46?"Enter":"ArrowDown";
                 bool down=frame%2==0,accepted=z_input_key(h,key,name,name,0,down,0);
                 fprintf(stderr,"[engine] Native input test: %s %s; handled=%d callback=%llu owner=%llu thread=%llu\n",name,down?"down":"up",accepted,
                   (unsigned long long)h->runtime->events[down?2:3].callback,(unsigned long long)h->runtime->events[down?2:3].owner,(unsigned long long)h->pthread);
             }
+            if(pointer_options&&frame>=40&&frame<=42) {
+                int32_t x=(int32_t)(runtime->width*0.178),y=(int32_t)(runtime->height*0.592);
+                bool handled=z_input_mouse(h,frame==40?8:(frame==41?5:6),0,frame==41?1:0,x,y,
+                  frame==40?x-(int32_t)runtime->width/2:0,frame==40?y-(int32_t)runtime->height/2:0);
+                fprintf(stderr,"[engine] Native pointer test: %s; handled=%d at %d,%d\n",frame==40?"move":(frame==41?"down":"up"),handled,x,y);
+            }
             z_pump(h);z_call_void(h,h->main_loop,h->main_loop_arg);
             if(!z_gl_present(h)) { fprintf(stderr,"[engine] Present failed\n");return 78; }
             fprintf(stderr,"[engine] Rendered engine frame %u\n",frame+1);
+            struct timespec interval={.tv_nsec=17000000};nanosleep(&interval,NULL);
         }
         if(argc>4) {
             if(!save_frame(h,argv[4])){fprintf(stderr,"[engine] Frame capture failed\n");return 78;}
