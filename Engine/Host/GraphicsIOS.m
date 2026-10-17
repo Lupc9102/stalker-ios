@@ -60,6 +60,7 @@ static bool create(void *pointer,u32 width,u32 height) {
         glGenFramebuffers(1,&s->drawableFramebuffer);glBindFramebuffer(GL_FRAMEBUFFER,s->drawableFramebuffer);
         glGenRenderbuffers(1,&s->drawableColor);glBindRenderbuffer(GL_RENDERBUFFER,s->drawableColor);
         if(![s.context renderbufferStorage:GL_RENDERBUFFER fromDrawable:s.layer])return false;
+        [CATransaction flush];
         glGetRenderbufferParameteriv(GL_RENDERBUFFER,GL_RENDERBUFFER_WIDTH,&s->drawableWidth);
         glGetRenderbufferParameteriv(GL_RENDERBUFFER,GL_RENDERBUFFER_HEIGHT,&s->drawableHeight);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_RENDERBUFFER,s->drawableColor);
@@ -126,6 +127,10 @@ static bool present(void *pointer) {
         for(unsigned i=0;i<sizeof features/sizeof *features;i++)if(enabled[i])glEnable(features[i]);
         glBindRenderbuffer(GL_RENDERBUFFER,s->drawableColor);bool ok=[s.context presentRenderbuffer:GL_RENDERBUFFER];
         glBindRenderbuffer(GL_RENDERBUFFER,renderbuffer);glBindFramebuffer(GL_DRAW_FRAMEBUFFER,draw);
+        // This pthread has no Cocoa run loop to commit implicit layer updates.
+        // In particular, the simulator's software renderer needs its presented
+        // drawable transaction flushed before the UI can composite the image.
+        [CATransaction flush];
         return ok;
     }
 }
