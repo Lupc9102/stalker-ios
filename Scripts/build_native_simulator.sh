@@ -13,6 +13,8 @@ fi
 if ! xcodebuild -project ZonePort.xcodeproj -scheme ZonePort -configuration Debug \
     -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
     -derivedDataPath Build/NativeSimulator ZONE_ENGINE_BUILD_DIR="$PWD/Engine/Build-Simulator" \
+    ARCHS=arm64 ONLY_ACTIVE_ARCH=YES \
+    SWIFT_ACTIVE_COMPILATION_CONDITIONS='DEBUG ZONE_WITH_ENGINE' \
     CODE_SIGNING_ALLOWED=NO build >Build/native-simulator-build.log 2>&1; then
     tail -n 120 Build/native-simulator-build.log; exit 1
 fi
