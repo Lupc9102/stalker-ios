@@ -1,5 +1,6 @@
 #define _POSIX_C_SOURCE 200809L
 #include "Host.h"
+#include "Input.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -67,11 +68,22 @@ int main(int argc,char **argv) {
 #if defined(ZONE_NATIVE_GLES)
     if(!atomic_load(&runtime->failures)&&h->yield_reason==1&&h->main_loop) {
         unsigned limit=argc>3?(unsigned)strtoul(argv[3],NULL,10):1;
+        const char *input_test=getenv("ZONE_MENU_INPUT");
+        bool options=input_test&&!strcmp(input_test,"options");
+        if(options&&limit<12)limit=12;
         if(limit>3600)limit=3600;
+        z_input_focus(h,true);
         fprintf(stderr,"[engine] Running up to %u real engine frames\n",limit);
         for(unsigned frame=0;frame<limit&&h->main_loop;frame++) {
             wasm_rt_trap_t trap=wasm_rt_impl_try();
             if(trap){fprintf(stderr,"[engine] Frame trapped: %s\n",wasm_rt_strerror(trap));return 78;}
+            z_input_frame_time(h,1000.0/60);
+            if(options&&frame>=2&&frame<=9) {
+                u32 key=frame>=8?13:40;const char *name=frame>=8?"Enter":"ArrowDown";
+                bool down=frame%2==0,accepted=z_input_key(h,key,name,name,0,down,0);
+                fprintf(stderr,"[engine] Native input test: %s %s; handled=%d callback=%llu owner=%llu thread=%llu\n",name,down?"down":"up",accepted,
+                  (unsigned long long)h->runtime->events[down?2:3].callback,(unsigned long long)h->runtime->events[down?2:3].owner,(unsigned long long)h->pthread);
+            }
             z_pump(h);z_call_void(h,h->main_loop,h->main_loop_arg);
             if(!z_gl_present(h)) { fprintf(stderr,"[engine] Present failed\n");return 78; }
             fprintf(stderr,"[engine] Rendered engine frame %u\n",frame+1);

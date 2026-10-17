@@ -13,7 +13,17 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         window.rootViewController = LauncherController(); window.makeKeyAndVisible(); self.window = window
         return true
     }
-    func applicationWillResignActive(_ application: UIApplication) { InputHub.shared.reset() }
+    func applicationWillResignActive(_ application: UIApplication) {
+        InputHub.shared.reset()
+        #if ZONE_WITH_ENGINE
+        ZEngineSetActive(false)
+        #endif
+    }
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        #if ZONE_WITH_ENGINE
+        ZEngineSetActive(true)
+        #endif
+    }
     func applicationDidEnterBackground(_ application: UIApplication) { InputHub.shared.reset() }
 }
 
@@ -58,6 +68,7 @@ final class LauncherController: UIViewController, UIDocumentPickerDelegate {
         }
         #endif
     }
+    override func viewWillAppear(_ animated: Bool) { super.viewWillAppear(animated); refresh() }
     private func refresh() {
         home.setMode(mode.rawValue, detail: mode.detail, enabled: true)
         home.playButton.configuration?.title = mode == .practice ? "Try controls" : "Play"
@@ -88,11 +99,22 @@ final class LauncherController: UIViewController, UIDocumentPickerDelegate {
         }
     }
     private func play() {
-        guard mode == .practice else { return }
+        if mode == .campaign {
+            #if ZONE_WITH_ENGINE
+            guard let report, report.detected, ZHostEngineAvailable() else { return }
+            let engine = EngineController(root: report.root); engine.modalPresentationStyle = .fullScreen; present(engine, animated: true)
+            #endif
+            return
+        }
         let practice = PracticeController(); practice.modalPresentationStyle = .fullScreen; present(practice, animated: true)
     }
     private func help() {
-        let alert = UIAlertController(title: "Welcome to the Zone", message: "Controls practice works without game files.\n\nMove: left thumb area. Look: swipe the right side. Tap Tools for more actions. Pause opens the editor and Settings.\n\nFor future gameplay, copy your installed original CoP folder into Files → On My iPhone → STALKER Port, or select it with Game files. The GOG installer itself isn’t a game folder.\n\nThis development build does not run CoP yet.", preferredStyle: .alert)
+        #if ZONE_WITH_ENGINE
+        let message = "Choose your installed original Call of Pripyat folder using Game files, then select Call of Pripyat and Play. The GOG installer itself isn’t a game folder.\n\nTap game menus directly. During play, move with your left thumb and swipe the right side to look. Controls opens the layout editor and Settings. A connected controller also works.\n\nThis experimental native build supports one engine session per app launch. Relaunch after exiting the game."
+        #else
+        let message = "Controls practice works without game files.\n\nMove: left thumb area. Look: swipe the right side. Tap Tools for more actions. Pause opens the editor and Settings.\n\nFor future gameplay, copy your installed original CoP folder into Files → On My iPhone → STALKER Port, or select it with Game files. The GOG installer itself isn’t a game folder.\n\nThis development build does not run CoP yet."
+        #endif
+        let alert = UIAlertController(title: "Welcome to the Zone", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Got it", style: .default)); present(alert, animated: true)
     }
 }

@@ -61,7 +61,13 @@ static bool present(void *pointer) {
         glGetIntegerv(GL_RENDERBUFFER_BINDING,&renderbuffer);GLboolean scissor=glIsEnabled(GL_SCISSOR_TEST);
         glDisable(GL_SCISSOR_TEST);glBindFramebuffer(GL_READ_FRAMEBUFFER,s->gameFramebuffer);
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER,s->drawableFramebuffer);
-        glBlitFramebuffer(0,0,s->gameWidth,s->gameHeight,0,0,s->drawableWidth,s->drawableHeight,GL_COLOR_BUFFER_BIT,GL_LINEAR);
+        GLfloat clear[4];GLboolean mask[4];glGetFloatv(GL_COLOR_CLEAR_VALUE,clear);glGetBooleanv(GL_COLOR_WRITEMASK,mask);
+        glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);glClearColor(0,0,0,1);glClear(GL_COLOR_BUFFER_BIT);
+        glColorMask(mask[0],mask[1],mask[2],mask[3]);glClearColor(clear[0],clear[1],clear[2],clear[3]);
+        double sx=(double)s->drawableWidth/s->gameWidth,sy=(double)s->drawableHeight/s->gameHeight,scale=sx<sy?sx:sy;
+        GLint width=(GLint)(s->gameWidth*scale+0.5),height=(GLint)(s->gameHeight*scale+0.5);
+        GLint x=(s->drawableWidth-width)/2,y=(s->drawableHeight-height)/2;
+        glBlitFramebuffer(0,0,s->gameWidth,s->gameHeight,x,y,x+width,y+height,GL_COLOR_BUFFER_BIT,GL_LINEAR);
         glBindRenderbuffer(GL_RENDERBUFFER,s->drawableColor);bool ok=[s.context presentRenderbuffer:GL_RENDERBUFFER];
         glBindRenderbuffer(GL_RENDERBUFFER,renderbuffer);glBindFramebuffer(GL_READ_FRAMEBUFFER,read);glBindFramebuffer(GL_DRAW_FRAMEBUFFER,draw);
         if(scissor)glEnable(GL_SCISSOR_TEST);

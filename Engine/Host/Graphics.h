@@ -21,6 +21,8 @@ bool z_gl_attach(ZRuntime *, ZGraphicsProvider);
 void z_gl_close(ZRuntime *);
 bool z_gl_present(struct w2c_a *);
 bool z_gl_resize(struct w2c_a *, u32, u32);
+bool z_gl_suspend(struct w2c_a *);
+bool z_gl_resume(struct w2c_a *);
 void z_gl_require(struct w2c_a *);
 u64 z_gl_count(struct w2c_a *, u64, u64);
 void *z_gl_optional(struct w2c_a *, u64, u64);

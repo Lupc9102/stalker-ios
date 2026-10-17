@@ -19,6 +19,7 @@ void z_pump(struct w2c_a *h) {
 }
 void Z_IMPORT__emscripten_init_main_thread_js(struct w2c_a *h,u64 thread) {
     h->pthread=thread;
+    h->runtime->main_guest_thread=thread;
     Z_EXPORT__emscripten_thread_init(&h->engine,thread,1,1,1,4194304,0);
     Z_EXPORT__emscripten_tls_init(&h->engine);
 }
@@ -76,8 +77,12 @@ u32 Z_IMPORT___pthread_create_js(struct w2c_a *parent,u64 thread,u64 attr,u64 ro
     pthread_detach(native);return 0;
 }
 void Z_IMPORT_emscripten_sleep(struct w2c_a *h,u32 milliseconds) {
-    struct timespec delay={.tv_sec=milliseconds/1000,.tv_nsec=(long)(milliseconds%1000)*1000000};
-    nanosleep(&delay,NULL);z_pump(h);
+    do {
+        u32 slice=milliseconds>20?20:milliseconds;
+        struct timespec delay={.tv_nsec=(long)slice*1000000};
+        nanosleep(&delay,NULL);zone_native_checkpoint();milliseconds-=slice;
+    } while(milliseconds);
+    z_pump(h);
 }
 void Z_IMPORT_emscripten_set_main_loop_arg(struct w2c_a *h,u64 callback,u64 argument,u32 fps,u32 simulate_infinite) {
     (void)fps;h->main_loop=callback;h->main_loop_arg=argument;

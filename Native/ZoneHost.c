@@ -1,5 +1,8 @@
 #define _POSIX_C_SOURCE 200809L
 #include "ZoneHost.h"
+#if defined(ZONE_WITH_ENGINE)
+#include "ZoneEngine.h"
+#endif
 #include <pthread.h>
 #include <math.h>
 #include <time.h>
@@ -88,9 +91,9 @@ uint32_t ZHostDroppedInputEvents(void) {
     return result;
 }
 uint32_t ZHostActionScancode(ZAction action) {
-    /* F/R/Space/Ctrl/Shift/I/P/L/O/1/6, Q/E and Escape. Quick slots F1/F2. */
+    /* F/R/Space/Ctrl/X/I/P/L/O/1/6/Y, Q/E and Escape. Quick slots F1/F2. */
     static const uint32_t keys[ZActionCount] = {
-        0, 0, 9, 21, 44, 224, 225, 12, 19, 15, 18, 30, 35, 0,
+        0, 0, 9, 21, 44, 224, 27, 12, 19, 15, 18, 30, 35, 28,
         58, 59, 20, 8, 41
     };
     return action >= 0 && action < ZActionCount ? keys[action] : 0;
@@ -100,7 +103,17 @@ double ZHostMonotonicSeconds(void) {
     clock_gettime(CLOCK_MONOTONIC, &time);
     return (double)time.tv_sec + (double)time.tv_nsec / 1e9;
 }
-bool ZHostEngineAvailable(void) { return false; }
+bool ZHostEngineAvailable(void) {
+#if defined(ZONE_WITH_ENGINE)
+    return ZEngineCanStart();
+#else
+    return false;
+#endif
+}
 const char *ZHostEngineStatus(void) {
+#if defined(ZONE_WITH_ENGINE)
+    return ZEngineCanStart()?"Native engine build. Choose your original Call of Pripyat game folder.":"Relaunch the app to start another game session.";
+#else
     return "Engine integration in progress. Controls practice is available.";
+#endif
 }

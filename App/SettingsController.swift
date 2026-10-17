@@ -12,8 +12,13 @@ final class SettingsController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { section == 0 ? 6 : 1 }
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? { section == 0 ? "Touch controls" : "About" }
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        section == 0 ? "Swipe an empty area on the right to look. Use the left thumb area to move. Open Tools for the detector, healing and leaning. Bluetooth controllers are supported in controls practice."
+        #if ZONE_WITH_ENGINE
+        return section == 0 ? "Swipe on the right to look and use the left thumb area to move. Tools opens healing, detector and leaning actions. Tap game menus directly or use a connected controller."
+            : "Experimental native Call of Pripyat build. Original PC game files required. Enhanced Edition and Anomaly are not supported. One engine session per app launch."
+        #else
+        return section == 0 ? "Swipe an empty area on the right to look. Use the left thumb area to move. Open Tools for the detector, healing and leaning. Bluetooth controllers are supported in controls practice."
             : "Early development build. Engine translation is separate from a working game runtime. Original CoP PC files required for future gameplay; Enhanced Edition and Anomaly are not supported yet."
+        #endif
     }
     override func tableView(_ tableView: UITableView, cellForRowAt path: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .value1, reuseIdentifier: nil)

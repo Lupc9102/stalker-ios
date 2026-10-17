@@ -29,6 +29,7 @@ bool z_gl_attach(ZRuntime *runtime,ZGraphicsProvider provider) {
     g->provider=provider;runtime->graphics=g;return true;
 }
 void z_gl_require(struct w2c_a *h) {
+    zone_native_checkpoint();
     ZGraphics *g=graphics(h);
     if(!g->created||!g->current||!pthread_equal(g->owner,pthread_self())) {
         fprintf(stderr,"[engine] GLES context created=%d current=%d owner=%llu caller=%llu guest=%llu\n",
@@ -146,6 +147,7 @@ GLenum z_gl_texture_format(struct w2c_a *h,GLenum format) {
     return z_gl_bc_needs_decode(h,format)?(z_bc_srgb(format)?GL_SRGB8_ALPHA8:GL_RGBA8):format;
 }
 u64 Z_IMPORT_emscripten_webgl_create_context(struct w2c_a *h,u64 target,u64 attributes) {
+    zone_native_checkpoint();
     (void)target;ZGraphics *g=graphics(h);if(g->created)return 0;
     const unsigned char *a=z_pointer(h,attributes,34);u32 major;memcpy(&major,a+16,4);
     if(major!=2)return 0; // The pinned engine requests WebGL 2 / GLES 3.
@@ -157,6 +159,7 @@ u64 Z_IMPORT_emscripten_webgl_create_context(struct w2c_a *h,u64 target,u64 attr
     return 1;
 }
 u32 Z_IMPORT_emscripten_webgl_make_context_current(struct w2c_a *h,u64 context) {
+    zone_native_checkpoint();
     ZGraphics *g=graphics(h);if(context>1||(!g->created&&context))return (u32)-5;
     fprintf(stderr,"[engine] GLES make-current %llu guest=%llu native=%llu\n",(unsigned long long)context,(unsigned long long)h->pthread,(unsigned long long)pthread_self());
     if(!g->provider.current(g->provider.user,context!=0))return (u32)-5;
@@ -173,6 +176,7 @@ u32 Z_IMPORT_emscripten_webgl_enable_extension(struct w2c_a *h,u64 context,u64 e
     return 0;
 }
 u32 Z_IMPORT_emscripten_webgl_destroy_context(struct w2c_a *h,u64 context) {
+    zone_native_checkpoint();
     if(context!=1)return (u32)-5;
     z_gl_close(h->runtime);return 0;
 }
@@ -180,6 +184,20 @@ bool z_gl_present(struct w2c_a *h) { z_gl_require(h);ZGraphics *g=graphics(h);re
 bool z_gl_resize(struct w2c_a *h,u32 width,u32 height) {
     ZGraphics *g=h->runtime->graphics;if(!g||!g->created)return true;
     z_gl_require(h);return g->provider.resize&&g->provider.resize(g->provider.user,width,height);
+}
+bool z_gl_suspend(struct w2c_a *h) {
+    ZGraphics *g=h->runtime->graphics;
+    if(!g||!g->created||!g->current)return true;
+    if(!pthread_equal(g->owner,pthread_self()))return false;
+    glFinish();
+    if(!g->provider.current(g->provider.user,false))return false;
+    g->current=false;return true;
+}
+bool z_gl_resume(struct w2c_a *h) {
+    ZGraphics *g=h->runtime->graphics;
+    if(!g||!g->created)return true;
+    if(!g->provider.current(g->provider.user,true))return false;
+    g->owner=pthread_self();g->current=true;return true;
 }
 void z_gl_close(ZRuntime *runtime) {
     ZGraphics *g=runtime->graphics;if(!g)return;

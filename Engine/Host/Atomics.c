@@ -19,6 +19,12 @@ typedef struct Waiter {
 
 static pthread_mutex_t queueLock = PTHREAD_MUTEX_INITIALIZER;
 static Waiter *waiters;
+_Thread_local ZoneCheckpoint zone_native_checkpoint_handler;
+_Thread_local void *zone_native_checkpoint_context;
+_Thread_local uint32_t zone_native_checkpoint_counter;
+void zone_native_checkpoint(void) {
+  if(zone_native_checkpoint_handler)zone_native_checkpoint_handler(zone_native_checkpoint_context);
+}
 
 static void *checkedAddress(wasm_rt_shared_memory_t *memory, uint64_t offset,
                             uint32_t width) {
@@ -66,24 +72,34 @@ static uint32_t waitFor(wasm_rt_shared_memory_t *memory, uint64_t offset,
   }
   int result = 0;
   while (!waiter.notified && !result) {
-    if (timeout < 0) {
+    if (timeout < 0 && !zone_native_checkpoint_handler) {
       result = pthread_cond_wait(&waiter.condition, &queueLock);
     } else {
       // Apple's relative wait uses monotonic time, so wall-clock changes cannot
       // extend or shorten an engine sleep. Recalculate after a spurious wakeup.
       struct timespec now, remaining;
       clock_gettime(CLOCK_MONOTONIC, &now);
-      remaining.tv_sec = deadline.tv_sec - now.tv_sec;
-      remaining.tv_nsec = deadline.tv_nsec - now.tv_nsec;
+      if(timeout<0){remaining.tv_sec=0;remaining.tv_nsec=20000000;}
+      else {remaining.tv_sec = deadline.tv_sec - now.tv_sec;remaining.tv_nsec = deadline.tv_nsec - now.tv_nsec;}
       if (remaining.tv_nsec < 0) { remaining.tv_sec--; remaining.tv_nsec += 1000000000; }
       if (remaining.tv_sec < 0) result = ETIMEDOUT;
       else {
+        bool quantum=zone_native_checkpoint_handler&&(remaining.tv_sec>0||remaining.tv_nsec>20000000||timeout<0);
+        if(quantum){remaining.tv_sec=0;remaining.tv_nsec=20000000;}
 #ifdef __APPLE__
         result = pthread_cond_timedwait_relative_np(&waiter.condition, &queueLock, &remaining);
 #else
-        result = pthread_cond_timedwait(&waiter.condition, &queueLock, &deadline);
+        struct timespec until={now.tv_sec+remaining.tv_sec,now.tv_nsec+remaining.tv_nsec};
+        if(until.tv_nsec>=1000000000){until.tv_sec++;until.tv_nsec-=1000000000;}
+        result = pthread_cond_timedwait(&waiter.condition, &queueLock, &until);
 #endif
+        if(result==ETIMEDOUT&&quantum)result=0;
       }
+    }
+    if(!result&&!waiter.notified&&zone_native_checkpoint_handler) {
+      // The waiter remains registered while the engine pauses. Release the
+      // queue mutex so another thread can notify it during that pause.
+      pthread_mutex_unlock(&queueLock);zone_native_checkpoint();pthread_mutex_lock(&queueLock);
     }
   }
   Waiter **link = &waiters;

@@ -42,7 +42,8 @@ void Z_IMPORT_emscripten_set_window_title(struct w2c_a *h,u64 title) {
 u32 z_register_event(struct w2c_a *h,u32 type,u64 user,u64 callback,u64 target) {
     if(type>=64)return (u32)-5;
     pthread_mutex_lock(&h->runtime->lock);
-    h->runtime->events[type]=(ZEvent){.callback=callback,.user=user,.target=target,.owner=h->pthread};
+    u64 owner=target>2?target:(target==1?h->runtime->main_guest_thread:h->pthread);
+    h->runtime->events[type]=(ZEvent){.callback=callback,.user=user,.target=target,.owner=owner};
     pthread_mutex_unlock(&h->runtime->lock);return 0;
 }
 bool z_dispatch_event(struct w2c_a *h,u32 type,u64 event) {

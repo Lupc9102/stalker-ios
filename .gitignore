@@ -2,6 +2,7 @@
 .build/
 .ccache/
 .ccache-linux/
+.ccache-ios-app/
 .swiftpm/
 .bsp/
 Build/

@@ -135,6 +135,8 @@ int main(int argc,char **argv) {
     Z_IMPORT_glDeleteProgram(h,program);Z_IMPORT_glDeleteShader(h,vs);Z_IMPORT_glDeleteShader(h,fs);
     z_write32(h,scratch,buffer);Z_IMPORT_glDeleteBuffers(h,1,scratch);z_write32(h,scratch,vao);Z_IMPORT_glDeleteVertexArrays(h,1,scratch);
     assert(Z_IMPORT_emscripten_glGetError(h)==GL_NO_ERROR);
+    assert(z_gl_suspend(h));assert(!Z_IMPORT_emscripten_webgl_get_current_context(h));
+    assert(z_gl_resume(h));assert(Z_IMPORT_emscripten_webgl_get_current_context(h)==1);
     z_gl_close(rt);Z_EXPORT_free(&h->engine,name);Z_EXPORT_free(&h->engine,p);
     wasm2c_xray_free(&h->engine);z_memory_close(rt);pthread_mutex_destroy(&rt->lock);free(h);free(rt);wasm_rt_free();
     puts("Native GLES: memory64 shader strings, shader compile/link, uniforms/reflection, vertex buffers, rasterization, pixel packing/readback, opaque sync handles and cleanup passed.");

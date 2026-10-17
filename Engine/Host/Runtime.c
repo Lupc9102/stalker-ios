@@ -26,6 +26,11 @@ void z_write64(struct w2c_a *h,u64 p,u64 v) { memcpy(z_pointer(h,p,8),&v,8); }
 u64 z_read64(struct w2c_a *h,u64 p) { u64 v;memcpy(&v,z_pointer(h,p,8),8);return v; }
 _Noreturn void z_missing(struct w2c_a *h,const char *name) {
     fprintf(stderr,"[engine] UNIMPLEMENTED: %s (guest thread %llu)\n",name,(unsigned long long)h->pthread);
+    unsigned first=0;
+    if(atomic_compare_exchange_strong(&h->runtime->first_failure,&first,1)) {
+        snprintf(h->runtime->error,sizeof h->runtime->error,"Unsupported engine call: %s",name);
+        atomic_store(&h->runtime->error_ready,true);
+    }
     atomic_fetch_add(&h->runtime->failures,1);
     wasm_rt_trap(WASM_RT_TRAP_UNREACHABLE);
 }

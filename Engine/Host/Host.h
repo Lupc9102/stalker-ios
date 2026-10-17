@@ -16,6 +16,8 @@ struct w2c_a {
     struct w2c_a *next;
     u64 pthread, heartbeat;
     u64 main_loop, main_loop_arg;
+    u64 input_buffer;
+    u32 input_modifiers;
     jmp_buf yielded;
     int yield_reason, status;
     bool worker;
@@ -29,8 +31,12 @@ struct ZRuntime {
     struct w2c_a *threads;
     atomic_bool stopping;
     atomic_uint failures;
+    atomic_uint first_failure;
+    atomic_bool error_ready;
+    char error[256];
     u32 width, height;
     bool offline;
+    u64 main_guest_thread;
     ZEvent events[64];
     u64 frame_time_pointer, mouse_pointer;
     double mouse_scale;
@@ -57,3 +63,4 @@ ZFilesystem *z_files_open(const char *, const char *);
 void z_files_close(ZFilesystem *);
 bool z_memory_open(ZRuntime *,u32 megabytes);
 void z_memory_close(ZRuntime *);
+void z_audio_pause(struct w2c_a *,bool);

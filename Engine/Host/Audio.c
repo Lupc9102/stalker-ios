@@ -15,6 +15,8 @@ typedef struct {
     ALCdevice *devices[64];
     ALCcontext *contexts[64];
     ZAudioString *strings;
+    atomic_bool paused;
+    _Atomic float gain;
 } ZAudio;
 static ZAudio *audio(struct w2c_a *h) {
     pthread_mutex_lock(&h->runtime->lock);
@@ -98,5 +100,18 @@ void Z_IMPORT_alBufferData(struct w2c_a *h,u32 buffer,u32 format,u64 data,u32 si
 void Z_IMPORT_alSourceQueueBuffers(struct w2c_a *h,u32 source,u32 count,u64 at) { alSourceQueueBuffers(source,(ALsizei)count,z_pointer(h,at,(u64)count*4)); }
 void Z_IMPORT_alSourceUnqueueBuffers(struct w2c_a *h,u32 source,u32 count,u64 out) { alSourceUnqueueBuffers(source,(ALsizei)count,z_pointer(h,out,(u64)count*4)); }
 void Z_IMPORT_alListener3f(struct w2c_a *h,u32 param,f32 x,f32 y,f32 z) { (void)h;alListener3f(param,x,y,z); }
-void Z_IMPORT_alListenerf(struct w2c_a *h,u32 param,f32 value) { (void)h;alListenerf(param,value); }
+void Z_IMPORT_alListenerf(struct w2c_a *h,u32 param,f32 value) {
+    if(param==AL_GAIN) {
+        ZAudio *a=audio(h);atomic_store(&a->gain,value);
+        if(atomic_load(&a->paused))value=0;
+    }
+    alListenerf(param,value);
+}
+void z_audio_pause(struct w2c_a *h,bool paused) {
+    pthread_mutex_lock(&h->runtime->lock);ZAudio *a=h->runtime->audio;pthread_mutex_unlock(&h->runtime->lock);
+    if(!a||!alcGetCurrentContext())return;
+    bool previous=atomic_exchange(&a->paused,paused);
+    if(paused&&!previous){float gain=1;alGetListenerf(AL_GAIN,&gain);atomic_store(&a->gain,gain);alListenerf(AL_GAIN,0);}
+    else if(!paused&&previous)alListenerf(AL_GAIN,atomic_load(&a->gain));
+}
 void Z_IMPORT_alListenerfv(struct w2c_a *h,u32 param,u64 values) { alListenerfv(param,z_pointer(h,values,param==AL_ORIENTATION?24:(param==AL_POSITION||param==AL_VELOCITY?12:4))); }

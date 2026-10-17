@@ -9,6 +9,15 @@
 
 static wasm_rt_shared_memory_t memory;
 static _Atomic unsigned started;
+static _Atomic bool checkpoint_entered,checkpoint_release;
+static void pause_checkpoint(void *unused) {
+    (void)unused;atomic_store(&checkpoint_entered,true);
+    while(!atomic_load(&checkpoint_release)){struct timespec d={0,1000000};nanosleep(&d,NULL);}
+}
+static void *pausable_waiter(void *unused) {
+    (void)unused;zone_native_checkpoint_handler=pause_checkpoint;
+    return (void *)(uintptr_t)(1+zone_atomic_wait32(&memory,0,42,UINT64_MAX));
+}
 static void *waiter(void *unused) {
     (void)unused;
     atomic_fetch_add(&started, 1);
@@ -33,6 +42,12 @@ int main(void) {
     }
     assert(notified == 2);
     for (int i = 0; i < 2; ++i) { void *result; pthread_join(threads[i], &result); assert((uintptr_t)result == 1); }
+    // A notification during an engine pause must not be lost, and pausing may
+    // not hold the shared waiter queue mutex or deadlock the notifying thread.
+    assert(!pthread_create(&threads[0],NULL,pausable_waiter,NULL));
+    for(unsigned i=0;i<500&&!atomic_load(&checkpoint_entered);i++){struct timespec d={0,1000000};nanosleep(&d,NULL);}
+    assert(atomic_load(&checkpoint_entered));assert(zone_atomic_notify(&memory,0,1)==1);
+    atomic_store(&checkpoint_release,true);void *paused_result;assert(!pthread_join(threads[0],&paused_result));assert((uintptr_t)paused_result==1);
     uint8_t bytes[16]; for (int i = 0; i < 16; ++i) bytes[i] = (uint8_t)(10 + i);
     v128 vector = simde_wasm_v128_load(bytes);
     v128_store_shared(NULL, 0, &memory, 101, vector); /* unaligned SIMD is valid */

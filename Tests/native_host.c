@@ -79,6 +79,9 @@ int main(void) {
     u64 device=Z_IMPORT_alcOpenDevice(h,0);
     if(device) {
         u64 context=Z_IMPORT_alcCreateContext(h,device,0);assert(context);assert(Z_IMPORT_alcMakeContextCurrent(h,context));
+        Z_IMPORT_alListenerf(h,AL_GAIN,0.5f);z_audio_pause(h,true);float gain=1;alGetListenerf(AL_GAIN,&gain);assert(gain==0);
+        Z_IMPORT_alListenerf(h,AL_GAIN,0.75f);alGetListenerf(AL_GAIN,&gain);assert(gain==0);
+        z_audio_pause(h,false);alGetListenerf(AL_GAIN,&gain);assert(gain==0.75f);
         Z_IMPORT_alGenBuffers(h,1,p+600);u32 buffer=word(h,p+600);assert(buffer);
         memset(z_pointer(h,p+640,32),0,32);Z_IMPORT_alBufferData(h,buffer,AL_FORMAT_MONO16,p+640,32,8000);
         Z_IMPORT_alGenSources(h,1,p+604);u32 source=word(h,p+604);assert(source);

@@ -1,0 +1,55 @@
+name: Build iOS native engine app
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [App/**, Native/**, Engine/**, Scripts/**, project-engine.yml, .github/workflows/ios-engine.yml]
+permissions:
+  contents: read
+concurrency:
+  group: ios-engine-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  engine-app:
+    runs-on: macos-15
+    timeout-minutes: 45
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache-ios-app
+      CCACHE_MAXSIZE: 2G
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build tools
+        run: brew install ccache xcodegen
+      - uses: actions/cache/restore@v4
+        id: compiler-cache
+        with:
+          path: .ccache-ios-app
+          key: ios-engine-app-${{ hashFiles('Engine/sources.lock.json', 'Engine/Host/NativeRuntime.h', 'Engine/Host/Stack.h', 'Scripts/patch_*.py') }}-${{ github.sha }}
+          restore-keys: |
+            ios-engine-app-${{ hashFiles('Engine/sources.lock.json', 'Engine/Host/NativeRuntime.h', 'Engine/Host/Stack.h', 'Scripts/patch_*.py') }}-
+            ios-engine-app-
+      - name: Check app input and source syntax
+        run: bash Scripts/check.sh
+      - name: Build and verify the native engine device app
+        run: bash Scripts/build_native_ios.sh
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: ZonePort-Native-iOS
+          path: Build/ZonePort-Native.ipa
+          compression-level: 0
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Native-iOS-build-diagnostics
+          path: |
+            Build/native-engine-ios.log
+            Build/native-ios-build.log
+            Engine/Generated/native-coverage.json
+          if-no-files-found: ignore
+      - uses: actions/cache/save@v4
+        if: always() && steps.compiler-cache.outputs.cache-hit != 'true'
+        with:
+          path: .ccache-ios-app
+          key: ${{ steps.compiler-cache.outputs.cache-primary-key }}
