@@ -1,0 +1,79 @@
+name: Verify native engine and GLES
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [Engine/**, Scripts/prepare_engine.py, Scripts/native_host.py, Scripts/gles_bindings.py, Scripts/patch_*.py, Tests/**, .github/workflows/native-linux.yml]
+permissions:
+  contents: read
+concurrency:
+  group: native-linux-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache-linux
+      CCACHE_MAXSIZE: 2G
+      ALSOFT_DRIVERS: 'null'
+      LIBGL_ALWAYS_SOFTWARE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install native development libraries
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y cmake ninja-build ccache libopenal-dev libegl-dev libgles-dev libgl1-mesa-dri
+      - uses: actions/cache/restore@v4
+        id: compiler-cache
+        with:
+          path: .ccache-linux
+          key: linux-native-${{ hashFiles('Engine/sources.lock.json', 'Engine/Host/NativeRuntime.h', 'Scripts/patch_*.py') }}-${{ github.sha }}
+          restore-keys: |
+            linux-native-${{ hashFiles('Engine/sources.lock.json', 'Engine/Host/NativeRuntime.h', 'Scripts/patch_*.py') }}-
+            linux-native-
+      - name: Generate and compile the real native engine
+        run: |
+          python3 Scripts/prepare_engine.py
+          python3 Scripts/native_host.py Engine/Generated Engine/Inputs/xr_3da.js --gles
+          cmake -G Ninja -S Engine -B Engine/Build -DZONE_ENGINE_OPTIMIZATION=1 -DZONE_NATIVE_GLES=ON -DCMAKE_C_COMPILER_LAUNCHER=ccache
+          cmake --build Engine/Build --target zone_native_boot zone_native_host_test zone_native_gles_test zone_atomics_test zone_exception_test -j 3
+      - name: Verify native services, exception unwinding and actual GPU pixels
+        run: |
+          mkdir -p Build
+          ctest --test-dir Engine/Build --output-on-failure
+          Engine/Build/zone_native_gles_test Build/native-gles-triangle.ppm
+      - name: Execute real engine startup
+        run: |
+          mkdir -p Build/BootGame Build/BootUser
+          set +e
+          Engine/Build/zone_native_boot Build/BootGame Build/BootUser > Build/native-boot.log 2>&1
+          result=$?
+          set -e
+          cat Build/native-boot.log
+          test "$result" -eq 1
+          grep -q 'ENTERING REAL ENGINE MAIN' Build/native-boot.log
+          grep -q 'Cannot open file' Build/native-boot.log
+          if grep -Eq 'UNIMPLEMENTED|trapped' Build/native-boot.log; then exit 1; fi
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: Native-Linux-Engine-Diagnostics
+          path: |
+            Engine/Build/zone_native_boot
+            Engine/Build/zone_native_gles_test
+            Build/native-gles-triangle.ppm
+            Build/native-boot.log
+            Engine/Generated/native-coverage.json
+          compression-level: 6
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: Native-Linux-Failure-Logs
+          path: Engine/Build/Testing/Temporary/LastTest.log
+          if-no-files-found: ignore
+      - uses: actions/cache/save@v4
+        if: always() && steps.compiler-cache.outputs.cache-hit != 'true'
+        with:
+          path: .ccache-linux
+          key: ${{ steps.compiler-cache.outputs.cache-primary-key }}

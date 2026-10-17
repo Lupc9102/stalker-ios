@@ -98,7 +98,9 @@ real startup path; raising it alone does not establish scripting correctness.
 `GraphicsIOS.m` supplies an EAGL/ES 3 provider for a caller-owned CAEAGLLayer.
 It draws at game resolution into a separate framebuffer, scales into the phone
 drawable at presentation and restores framebuffer/scissor state. It is not yet
-connected to the app and still requires an Apple compile/device check.
+connected to the app. The provider and engine cross-compiled for iPhone ARM64
+in [Apple verification](verification/apple-engine-build.md); a device run
+remains unverified.
 
 Only reviewed native extensions are exposed. Browser-only base-vertex, polygon
 mode and timer-query APIs remain unsupported; they are not advertised. Native

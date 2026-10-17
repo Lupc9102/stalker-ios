@@ -1,4 +1,4 @@
-# Checkpoint: 2026-10-16
+# Checkpoint: 2026-10-17
 
 ## Verified here
 
@@ -39,22 +39,30 @@
   reflection, buffers, readback/packing and GPU sync handles pass. This is a
   bridge test, not a rendered game frame.
 - Both workflow YAML files, the xtool configuration and Info.plist parse.
+- The engine and native GLES/drawable host cross-compile for iPhone ARM64.
+  Actual engine main also runs on Apple Silicon and reaches the expected
+  missing-data boundary. The Apple workflow's three tests pass, including
+  10,000 exception catch/rethrow rounds and file reads using guest addresses
+  and file offsets above 4 GiB. See `Docs/verification/apple-engine-build.md`.
+- A reproducible compiler bug leaked the guest call-depth counter on caught
+  exceptions. The patched generator passes the nested exception regression
+  fixture; full engine startup with the fix is being tested.
 
 ## Not implemented / not verified
 
 - **The compiled IPA is a launcher and controls-practice build, not a playable
   STALKER port.**
 - The translated engine is not connected to the app. Campaign Play is disabled.
-- iOS graphics surface integration, the engine lifecycle and SDL input delivery
-  are still outstanding. Filesystem/pthread/OpenAL/GLES services now work in
+- UIKit graphics surface integration, the engine lifecycle and SDL input delivery
+  are still outstanding. An iOS EAGL provider compiles, while filesystem/pthread/OpenAL/GLES services work in
   Linux host tests; they have not yet been integrated into UIKit.
 - The native host implements 451 typed import entry points with GLES. The other 38 imports
   remain explicit traps. Event registration is stored; UI event delivery is not
   connected. See `Docs/NATIVE-HOST.md` for the exact scope.
 - No menu, level, save, combat, game memory-budget or sustained frame-rate test
   has been performed. Reaching missing game data is a startup test only.
-- No ARM64 engine compile, automated UI interaction test or physical-device test
-  has completed. The ARM64 app build does not contain the translated engine.
+- No physical-device engine test has completed. The ARM64 app build does not
+  contain the translated engine.
 - No retail game archives or textures have been compressed, resized or modified.
 - Full archive integrity/compatibility checks are not implemented; the app checks
   for archive presence and obvious missing/empty/cloud-only files.
