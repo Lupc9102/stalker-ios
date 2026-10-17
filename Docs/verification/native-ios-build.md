@@ -20,3 +20,27 @@ also passed for `1319ed7`, which preserves UI default bindings and adapts touch
 to the main menu's animated selector. Its simulator runtime test is in progress.
 This record establishes compilation and packaging, not physical-device
 gameplay, level loading or performance.
+
+
+## Visible native menu build
+
+[Run 39026671344](https://github.com/Lupc9102/stalker-ios/actions/runs/39026671344)
+for `5acffea` also passed device and simulator compilation. Unlike the earlier
+frame-counter smoke test, its simulator diagnostics include the actual CoP
+menu visibly composited in UIKit. See [the runtime record](native-ios-runtime.md)
+for framebuffer counts and the separate screenshot-verifier failure.
+
+Its unsigned `ZonePort-Native.ipa` is 41,341,843 bytes, SHA-256
+`4f339fd7627ef844701db0b66a8154765fd5396dbc07cc27e20f9955ba7e2afc`.
+Downloaded artifact bytes matched the GitHub artifact digest, and local package
+verification passed ARM64, landscape, fullscreen and Files checks. No WASM,
+JavaScript runtime, Windows executable or game archive is packaged. This is
+still simulator menu evidence, not physical iPhone gameplay validation.
+
+
+The follow-up `ae1e908` device artifact from
+[run 39028193756](https://github.com/Lupc9102/stalker-ios/actions/runs/39028193756)
+passed the same package checks: 41,342,199 bytes, SHA-256
+`068c0cf628e0e083f43663cf3c5f3307659857ab889645ae318d24451ff595f3`.
+Its only source changes are in verification scripts. The run also compiles the simulator app and type-checks the screenshot
+verifier before running the engine.

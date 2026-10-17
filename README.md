@@ -3,10 +3,14 @@
 An early engine-port project with a native landscape UIKit launcher and an
 editable touch layout adapted from the MIT-licensed GTA V iOS port.
 
-**The native launcher and controls compile for iPhone; Call of Pripyat does not
-run yet.** The unsigned IPA contains a controls-practice screen. Gameplay stays
-disabled until a real engine host is linked. See [STATUS.md](STATUS.md) for
-verification and gaps.
+**The native engine build renders the real CoP main menu in an iOS simulator,
+without JIT.** It links the translated engine, native graphics/audio/file services
+and customizable touch controls. Retail levels and physical iPhone gameplay
+remain unverified. See [STATUS.md](STATUS.md) and the
+[runtime record](Docs/verification/native-ios-runtime.md).
+
+Use `ZonePort-Native.ipa` for engine testing. The older `ZonePort.ipa` is the
+launcher/controls-practice build.
 
 ## App and controls
 
@@ -17,13 +21,14 @@ verification and gaps.
 - Move, resize, hide and reassign action buttons. Size 60–180%; per-button
   opacity 20–100%; three saved layouts; JSON import/export; left-handed mirror.
 - Floating movement stick; hold or toggle aiming; sensitivity and global opacity.
-- Bluetooth controller input in practice; button states merge with touch input.
+- Bluetooth controller input shares the engine input hub with touch input;
+  physical-device controller behavior remains unverified.
 - Reset held input on backgrounding, cancelled touches and controller disconnect.
 - File picker can remember an installed original CoP folder. Presence checks
   detect resources/, levels/ and localization/ archives; they are **not** full
   game-integrity or compatibility validation. Original GOG/Steam PC version only.
 
-## Build on Linux with xtool
+## Launcher-only build on Linux with xtool
 
 Install the Swift toolchain and xtool using its official instructions:
 <https://xtool.sh/documentation/xtool/installation-linux/>
@@ -41,23 +46,44 @@ This SwiftPM/xtool configuration has not yet completed an iOS compile here.
 
 ## Build with GitHub Actions (no Mac at home)
 
-Run **Build iOS app** under [Actions](https://github.com/Lupc9102/stalker-ios/actions/workflows/ios.yml).
-The macOS job runs Xcode, builds an unsigned `ZonePort.ipa`, compiles a simulator
-app and captures the launcher, controls editor and controls-practice screen.
-The device and simulator builds have passed with Xcode 16.4 on macOS 15.
-All three screens have been inspected on an iPhone 16 Pro simulator.
-See the [build record](Docs/verification/ios-build.md) for the exact source,
-artifact and verification limits.
-Download the `ZonePort-iOS` artifact from a successful run, extract the IPA, and
-sign/install it with your sideloading tool. Minimum iOS version: 17.0.
-The workflow never requests an Apple ID, certificate or game data. Public and
-private repositories use GitHub's respective runner usage rules.
+Run **Build iOS native engine app** under
+[Actions](https://github.com/Lupc9102/stalker-ios/actions/workflows/ios-engine.yml).
+The macOS job builds and verifies an unsigned ARM64 `ZonePort-Native.ipa`, then
+builds the connected simulator app. It tests the actual engine using GSC's free
+benchmark archives outside the app, checks framebuffer and screen content, and
+checks background/resume. Test archives are not uploaded with the artifacts.
 
-On a Mac with Xcode and `xcodegen`:
+Download `ZonePort-Native-iOS` from a successful run, extract the IPA, and
+sign/install it with your existing sideloading tool. Minimum iOS version: 17.0.
+The workflow needs no Apple ID, certificate or retail game data. See the
+[device build record](Docs/verification/native-ios-build.md) for verification
+and limitations.
+
+On a Mac with Xcode, CMake, Python and `xcodegen`:
 
 ```sh
-bash Scripts/build_ios.sh
+bash Scripts/build_native_ios.sh
 ```
+
+The separate [Build iOS app](https://github.com/Lupc9102/stalker-ios/actions/workflows/ios.yml)
+workflow and `Scripts/build_ios.sh` build only the launcher and controls practice.
+The xtool configuration also targets that smaller variant.
+
+## Load your game files
+
+1. Install/extract your original GOG or Steam PC copy of Call of Pripyat.
+2. Copy the installed folder to the iPhone and make sure its files are fully
+   downloaded. Keep `resources/`, `levels/`, `localization/` and `patches/`
+   (when present) together.
+3. In the native engine app, select that folder and start CoP. Changes and
+   engine logs go to `Documents/ZonePortData`, separate from the originals.
+4. The app starts with direct taps for the game menus. In Controls, choose
+   Show game controls for the customizable movement/action HUD; Use game menus
+   switches back. CoP draws its own cursor, so this mode is selected manually.
+
+This is an experimental engine checkpoint. Level loading, saves and performance
+still require testing with retail files. Only one engine session is supported
+per app process; relaunch the app after ending a session.
 
 ## Engine experiment
 
@@ -85,9 +111,10 @@ works. This diagnostic archive is not linked into the iOS app.
 The newer [native host](Docs/NATIVE-HOST.md) goes further: it runs constructors
 and real engine main on Linux, mounts files through a native OPFS replacement,
 and uses native pthreads and OpenAL. With the official free benchmark it mounts
-four archives, selects the renderer and begins texture/script initialization.
-The optional GLES bridge passes a real rendering/readback test on Linux; iPhone
-surface integration and a rendered game frame are still unverified.
+four archives, initializes textures/scripts and renders the real main menu.
+Native pointer input opens Options on Linux. The connected iOS simulator app
+also visibly renders the menu through GLES and UIKit. These menu tests do not
+establish retail-level compatibility, physical-device gameplay or performance.
 
 `prepare_engine.py --wasm /path/to/custom.wasm --javascript /path/to/custom.js`
 accepts an explicitly supplied custom engine build. Shared-memory assumptions

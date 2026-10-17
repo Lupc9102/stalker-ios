@@ -51,6 +51,11 @@
   benchmark supplies the test archives; forced BC1/2/3 decoding also renders
   the same menu with the iPhone-compatible RGBA upload path; see `Docs/verification/native-engine-menu.log`.
 
+- The native iOS engine now visibly renders the real CoP main menu in UIKit on
+  an ARM64 simulator. Game and display framebuffer readbacks and an actual
+  simulator screenshot confirm the result; see
+  `Docs/verification/native-ios-runtime.md`.
+
 ## Not implemented / not verified
 
 - The original `ZonePort.ipa` is the launcher/controls-practice variant. The new
@@ -59,7 +64,9 @@
   `Docs/verification/native-ios-build.md`. Physical-device gameplay remains
   unverified.
 - The UIKit engine surface, action/pointer delivery and background pause
-  checkpoints are connected. The simulator runtime test is in progress.
+  checkpoints are connected. Visible simulator menu rendering is verified; the
+  background/resume run passed. A stricter same-process/fresh-frame check is
+  in progress.
   This first integration retains one session per app process; safe worker
   teardown/restart remains outstanding. See `Docs/IOS-ENGINE.md`.
 - The native host implements 452 typed import entry points with GLES. The other 37 imports
