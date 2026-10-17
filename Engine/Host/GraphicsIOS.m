@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
 #import <QuartzCore/CAEAGLLayer.h>
+#import <QuartzCore/CATransaction.h>
 #import <OpenGLES/EAGL.h>
 #include "Graphics.h"
 #include <stdio.h>
