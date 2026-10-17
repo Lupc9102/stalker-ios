@@ -55,6 +55,13 @@
   an ARM64 simulator. Game and display framebuffer readbacks and an actual
   simulator screenshot confirm the result; see
   `Docs/verification/native-ios-runtime.md`.
+- The player's Enhanced Edition upload mounts on the native Linux host. Two
+  bundled shader repairs eliminate four GLES compilation failures. A duplicate
+  info-ID diagnostic in the pinned engine was then identified as the startup
+  trap; an equivalent native branch repair reaches 80 real frames and a
+  backdrop/cursor capture. Menu labels and retail gameplay remain unverified.
+  The checked build-time snapshot repair still needs a fresh translated-runtime
+  test; see `Docs/verification/retail-startup.md`.
 
 ## Not implemented / not verified
 
@@ -100,5 +107,6 @@ Artifact details and verification limits are in
 Continue the native engine host in the order documented in `Docs/ENGINE-HOST.md`.
 The native engine renders the menu and responds to input. The native
 UIKit simulator/resume test and unsigned device package checks pass. Test the
-player's GOG files next: new game, retail-level loading, saves and physical-device
-controls remain outstanding.
+player's files next: the supplied Enhanced Edition data now reaches backdrop
+rendering in a Linux diagnostic. Verify the reproducibly rebuilt engine, menu UI,
+new game, retail-level loading, saves and physical-device controls.

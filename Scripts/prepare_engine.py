@@ -12,6 +12,7 @@ import sys
 import urllib.request
 import urllib.parse
 import tempfile
+from patch_engine_snapshot import prepare_mobile_snapshot
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -57,6 +58,7 @@ def main():
                 temporary.replace(destination)
             files[name] = destination
         wasm, javascript = files['wasm'], files['javascript']
+        wasm = prepare_mobile_snapshot(wasm, inputs / 'xr_3da.mobile.wasm')
     generated = ROOT / 'Engine/Generated'; generated.mkdir(parents=True, exist_ok=True)
     command = [sys.executable, ROOT / 'Scripts/inspect_wasm.py', wasm, '--out', generated / 'imports.json']
     if javascript: command += ['--javascript', javascript]
