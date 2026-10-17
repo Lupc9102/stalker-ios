@@ -30,6 +30,7 @@ struct ZRuntime {
     atomic_bool stopping;
     atomic_uint failures;
     u32 width, height;
+    bool offline;
     ZEvent events[64];
     u64 frame_time_pointer, mouse_pointer;
     double mouse_scale;

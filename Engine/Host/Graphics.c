@@ -1,4 +1,5 @@
 #include "Graphics.h"
+#include "BC.h"
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,6 +15,7 @@ typedef struct {
     char *extensions[128];
     unsigned extension_count;
     char *extension_string;
+    bool bc_native,bc_srgb_native,force_bc_decode;
 } ZGraphics;
 
 static ZGraphics *graphics(struct w2c_a *h) {
@@ -126,12 +128,22 @@ static void discover_extensions(ZGraphics *g) {
       "GL_EXT_texture_compression_dxt1","GL_EXT_texture_compression_s3tc_srgb",
       "GL_EXT_texture_format_BGRA8888","GL_APPLE_texture_format_BGRA8888"};
     const char *all=(const char *)glGetString(GL_EXTENSIONS);if(!all)all="";
+    g->bc_native=extension_available(all,"GL_EXT_texture_compression_s3tc");
+    g->bc_srgb_native=extension_available(all,"GL_EXT_texture_compression_s3tc_srgb");
+    const char *force=getenv("ZONE_FORCE_BC_DECODE");g->force_bc_decode=force&&!strcmp(force,"1");
     size_t bytes=1;
     for(unsigned i=0;i<sizeof reviewed/sizeof *reviewed;i++)if(extension_available(all,reviewed[i])) {
         g->extensions[g->extension_count++]=strdup(reviewed[i]);bytes+=strlen(reviewed[i])+1;
     }
     g->extension_string=calloc(bytes,1);if(!g->extension_string)return;
     for(unsigned i=0;i<g->extension_count;i++) { if(i)strcat(g->extension_string," ");strcat(g->extension_string,g->extensions[i]); }
+}
+bool z_gl_bc_needs_decode(struct w2c_a *h,GLenum format) {
+    ZGraphics *g=graphics(h);
+    return z_bc_kind(format)&&(g->force_bc_decode||!(z_bc_srgb(format)?g->bc_srgb_native:g->bc_native));
+}
+GLenum z_gl_texture_format(struct w2c_a *h,GLenum format) {
+    return z_gl_bc_needs_decode(h,format)?(z_bc_srgb(format)?GL_SRGB8_ALPHA8:GL_RGBA8):format;
 }
 u64 Z_IMPORT_emscripten_webgl_create_context(struct w2c_a *h,u64 target,u64 attributes) {
     (void)target;ZGraphics *g=graphics(h);if(g->created)return 0;

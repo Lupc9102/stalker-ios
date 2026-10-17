@@ -38,7 +38,7 @@
   memory64 import bindings using EGL/Mesa. Shader compilation, uniforms,
   reflection, buffers, readback/packing and GPU sync handles pass. This is a
   bridge test, not a rendered game frame.
-- Both workflow YAML files, the xtool configuration and Info.plist parse.
+- Workflow YAML files, the xtool configuration and Info.plist parse.
 - The engine and native GLES/drawable host cross-compile for iPhone ARM64.
   Actual engine main also runs on Apple Silicon and reaches the expected
   missing-data boundary. The Apple workflow's three tests pass, including
@@ -48,7 +48,8 @@
   exceptions. The patched generator passes the nested exception regression
   fixture and actual engine startup registers 251 script-export nodes, loads
   game scripts, and renders three real main-menu frames. The official free
-  benchmark supplies the test archives; see `Docs/verification/native-engine-menu.log`.
+  benchmark supplies the test archives; forced BC1/2/3 decoding also renders
+  the same menu with the iPhone-compatible RGBA upload path; see `Docs/verification/native-engine-menu.log`.
 
 ## Not implemented / not verified
 

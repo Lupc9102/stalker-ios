@@ -15,6 +15,10 @@ u32 Z_IMPORT__emscripten_lookup_name(struct w2c_a *h,u64 pointer) {
     if(!strcmp(name,"emscripten"))name="localhost";
     struct in_addr address;
     if(inet_pton(AF_INET,name,&address)!=1) {
+        if(h->runtime->offline&&strcmp(name,"localhost")) {
+            if(getenv("ZONE_TRACE_NETWORK"))fprintf(stderr,"[engine] Offline mode: hostname unavailable: %s\n",name);
+            return 0;
+        }
         struct addrinfo hints={.ai_family=AF_INET,.ai_socktype=SOCK_STREAM},*result=NULL;
         int error=getaddrinfo(name,NULL,&hints,&result);
         if(error||!result) {

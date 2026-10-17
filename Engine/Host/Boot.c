@@ -33,6 +33,7 @@ int main(int argc,char **argv) {
     struct w2c_a *h=calloc(1,sizeof *h);
     if(!runtime||!h)return 1;
     h->runtime=runtime;runtime->threads=h;runtime->width=960;runtime->height=540;
+    const char *offline=getenv("ZONE_OFFLINE");runtime->offline=offline&&!strcmp(offline,"1");
     pthread_mutex_init(&runtime->lock,NULL);z_current_thread=h;
     char temporary[]="/tmp/zone-engine-XXXXXX";
     const char *overlay=argc>2?argv[2]:mkdtemp(temporary);

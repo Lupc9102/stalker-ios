@@ -68,6 +68,7 @@ int main(void) {
     text(h,high_guest,"localhost");assert(Z_IMPORT__emscripten_lookup_name(h,high_guest)==0x0100007fu);
     text(h,high_guest,"emscripten");assert(Z_IMPORT__emscripten_lookup_name(h,high_guest)==0x0100007fu);
     text(h,high_guest,"");assert(!Z_IMPORT__emscripten_lookup_name(h,high_guest));
+    rt->offline=true;text(h,high_guest,"example.invalid");assert(!Z_IMPORT__emscripten_lookup_name(h,high_guest));
     puts("Native IPv4 lookup: literal addresses, localhost, bundled hostname and empty-name failure passed.");
     assert(get(h,p,"../outside")<0);assert(get(h,p,"/etc/passwd")<0);assert(get(h,p,"link")<0);assert(get(h,p,"a\\b")<0);
     // A released access handle must not close its still-live file node. Handle

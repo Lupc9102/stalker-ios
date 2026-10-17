@@ -18,6 +18,68 @@ static GLuint shader(struct w2c_a *h,GLenum kind,const char *source,u64 scratch)
     if(!word(h,scratch+16)) { Z_IMPORT_glGetShaderInfoLog(h,object,2048,0,scratch+32);fprintf(stderr,"%s\n",z_string(h,scratch+32)); }
     assert(word(h,scratch+16));Z_EXPORT_free(&h->engine,string);return object;
 }
+static void bc_pixel(GLuint framebuffer,GLenum target,GLuint texture,int level,int layer,int x,
+                     unsigned r,unsigned g,unsigned b,unsigned a) {
+    glBindFramebuffer(GL_FRAMEBUFFER,framebuffer);
+    if(target==GL_TEXTURE_2D_ARRAY)glFramebufferTextureLayer(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,texture,level,layer);
+    else glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,target,texture,level);
+    assert(glCheckFramebufferStatus(GL_FRAMEBUFFER)==GL_FRAMEBUFFER_COMPLETE);
+    unsigned char pixel[4];glReadPixels(x,0,1,1,GL_RGBA,GL_UNSIGNED_BYTE,pixel);
+    assert(glGetError()==GL_NO_ERROR);
+    assert(pixel[0]==r&&pixel[1]==g&&pixel[2]==b&&pixel[3]==a);
+}
+static void test_bc_uploads(struct w2c_a *h,u64 scratch) {
+    assert(z_gl_bc_needs_decode(h,0x83f1));
+    GLuint textures[6],framebuffer;glGenTextures(6,textures);glGenFramebuffers(1,&framebuffer);
+    u64 high=((u64)1<<32)+8192;unsigned char blocks[32]={0};
+    // A non-power-of-two immutable BC1 texture with red and blue edge blocks.
+    blocks[1]=0xf8;blocks[8]=0x1f;memcpy(z_pointer(h,high,16),blocks,16);
+    Z_IMPORT_glBindTexture(h,GL_TEXTURE_2D,textures[0]);
+    Z_IMPORT_emscripten_glTexStorage2D(h,GL_TEXTURE_2D,2,0x83f1,5,3);
+    Z_IMPORT_emscripten_glCompressedTexSubImage2D(h,GL_TEXTURE_2D,0,0,0,5,3,0x83f1,16,high);
+    bc_pixel(framebuffer,GL_TEXTURE_2D,textures[0],0,0,0,255,0,0,255);
+    bc_pixel(framebuffer,GL_TEXTURE_2D,textures[0],0,0,4,0,0,255,255);
+    memset(blocks,0,8);blocks[0]=0xe0;blocks[1]=0x07;memcpy(z_pointer(h,high,8),blocks,8);
+    Z_IMPORT_emscripten_glCompressedTexSubImage2D(h,GL_TEXTURE_2D,1,0,0,2,1,0x83f1,8,high);
+    bc_pixel(framebuffer,GL_TEXTURE_2D,textures[0],1,0,0,0,255,0,255);
+    // Compressed source bytes in a PBO at offset zero. Decoding must restore
+    // both the binding and all native unpack state after its RGBA upload.
+    GLuint unpack;glGenBuffers(1,&unpack);glBindBuffer(GL_PIXEL_UNPACK_BUFFER,unpack);
+    Z_IMPORT_glBufferData(h,GL_PIXEL_UNPACK_BUFFER,8,high,GL_STATIC_READ);
+    glPixelStorei(GL_UNPACK_ALIGNMENT,8);glPixelStorei(GL_UNPACK_ROW_LENGTH,7);
+    Z_IMPORT_glBindTexture(h,GL_TEXTURE_2D,textures[1]);
+    Z_IMPORT_emscripten_glCompressedTexImage2D(h,GL_TEXTURE_2D,0,0x83f1,4,4,0,8,0);
+    GLint value=0;glGetIntegerv(GL_PIXEL_UNPACK_BUFFER_BINDING,&value);assert((GLuint)value==unpack);
+    glGetIntegerv(GL_UNPACK_ALIGNMENT,&value);assert(value==8);
+    glGetIntegerv(GL_UNPACK_ROW_LENGTH,&value);assert(value==7);
+    bc_pixel(framebuffer,GL_TEXTURE_2D,textures[1],0,0,0,0,255,0,255);
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER,0);glDeleteBuffers(1,&unpack);
+    // BC2 explicit alpha, plus BC3 sRGB array storage and multiple slices.
+    memset(blocks,0,16);memset(blocks,0x88,8);blocks[8]=0xe0;blocks[9]=0x07;
+    memcpy(z_pointer(h,high,16),blocks,16);Z_IMPORT_glBindTexture(h,GL_TEXTURE_2D,textures[2]);
+    Z_IMPORT_emscripten_glCompressedTexImage2D(h,GL_TEXTURE_2D,0,0x83f2,4,4,0,16,0);
+    assert(glGetError()==GL_NO_ERROR);
+    Z_IMPORT_emscripten_glCompressedTexImage2D(h,GL_TEXTURE_2D,0,0x83f2,4,4,0,16,high);
+    bc_pixel(framebuffer,GL_TEXTURE_2D,textures[2],0,0,0,0,255,0,136);
+    memset(blocks,0,32);blocks[0]=blocks[16]=255;blocks[8]=0x1f;blocks[25]=0xf8;
+    memcpy(z_pointer(h,high,32),blocks,32);Z_IMPORT_glBindTexture(h,GL_TEXTURE_2D_ARRAY,textures[3]);
+    Z_IMPORT_emscripten_glTexStorage3D(h,GL_TEXTURE_2D_ARRAY,1,0x8c4f,4,4,2);
+    Z_IMPORT_emscripten_glCompressedTexSubImage3D(h,GL_TEXTURE_2D_ARRAY,0,0,0,0,4,4,2,0x8c4f,32,high);
+    bc_pixel(framebuffer,GL_TEXTURE_2D_ARRAY,textures[3],0,0,0,0,0,255,255);
+    bc_pixel(framebuffer,GL_TEXTURE_2D_ARRAY,textures[3],0,1,0,255,0,0,255);
+    Z_IMPORT_glBindTexture(h,GL_TEXTURE_2D_ARRAY,textures[4]);
+    Z_IMPORT_emscripten_glCompressedTexImage3D(h,GL_TEXTURE_2D_ARRAY,0,0x83f3,4,4,2,0,32,high);
+    bc_pixel(framebuffer,GL_TEXTURE_2D_ARRAY,textures[4],0,1,0,255,0,0,255);
+    memset(blocks,0,8);blocks[0]=0xe0;blocks[1]=0x07;memcpy(z_pointer(h,high,8),blocks,8);
+    Z_IMPORT_glBindTexture(h,GL_TEXTURE_CUBE_MAP,textures[5]);
+    Z_IMPORT_emscripten_glTexStorage2D(h,GL_TEXTURE_CUBE_MAP,1,0x83f1,4,4);
+    Z_IMPORT_emscripten_glCompressedTexSubImage2D(h,GL_TEXTURE_CUBE_MAP_POSITIVE_X,0,0,0,4,4,0x83f1,8,high);
+    bc_pixel(framebuffer,GL_TEXTURE_CUBE_MAP_POSITIVE_X,textures[5],0,0,0,0,255,0,255);
+    glPixelStorei(GL_UNPACK_ALIGNMENT,4);glPixelStorei(GL_UNPACK_ROW_LENGTH,0);
+    glBindFramebuffer(GL_FRAMEBUFFER,0);glDeleteFramebuffers(1,&framebuffer);glDeleteTextures(6,textures);
+    (void)scratch;
+    puts("Native BC fallback: actual GPU pixels from BC1/2/3, partial mips, sRGB arrays, cube faces, PBO offsets and guest addresses above 4 GiB passed.");
+}
 int main(int argc,char **argv) {
     wasm_rt_init();ZRuntime *rt=calloc(1,sizeof *rt);struct w2c_a *h=calloc(1,sizeof *h);assert(rt&&h);
     h->runtime=rt;rt->threads=h;rt->width=256;rt->height=256;pthread_mutex_init(&rt->lock,NULL);z_current_thread=h;
@@ -65,6 +127,7 @@ int main(int argc,char **argv) {
         for(int y=255;y>=0;y--)for(int x=0;x<256;x++)assert(fwrite(bytes+4*(y*256+x),1,3,image)==3);
         assert(!fclose(image));
     }
+    if(getenv("ZONE_FORCE_BC_DECODE"))test_bc_uploads(h,scratch);
     u64 sync=Z_IMPORT_emscripten_glFenceSync(h,GL_SYNC_GPU_COMMANDS_COMPLETE,0);assert(sync&&Z_IMPORT_emscripten_glIsSync(h,sync));
     GLenum wait=Z_IMPORT_emscripten_glClientWaitSync(h,sync,GL_SYNC_FLUSH_COMMANDS_BIT,1000000000);
     assert(wait==GL_ALREADY_SIGNALED||wait==GL_CONDITION_SATISFIED);

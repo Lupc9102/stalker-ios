@@ -56,6 +56,17 @@ def generate(directory, functions, header):
             special = f'z_gl_get_state(h,p0,p1,{kind});'
         elif name == 'glBindFramebuffer':
             special = 'glBindFramebuffer(p0,z_gl_framebuffer(h,p1));'
+        elif name in ('glTexStorage2D', 'glTexStorage3D'):
+            tail = ',p5' if name.endswith('3D') else ''
+            special = f'{name}(p0,p1,z_gl_texture_format(h,p2),p3,p4{tail});'
+        elif name == 'glCompressedTexImage2D':
+            special = 'z_gl_compressed_image(h,2,p0,p1,p2,p3,p4,1,p5,p6,p7);'
+        elif name == 'glCompressedTexImage3D':
+            special = 'z_gl_compressed_image(h,3,p0,p1,p2,p3,p4,p5,p6,p7,p8);'
+        elif name == 'glCompressedTexSubImage2D':
+            special = 'z_gl_compressed_sub_image(h,2,p0,p1,p2,p3,0,p4,p5,1,p6,p7,p8);'
+        elif name == 'glCompressedTexSubImage3D':
+            special = 'z_gl_compressed_sub_image(h,3,p0,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10);'
 
         if special is None:
             if name in ('glShaderSource', 'glTransformFeedbackVaryings', 'glGetUniformIndices'):

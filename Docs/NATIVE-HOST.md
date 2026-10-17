@@ -50,6 +50,10 @@ ALSOFT_DRIVERS=null Engine/Build/zone_native_boot \
   Build/Benchmark/app Build/BenchmarkUser 3 Build/engine-frame.ppm
 ```
 
+Set `ZONE_OFFLINE=1` to make non-local hostname lookups fail immediately during
+offline diagnostics, and `ZONE_FORCE_BC_DECODE=1` to exercise the iPhone texture
+compatibility path on desktop GLES.
+
 The installer size and SHA-256 are pinned in `Engine/benchmark.lock.json`.
 Extraction never executes Windows binaries. Keep these test assets out of app
 packages and diagnostic artifacts. They are insufficient for full retail
@@ -132,8 +136,14 @@ remains unverified.
 
 Only reviewed native extensions are exposed. Browser-only base-vertex, polygon
 mode and timer-query APIs remain unsupported; they are not advertised. Native
-GLES is the initial iOS provider; ANGLE/Metal is a possible later provider. DXT
-fallbacks and real game shader/texture compatibility still need validation.
+GLES is the initial iOS provider; ANGLE/Metal is a possible later provider. BC1/2/3
+(DXT1/3/5) uploads now decode to RGBA8 or sRGB RGBA when the device lacks the
+corresponding native format. Original archives are unchanged. CPU vectors and
+actual GPU readback cover color/alpha modes, partial mips, arrays, cube faces,
+PBO offsets and high guest pointers. Forced decoding also renders the full
+benchmark main menu (`verification/native-engine-bc-menu.log`). This uses more
+GPU memory than native block compression; it is a compatibility path, not the
+planned phone asset-compression pass. Physical iPhone validation remains pending.
 
 The existing app still links only its input layer. Native graphics, engine
 lifetime, game-file access grants and touch/controller delivery are still
