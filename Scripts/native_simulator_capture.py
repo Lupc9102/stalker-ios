@@ -49,6 +49,8 @@ def main():
     report.unlink(missing_ok=True)
     framebuffer = documents / 'engine-frame.ppm'
     framebuffer.unlink(missing_ok=True)
+    drawable = documents / 'engine-drawable.ppm'
+    drawable.unlink(missing_ok=True)
     diagnostics = Path('Build/NativeSimulatorDiagnostics'); diagnostics.mkdir(parents=True, exist_ok=True)
 
     def wait_frames(minimum, seconds=180):
@@ -71,13 +73,18 @@ def main():
         run('xcrun', 'simctl', 'launch', identifier, bundle, '--engine-smoke-test', timeout=60)
         state = wait_frames(60)
         verify_engine_frame(framebuffer)
+        verify_engine_frame(drawable)
+        if state.get('surfaceHidden') or not state.get('loadingHidden'):
+            raise RuntimeError('Engine view is hidden or still covered by the loading screen')
         run('xcrun', 'simctl', 'io', identifier, 'screenshot', str(Path('Build/native-ios-menu.png').resolve()))
+        run('swift', 'Scripts/verify_simulator_screen.swift', 'Build/native-ios-menu.png')
         before = state['frames']
         run('xcrun', 'simctl', 'launch', identifier, 'com.apple.Preferences')
         time.sleep(2)
         run('xcrun', 'simctl', 'launch', identifier, bundle)
         state = wait_frames(before + 30, 60)
         run('xcrun', 'simctl', 'io', identifier, 'screenshot', str(Path('Build/native-ios-resumed.png').resolve()))
+        run('swift', 'Scripts/verify_simulator_screen.swift', 'Build/native-ios-resumed.png')
         print(f'Native UIKit engine rendered {state["frames"]} frame callbacks and resumed after backgrounding. This is simulator validation, not a physical-device or level test.')
     finally:
         # A failed startup must still leave a visible app state for diagnosis.
@@ -87,7 +94,7 @@ def main():
             print('Diagnostic screenshot unavailable:', error, flush=True)
         if report.exists():
             shutil.copy2(report, diagnostics / 'engine-smoke.json')
-        for name in ('engine-native.log', 'engine-frame.ppm'):
+        for name in ('engine-native.log', 'engine-frame.ppm', 'engine-drawable.ppm'):
             if (documents / name).exists():
                 shutil.copy2(documents / name, diagnostics / name)
         logs = documents / 'ZonePortData/_appdata_/logs'
