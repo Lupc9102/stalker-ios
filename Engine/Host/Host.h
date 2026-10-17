@@ -1,6 +1,7 @@
 #pragma once
 #include "NativeABI.h"
 #include "wasm-rt-impl.h"
+#include "Atomics.h"
 #include <stdatomic.h>
 #include <pthread.h>
 #include <setjmp.h>
