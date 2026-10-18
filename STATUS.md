@@ -87,6 +87,22 @@
   execution, visible screenshots and same-process/fresh-frame background resume.
   This uses the official benchmark, not the private retail archives. The saved
   unsigned IPA matches the prepared pack's support manifest.
+- At `cfc2843`, the complete UIKit workflow also passes with a real local
+  `GameFiles` folder, discovery after returning from Files and a packaged app
+  icon. No folder picker is required for local game data.
+- The first physical iPhone startup attempt stops with `Invalid call_indirect
+  or return_call_indirect`. The old build captured stdout/stderr only in
+  simulator smoke tests, so it could stop before producing any accessible log.
+  At `8bcec07`, device logging starts before native engine initialization and
+  failure reports can be shared from the alert. A Release simulator test
+  deliberately traps before engine main and verifies both persistent files.
+  This verifies the diagnostic path, not a repair of the device's engine trap.
+  The complete workflow also passes visible native benchmark-menu rendering,
+  prepared override execution and same-process/fresh-frame background resume
+  with the Release simulator host. Details are in
+  `Docs/verification/iphone-startup-diagnostics.md`.
+  The six native host tests also pass at `ade6551`, including real generated
+  indirect calls with invalid signatures and out-of-range table indices.
 
 ## Not implemented / not verified
 
@@ -108,8 +124,9 @@
   renders a retail world view and reloads its initial save on Linux. Combat,
   the iPhone memory budget and sustained
   frame rate remain unverified.
-- No physical-device engine test has completed. The new native app build does
-  contain the translated engine.
+- A physical-device startup attempt fails with an indirect-call trap. No
+  physical-device engine session has reached a verified game frame. The next
+  phone log must identify the rejected call before a targeted repair is made.
 - Original retail archives remain unchanged. A manual font-mask converter is
   tested, along with selection of existing BC mipmaps and offline BC7-to-RGBA8
   conversion. General resizing, ASTC encoding and automatic on-phone archive
@@ -137,7 +154,9 @@ Artifact details and verification limits are in
 Continue the native engine host in the order documented in `Docs/ENGINE-HOST.md`.
 The native engine renders Zaton with the private prepared EE/classic overlay
 on Linux, reloads the initial save and responds to movement/look input. The
-prepared-file UIKit integration check passes. Install the signed test IPA and
-test the prepared data on a physical iPhone. The native UIKit menu,
+prepared-file UIKit integration check passes. Install diagnostic v0.1.2 over
+the existing app, reproduce startup once and export `engine-native.log` and
+`engine-failure.txt` using **Share diagnostics**. Investigate the reported
+call site, table index and expected/actual type hashes. The native UIKit menu,
 simulator/resume test and unsigned device package checks pass; iOS world
 rendering, combat and sustained performance remain.
