@@ -129,8 +129,63 @@ reach NPC creation, where Enhanced Edition expects `get_platform_id` and
 object-creation assertion. These diagnostic overlays are not shipped fixes or
 evidence of a playable campaign.
 
-Retail-level rendering, saves, combat and physical iPhone performance remain
+## October 18: classic compatibility layer and memory
+
+The full benchmark script set's object-creation failure was traced to its
+commented-out `CLevelChanger` registration. Keeping the player's EE
+`class_registrator.script`, after applying the classic scripts and pinned public
+support scripts, passes that assertion. It loads 6,464 spawn points, accepts the
+local client, loads Zaton's geometry and creates its objects.
+
+The first full-resolution test was killed by the host's 8 GiB memory limit;
+the cgroup records one OOM kill. Inspection of pinned
+`src/Layers/xrRenderGL/glTexture.cpp` shows that `get_texture_load_lod` affects
+reported memory accounting, while the upload still uses the original extent
+and all mip levels. Merely setting `texture_lod` does not reduce that allocation.
+This matters when the mobile fallback expands BC textures to RGBA.
+
+`Scripts/prepare_texture_overlay.py` instead selects existing compressed DDS
+mip levels. At maximum dimension 512, it produces 1,194 loose overrides,
+including 11 level textures, with 264,632,088 bytes of DDS files. For those
+changed textures, the estimated decoded RGBA mip data decreases from
+11,158,596,288 to 1,348,905,664 bytes. This is a sum across assets, **not** measured
+simultaneous GPU residency. Retained compressed bytes are unchanged; original
+archives, UI/fonts, cubemaps and unsupported formats remain unchanged.
+
+The mobile host also disables bulk object/model prefetch (`-noprefetch`). A
+512-mip run with classic UI and prefetch disabled peaks at 2,930,444 KiB RSS
+(about 2.8 GiB) in 1-second process samples. It avoids another OOM kill and
+reaches a later achievement-definition assertion. This is Linux/Mesa process
+memory, not an established iPhone memory budget.
+
+The next compatibility differences have matching classic implementations:
+
+- EE PDA XML lacks `btn_nav_parent:btn_nav_2`, expected by this engine. Restoring
+  826 classic UI/font files gets past that assertion.
+- EE achievement definitions reference additional functions absent from the
+  classic `xr_statistic.script`. Restoring classic `misc/achievements.ltx`
+  gets past the achievement assertion.
+
+With these changes, the executable from
+[Linux run 39103015992](https://github.com/Lupc9102/stalker-ios/actions/runs/39103015992)
+at `055de63` completes 100 real frame callbacks and exits successfully. Its
+1280 × 720 capture visibly shows the final **"Press any button to play" loading
+screen**. This is not a world-rendering or gameplay pass. The diagnostic host's
+`ZONE_DISMISS_LOADING=1` option is the next test: it sends actual Enter events
+through the existing native input callback, rather than bypassing game logic.
+
+`Scripts/prepare_classic_overlay.py` reproduces the private compatibility files
+from the verified official benchmark, pinned public support files and the
+player's registry. The generated 1,717 existing overrides match the tested
+overlay byte for byte; it additionally includes four source metadata files.
+Benchmark archive hashes are pinned in `Engine/classic-compat.lock.json`;
+selected member CRCs and support-file hashes are checked. Output is staged,
+manifested and refused if the destination already exists. No game assets are
+committed or included in app artifacts. The separate 512-mip overlay is merged
+into `gamedata/` for this test.
+
+Retail-world rendering, saves, combat and physical iPhone performance remain
 unverified. Enhanced Edition also has unsupported `mtb_*` renderer commands,
-blender names and changed scripts/UI. The original/classic CoP 1.6.02 data is
-still needed for the intended campaign baseline; Enhanced Edition support is a
-separate compatibility effort.
+blender names and changed scripts/UI. This experimental layer is not integrated
+into automatic iOS import. Original/classic CoP 1.6.02 remains the intended
+campaign baseline; Enhanced Edition support is a separate compatibility effort.

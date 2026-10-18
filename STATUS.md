@@ -1,4 +1,4 @@
-# Checkpoint: 2026-10-17
+# Checkpoint: 2026-10-18
 
 ## Verified here
 
@@ -66,6 +66,15 @@
 - The repaired engine also passes a fresh native iOS device/simulator build
   and UIKit benchmark-menu/background-resume test at `5ba6be8`. The same app
   process renders 32 new callbacks after foregrounding (278 → 310).
+- At `055de63`, fresh Linux/Apple engine checks, iOS device/simulator builds,
+  visible UIKit menu and same-process background/resume checks pass with bulk
+  prefetch disabled. The new unsigned IPA passes packaged ARM64/metadata checks.
+- A private classic-script/UI compatibility layer with the player's registry
+  loads Zaton's geometry and objects from Enhanced Edition archives. Selecting
+  existing 512px DDS mips avoids the earlier host OOM kill. Matching classic
+  achievement definitions then allow 100 callbacks and a successful diagnostic
+  exit. The capture is the final "Press any button to play" loading screen;
+  world rendering is not established. See `Docs/verification/retail-startup.md`.
 
 ## Not implemented / not verified
 
@@ -83,14 +92,15 @@
   remain explicit traps. Native input tests cover the callback ABI, surface
   listener removal and thread ownership. Real pointer input opens Options;
   see `Docs/verification/native-engine-options.log` and `Docs/NATIVE-HOST.md`.
-- Campaign startup has been attempted with Enhanced Edition data; compatibility
-  diagnostics reach 6,464 loaded spawn points before further script errors.
-  No retail level has rendered. Saves, combat, game memory budget and sustained
+- Campaign startup with the experimental Enhanced Edition/classic overlay now
+  reaches the final loading prompt. No retail world view has been verified.
+  Saves, combat, game memory budget and sustained
   frame rate remain unverified.
 - No physical-device engine test has completed. The new native app build does
   contain the translated engine.
 - Original retail archives remain unchanged. A manual font-mask converter is
-  tested; general texture resizing/GPU compression is not implemented.
+  tested, along with selection of existing BC mipmaps. General texture resizing,
+  GPU format conversion and automatic mobile asset preparation are not implemented.
 - Full archive integrity/compatibility checks are not implemented; the app checks
   for archive presence and obvious missing/empty/cloud-only files.
 

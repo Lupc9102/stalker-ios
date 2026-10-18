@@ -80,6 +80,17 @@ backgrounds the app, returns, waits for more frames and verifies another screen.
 
 ## Limits
 
+[Run 39103015993](https://github.com/Lupc9102/stalker-ios/actions/runs/39103015993)
+at `055de63` passes device/simulator compilation, both actual screenshot checks
+and the same-process/fresh-frame background/resume gate with bulk prefetch
+disabled. The final diagnostic has 497 callbacks, phase 2, a visible surface
+and a hidden loading view. Game and drawable readbacks again report 779,808 and
+2,209,185 non-black pixels with no GL errors. The actual menu screenshot was
+visually inspected. The unsigned IPA is 41,343,013 bytes, SHA-256
+`38b00ccf25325826d091930058fa7dfd8a417c491058ad14a8d95124b12dbfc4`;
+packaged ARM64, landscape, full-screen and Files checks pass. This uses the
+official benchmark, not the private campaign compatibility overlay.
+
 Physical iPhone gameplay, retail-level loading, saves, combat, sustained
 performance and memory use remain unverified. This integration retains one
 engine session per app process; exiting a session requires relaunching the app.
