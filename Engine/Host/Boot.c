@@ -54,15 +54,21 @@ int main(int argc,char **argv) {
         wasm2c_xray_instantiate(&h->engine,h);
         fprintf(stderr,"[engine] Running static constructors\n");
         w2c_xray_fi(&h->engine);
-        const char *args[]={"xr_3da","-nosplash","-nointro","-nogameintro","-fsltx","/opfs/fsgame.ltx"};
-        u64 pointers=Z_EXPORT_malloc(&h->engine,sizeof args+8);
-        for(unsigned i=0;i<sizeof args/sizeof *args;i++) {
+        const char *args[8]={"xr_3da","-nosplash","-nointro","-nogameintro","-fsltx","/opfs/fsgame.ltx"};
+        unsigned count=6;
+        const char *campaign=getenv("ZONE_START_NEW_GAME");
+        if(campaign&&!strcmp(campaign,"1")) {
+            args[count++]="-start";
+            args[count++]="server(all/single/alife/new) client(localhost)";
+        }
+        u64 pointers=Z_EXPORT_malloc(&h->engine,(count+1)*8);
+        for(unsigned i=0;i<count;i++) {
             size_t size=strlen(args[i])+1;u64 p=Z_EXPORT_malloc(&h->engine,size);
             memcpy(z_pointer(h,p,size),args[i],size);z_write64(h,pointers+8*i,p);
         }
-        z_write64(h,pointers+sizeof args,0);
+        z_write64(h,pointers+count*8,0);
         fprintf(stderr,"[engine] ENTERING REAL ENGINE MAIN\n");
-        h->status=(int)Z_EXPORT_main(&h->engine,sizeof args/sizeof *args,pointers);
+        h->status=(int)Z_EXPORT_main(&h->engine,count,pointers);
         fprintf(stderr,"[engine] main returned %d\n",h->status);
     } else fprintf(stderr,"[engine] Main yielded: reason %d, status %d\n",h->yield_reason,h->status);
 #if defined(ZONE_NATIVE_GLES)
@@ -78,7 +84,12 @@ int main(int argc,char **argv) {
         fprintf(stderr,"[engine] Running up to %u real engine frames\n",limit);
         for(unsigned frame=0;frame<limit&&h->main_loop;frame++) {
             wasm_rt_trap_t trap=wasm_rt_impl_try();
-            if(trap){fprintf(stderr,"[engine] Frame trapped: %s\n",wasm_rt_strerror(trap));return 78;}
+            if(trap){
+                fprintf(stderr,"[engine] Frame trapped: %s\n",wasm_rt_strerror(trap));
+                if(argc>4&&save_frame(h,argv[4]))
+                    fprintf(stderr,"[engine] Captured last framebuffer after failure; campaign not verified: %s\n",argv[4]);
+                return 78;
+            }
             z_input_frame_time(h,1000.0/60);
             if(options&&frame>=40&&frame<=47) {
                 u32 key=frame>=46?13:40;const char *name=frame>=46?"Enter":"ArrowDown";

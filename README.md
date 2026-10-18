@@ -147,6 +147,22 @@ loose L8 font overrides from extracted, colorless Enhanced Edition BC3 masks;
 it preserves the base-level glyph mask exactly. This manual compatibility tool
 does not run automatically during iOS import. General texture resizing and GPU
 compression have not been implemented.
+
+For private data diagnostics on Linux, `Scripts/xray_archives.py` extracts only
+scripts or font atlases and checks every selected member's CRC. It requires a
+C++ compiler, liblzo2, and the public source checkout prepared by
+`prepare_support_data.py`. Use a new output directory outside this repository:
+
+```sh
+python3 Scripts/xray_archives.py --input-root /path/to/installed-game --kind scripts --output-dir /path/to/private/extracted
+```
+
+Use `--kind fonts` for font conversion inputs; the extracted fonts retain their
+`textures/ui/` directory. The native Linux diagnostic host also accepts
+`ZONE_START_NEW_GAME=1`, so campaign tests need not alter `user.ltx`. If a frame
+traps and a capture path was supplied, the host attempts to capture the last
+framebuffer and still exits with failure. Such captures can show loading/error
+screens and do not establish playable gameplay.
 Once gameplay works, profile texture residency and streaming before making a
 separate mobile asset pack. Archive compression and GPU texture compression
 solve different problems.
