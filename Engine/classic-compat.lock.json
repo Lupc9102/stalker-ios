@@ -1,0 +1,21 @@
+{
+  "benchmark_installer_sha256": "8c810fba1bbb9c58fc01f4f602479886680c9f4b491dd0afe935e27083f54845",
+  "archives": {
+    "resources/amd_demo.db1": {
+      "bytes": 673488310,
+      "sha256": "fbdaacc010175b02071d8a84a80fa9440c7e12eddfae49795f0caf7a731101cd"
+    },
+    "resources/amd_demo.db2": {
+      "bytes": 371662180,
+      "sha256": "ac52b8333f44f5b6bf29ae8710e02df5e1c869ef6519f239efdb75da371a6da5"
+    },
+    "resources/shaders.db": {
+      "bytes": 927676,
+      "sha256": "3910108349fa45f1630c0f9b9691552f0f307c9b8921b533ea13d40f57a9e222"
+    },
+    "resources/x_patch.db": {
+      "bytes": 20071909,
+      "sha256": "fe482224202694bd64cf5959a23242e418e96dcbbbe6b3ae59d370d470e4dc26"
+    }
+  }
+}

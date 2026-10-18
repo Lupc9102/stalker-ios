@@ -163,6 +163,8 @@ Use `--kind fonts` for font conversion inputs; the extracted fonts retain their
 traps and a capture path was supplied, the host attempts to capture the last
 framebuffer and still exits with failure. Such captures can show loading/error
 screens and do not establish playable gameplay.
+`ZONE_DISMISS_LOADING=1` additionally sends a real Enter press/release at frames
+91/92 and runs at least 120 callbacks, to exercise the final campaign prompt.
 
 `Scripts/prepare_texture_overlay.py --input-root /path/to/installed-game
 --output-dir /path/to/private/mobile-overlay --max-size 512` selects existing
@@ -172,6 +174,23 @@ Textures without smaller mip levels cannot be reduced by this tool. This is
 manual asset preparation, not automatic iOS import or GPU format conversion.
 The mobile app and diagnostic host disable bulk object/model prefetch to lower
 the startup memory peak; assets still load when requested by the engine.
+
+For the experimental Enhanced Edition/classic compatibility diagnostic,
+`Scripts/prepare_classic_overlay.py` prepares the tested classic scripts, UI,
+fonts and achievement definitions from GSC's official free benchmark. It checks
+the benchmark archives against pinned size/SHA-256 values, checks extracted
+member CRCs, reapplies the public port's support scripts and keeps the player's
+level-changer registry. Prepare the benchmark and support files first:
+
+```sh
+python3 Scripts/prepare_classic_overlay.py --input-root /path/to/installed-game --benchmark-root /path/to/extracted-benchmark/app --output-dir /path/to/private/classic-overlay
+```
+
+This is a private diagnostic overlay, not a verified playable data pack or an
+automatic iOS importer. It contains game assets: keep it outside the repository
+and public build artifacts. A separate texture overlay can be merged into its
+`gamedata/` folder without replacing the original archives.
+
 Once gameplay works, profile texture residency and streaming before making a
 separate mobile asset pack. Archive compression and GPU texture compression
 solve different problems.
