@@ -2,6 +2,7 @@
 #include "NativeABI.h"
 #include "wasm-rt-impl.h"
 #include "Atomics.h"
+#include "Diagnostics.h"
 #include <stdatomic.h>
 #include <pthread.h>
 #include <setjmp.h>
@@ -56,6 +57,7 @@ double z_proxy(struct w2c_a *, u32, u64, u32);
 long double z_proxy_argument(struct w2c_a *, u64, unsigned, u32);
 u32 z_asm(struct w2c_a *,u64,const long double *,unsigned);
 void z_call_void(struct w2c_a *, u64, u64);
+wasm_rt_funcref_t z_checked_function(struct w2c_a *, u64, wasm_rt_func_type_t, const char *);
 void z_pump(struct w2c_a *);
 void z_atomic_wait_pump(void);
 u32 z_register_event(struct w2c_a *,u32,u64,u64,u64,u64,bool);

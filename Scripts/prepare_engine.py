@@ -67,6 +67,7 @@ def main():
         staging = Path(temporary)
         run(wabt / 'build/wasm2c', wasm, '--enable-threads', '--module-name=xray', '--num-outputs=64', '-o', staging / 'xray.c')
         run(sys.executable, ROOT / 'Scripts/patch_generated.py', staging)
+        run(sys.executable, ROOT / 'Scripts/patch_indirect_diagnostics.py', staging / 'xray-impl.h')
         for path in staging.iterdir():
             target = generated / path.name
             if not target.exists() or target.read_bytes() != path.read_bytes():

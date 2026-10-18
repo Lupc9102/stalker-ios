@@ -5,12 +5,18 @@
 #include <string.h>
 #include <time.h>
 
-void z_call_void(struct w2c_a *h,u64 function,u64 argument) {
+wasm_rt_funcref_t z_checked_function(struct w2c_a *h,u64 function,wasm_rt_func_type_t expected,const char *caller) {
     wasm_rt_funcref_table_t *table=Z_EXPORT__indirect_function_table(&h->engine);
-    if(function>=table->size)wasm_rt_trap(WASM_RT_TRAP_CALL_INDIRECT);
+    if(function>=table->size){zone_indirect_failure(table,expected,function,caller);wasm_rt_trap(WASM_RT_TRAP_CALL_INDIRECT);}
     wasm_rt_funcref_t f=table->data[function];
+    if(!f.func||!f.func_type||!expected||memcmp(f.func_type,expected,32)){
+        zone_indirect_failure(table,expected,function,caller);wasm_rt_trap(WASM_RT_TRAP_CALL_INDIRECT);
+    }
+    return f;
+}
+void z_call_void(struct w2c_a *h,u64 function,u64 argument) {
     wasm_rt_func_type_t expected=wasm2c_xray_get_func_type(1,0,WASM_RT_I64);
-    if(!f.func||!f.func_type||memcmp(f.func_type,expected,32))wasm_rt_trap(WASM_RT_TRAP_CALL_INDIRECT);
+    wasm_rt_funcref_t f=z_checked_function(h,function,expected,"native main-loop callback");
     ((void (*)(void *,u64))f.func)(f.module_instance,argument);
 }
 void z_pump(struct w2c_a *h) {
@@ -45,11 +51,8 @@ static void *run_worker(void *pointer) {
         Z_EXPORT__emscripten_stack_restore(&h->engine,high);
         Z_EXPORT__emscripten_thread_init(&h->engine,h->pthread,0,0,1,0,0);
         Z_EXPORT__emscripten_tls_init(&h->engine);
-        wasm_rt_funcref_table_t *table=Z_EXPORT__indirect_function_table(&h->engine);
-        if(w->routine>=table->size)wasm_rt_trap(WASM_RT_TRAP_CALL_INDIRECT);
-        wasm_rt_funcref_t f=table->data[w->routine];
         wasm_rt_func_type_t expected=wasm2c_xray_get_func_type(1,1,WASM_RT_I64,WASM_RT_I64);
-        if(!f.func||!f.func_type||memcmp(f.func_type,expected,32))wasm_rt_trap(WASM_RT_TRAP_CALL_INDIRECT);
+        wasm_rt_funcref_t f=z_checked_function(h,w->routine,expected,"native pthread entry");
         u64 result=((u64 (*)(void *,u64))f.func)(f.module_instance,w->argument);
         Z_EXPORT__emscripten_thread_exit(&h->engine,result);
     }

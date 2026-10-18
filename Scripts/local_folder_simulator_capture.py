@@ -22,7 +22,7 @@ def main():
     if phone['state'] != 'Booted':
         run('xcrun', 'simctl', 'boot', device)
     run('xcrun', 'simctl', 'bootstatus', device, '-b')
-    app = Path('Build/NativeSimulator/Build/Products/Debug-iphonesimulator/ZonePort.app').resolve()
+    app = Path('Build/NativeSimulator/Build/Products/Release-iphonesimulator/ZonePort.app').resolve()
     run('xcrun', 'simctl', 'install', device, str(app))
     data = Path(run('xcrun', 'simctl', 'get_app_container', device, bundle, 'data'))
     documents = data / 'Documents'

@@ -39,7 +39,7 @@ jobs:
       - name: Compile the engine and run native host tests
         run: |
           cmake -S Engine -B Engine/Build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER_LAUNCHER=ccache
-          cmake --build Engine/Build --target zone_native_boot zone_native_host_test zone_native_input_test zone_atomics_test zone_exception_test zone_bc_test -j 3
+          cmake --build Engine/Build --target zone_native_boot zone_native_host_test zone_native_input_test zone_atomics_test zone_exception_test zone_indirect_test zone_bc_test -j 3
           ctest --test-dir Engine/Build --output-on-failure
       - name: Run real engine startup without game data
         run: |

@@ -40,7 +40,7 @@ def main():
     if device['state'] != 'Booted':
         run('xcrun', 'simctl', 'boot', identifier)
     run('xcrun', 'simctl', 'bootstatus', identifier, '-b', timeout=180)
-    app = Path('Build/NativeSimulator/Build/Products/Debug-iphonesimulator/ZonePort.app').resolve()
+    app = Path('Build/NativeSimulator/Build/Products/Release-iphonesimulator/ZonePort.app').resolve()
     run('xcrun', 'simctl', 'install', identifier, str(app))
     container = Path(run('xcrun', 'simctl', 'get_app_container', identifier, bundle, 'data'))
     documents = container / 'Documents'; documents.mkdir(exist_ok=True)

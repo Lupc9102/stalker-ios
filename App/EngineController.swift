@@ -116,7 +116,7 @@ final class EngineController: UIViewController {
     private var openGameMenuWhenReady = false, inputSuppressed = false
     private var overlayToStart: URL?
     private var observers: [NSObjectProtocol] = []
-    #if DEBUG
+    #if DEBUG || ZONE_SIMULATOR_TESTS
     private var smokeTicks = 0
     private func reportSmoke(_ info: ZEngineInfo) {
         guard ProcessInfo.processInfo.arguments.contains("--engine-smoke-test") else { return }
@@ -164,11 +164,14 @@ final class EngineController: UIViewController {
         super.viewDidAppear(animated); ZEngineSetPaused(false)
         displayLink?.invalidate(); lastTime = 0
         let link = CADisplayLink(target: self, selector: #selector(tick(_:))); link.add(to: .main, forMode: .common); displayLink = link
-        guard !started else { return }; started = true; EngineFiles.hold(root)
+        guard !started else { return }; started = true
+        guard ZEngineCanStart() else { showFailure("Relaunch ZonePort before starting another engine session."); return }
+        EngineFiles.hold(root)
         information.text = "Checking prepared files and setting up the game…"
         let gameRoot = root
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             do {
+                try EngineDiagnostics.begin(root: gameRoot)
                 let overlay = try EngineFiles.prepare(gameRoot: gameRoot)
                 DispatchQueue.main.async { [weak self] in self?.start(overlay: overlay) }
             } catch { DispatchQueue.main.async { [weak self] in self?.showFailure(error.localizedDescription) } }
@@ -196,7 +199,7 @@ final class EngineController: UIViewController {
     @objc private func tick(_ link: CADisplayLink) {
         let dt = lastTime == 0 ? 1.0 / 60 : min(0.05, link.timestamp - lastTime); lastTime = link.timestamp
         let info = ZEngineGetInfo()
-        #if DEBUG
+        #if DEBUG || ZONE_SIMULATOR_TESTS
         reportSmoke(info)
         #endif
         if let overlay = overlayToStart, UIApplication.shared.applicationState == .active, presentedViewController == nil {
@@ -268,8 +271,18 @@ final class EngineController: UIViewController {
     }
     private func showFailure(_ message: String) {
         guard !finished else { return }; finished = true; reset(); ZEngineStop()
+        EngineDiagnostics.recordFailure(message)
         information.isHidden = false; information.text = message
-        let alert = UIAlertController(title: "Engine stopped", message: message + "\n\nEngine logs are in Files → ZonePortData → _appdata_ → logs. This build supports one engine session per app launch.", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Engine stopped", message: message + "\n\nDiagnostics are saved in Files → On My iPhone → ZonePort → engine-native.log. X-Ray’s own log folder may not exist if startup stops early. Relaunch the app before trying again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Share diagnostics", style: .default) { [weak self] _ in
+            guard let self else { return }
+            var items: [Any] = EngineDiagnostics.files
+            items.append(message)
+            let share = UIActivityViewController(activityItems: items, applicationActivities: nil)
+            share.popoverPresentationController?.sourceView = self.view
+            share.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 1, height: 1)
+            self.present(share, animated: true)
+        })
         alert.addAction(UIAlertAction(title: "Back to launcher", style: .default) { [weak self] _ in self?.dismiss(animated: true) })
         present(alert, animated: true)
     }

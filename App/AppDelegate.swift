@@ -62,7 +62,7 @@ final class LauncherController: UIViewController, UIDocumentPickerDelegate {
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        #if DEBUG
+        #if DEBUG || ZONE_SIMULATOR_TESTS
         let arguments = ProcessInfo.processInfo.arguments
         if presentedViewController == nil && arguments.contains("--controls-editor") {
             let editor = ControlsEditorController(); editor.modalPresentationStyle = .fullScreen
@@ -133,7 +133,7 @@ final class LauncherController: UIViewController, UIDocumentPickerDelegate {
                 guard let self, self.scanGeneration == generation else { return }
                 if self.report?.detected != true && report?.detected == true { self.mode = .campaign }
                 self.report = report; self.refresh()
-                #if DEBUG
+                #if DEBUG || ZONE_SIMULATOR_TESTS
                 if ProcessInfo.processInfo.arguments.contains("--files-smoke-test") {
                     let state: [String: Any] = ["ready": report?.detected == true,
                         "root": report?.root.path ?? "", "archives": report?.archiveCount ?? 0,

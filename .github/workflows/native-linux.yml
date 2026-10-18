@@ -37,7 +37,7 @@ jobs:
           python3 Scripts/prepare_engine.py
           python3 Scripts/native_host.py Engine/Generated Engine/Inputs/xr_3da.js --gles
           cmake -G Ninja -S Engine -B Engine/Build -DZONE_ENGINE_OPTIMIZATION=1 -DZONE_NATIVE_GLES=ON -DCMAKE_C_COMPILER_LAUNCHER=ccache '-DZONE_ENGINE_UNOPTIMIZED_UNITS=xray_8.c;xray_9.c;xray_63.c'
-          cmake --build Engine/Build --target zone_native_boot zone_native_host_test zone_native_input_test zone_native_gles_test zone_atomics_test zone_exception_test zone_bc_test -j 3
+          cmake --build Engine/Build --target zone_native_boot zone_native_host_test zone_native_input_test zone_native_gles_test zone_atomics_test zone_exception_test zone_indirect_test zone_bc_test -j 3
       - name: Verify native services, exception unwinding and actual GPU pixels
         run: |
           mkdir -p Build

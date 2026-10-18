@@ -10,11 +10,11 @@ cmake -S Engine -B Engine/Build-Simulator \
 if ! cmake --build Engine/Build-Simulator --target zone_native_host -j 3 >Build/native-engine-simulator.log 2>&1; then
     tail -n 90 Build/native-engine-simulator.log; exit 1
 fi
-if ! xcodebuild -project ZonePort.xcodeproj -scheme ZonePort -configuration Debug \
+if ! xcodebuild -project ZonePort.xcodeproj -scheme ZonePort -configuration Release \
     -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
     -derivedDataPath Build/NativeSimulator ZONE_ENGINE_BUILD_DIR="$PWD/Engine/Build-Simulator" \
     ARCHS=arm64 ONLY_ACTIVE_ARCH=YES \
-    SWIFT_ACTIVE_COMPILATION_CONDITIONS='DEBUG ZONE_WITH_ENGINE' \
+    SWIFT_ACTIVE_COMPILATION_CONDITIONS='ZONE_SIMULATOR_TESTS ZONE_WITH_ENGINE' \
     CODE_SIGNING_ALLOWED=NO build >Build/native-simulator-build.log 2>&1; then
     tail -n 120 Build/native-simulator-build.log; exit 1
 fi

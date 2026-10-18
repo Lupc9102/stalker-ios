@@ -43,6 +43,8 @@ jobs:
         run: bash Scripts/build_native_simulator.sh
       - name: Verify local game folder creation and foreground discovery
         run: python3 Scripts/local_folder_simulator_capture.py
+      - name: Verify persistent logs after an early native trap
+        run: python3 Scripts/native_diagnostics_capture.py
       - name: Prepare external benchmark test data
         run: |
           brew install innoextract
@@ -69,6 +71,7 @@ jobs:
             Build/native-engine-simulator.log
             Build/native-simulator-build.log
             Build/NativeSimulatorDiagnostics
+            Build/NativeDiagnosticsTest
             Engine/Generated/native-coverage.json
           if-no-files-found: ignore
       - uses: actions/cache/save@v4

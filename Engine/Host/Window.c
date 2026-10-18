@@ -81,14 +81,11 @@ bool z_dispatch_event(struct w2c_a *h,u32 type,u64 event) {
     pthread_mutex_unlock(&h->runtime->lock);
     // Called by the owning native engine thread with a validated guest event
     // structure. UI callbacks must enqueue there; they cannot mutate guest TLS.
-    wasm_rt_funcref_table_t *table=Z_EXPORT__indirect_function_table(&h->engine);
     wasm_rt_func_type_t expected=wasm2c_xray_get_func_type(3,1,WASM_RT_I32,WASM_RT_I64,WASM_RT_I64,WASM_RT_I32);
     bool handled=false;
     for(int capture=1;capture>=0;capture--)for(unsigned i=0;i<count;i++) {
         ZEvent reg=registered[i];if(reg.capture!=(bool)capture)continue;
-        if(reg.callback>=table->size)wasm_rt_trap(WASM_RT_TRAP_CALL_INDIRECT);
-        wasm_rt_funcref_t f=table->data[reg.callback];
-        if(!f.func||!f.func_type||memcmp(f.func_type,expected,32))wasm_rt_trap(WASM_RT_TRAP_CALL_INDIRECT);
+        wasm_rt_funcref_t f=z_checked_function(h,reg.callback,expected,"native input callback");
         handled|=((u32 (*)(void *,u32,u64,u64))f.func)(f.module_instance,type,event,reg.user)!=0;
     }
     return handled;

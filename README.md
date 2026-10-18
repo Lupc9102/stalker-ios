@@ -85,6 +85,10 @@ The xtool configuration also targets that smaller variant.
    folders, and enables campaign Play when archive presence checks pass. The
    game-files card also offers **Check again** and an optional external picker.
    Changes and engine logs go to `Documents/ZonePortData`, separate from originals.
+   Native startup output is always saved to `Documents/engine-native.log`,
+   including on physical iPhones. If the engine stops, use **Share diagnostics**
+   in the failure alert. `engine-failure.txt` contains the failure message;
+   X-Ray's `_appdata_/logs` folder can be absent when startup stops early.
 4. The app starts with direct taps for the game menus. In Controls, choose
    Show game controls for the customizable movement/action HUD; Use game menus
    switches back. CoP draws its own cursor, so this mode is selected manually.

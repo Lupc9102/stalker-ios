@@ -9,7 +9,7 @@ file(GLOB ENGINE_C CONFIGURE_DEPENDS "${ZONE_GENERATED_DIR}/xray_*.c")
 if(NOT ENGINE_C)
   message(FATAL_ERROR "Generate the engine first with Scripts/prepare_engine.py")
 endif()
-add_library(xray_aot STATIC ${ENGINE_C} Host/Atomics.c Host/Stack.c
+add_library(xray_aot STATIC ${ENGINE_C} Host/Atomics.c Host/Stack.c Host/Diagnostics.c
   "${WABT_ROOT}/wasm2c/wasm-rt-impl.c"
   "${WABT_ROOT}/wasm2c/wasm-rt-mem-impl.c"
   "${WABT_ROOT}/wasm2c/wasm-rt-exceptions-impl.c")
@@ -54,6 +54,19 @@ target_include_directories(zone_exception_test PRIVATE "${EXCEPTION_FIXTURE}")
 target_compile_options(zone_exception_test PRIVATE -UNDEBUG)
 target_link_libraries(zone_exception_test PRIVATE xray_aot)
 add_test(NAME exception_depth COMMAND zone_exception_test)
+find_package(Python3 COMPONENTS Interpreter REQUIRED)
+set(INDIRECT_FIXTURE "${CMAKE_CURRENT_BINARY_DIR}/indirect-fixture")
+add_custom_command(OUTPUT "${INDIRECT_FIXTURE}/indirect_diagnostics.c" "${INDIRECT_FIXTURE}/indirect_diagnostics.h"
+  COMMAND ${CMAKE_COMMAND} -E make_directory "${INDIRECT_FIXTURE}"
+  COMMAND "${WABT_ROOT}/build/wat2wasm" "${CMAKE_CURRENT_SOURCE_DIR}/../Tests/indirect_diagnostics.wat" -o "${INDIRECT_FIXTURE}/indirect_diagnostics.wasm"
+  COMMAND "${WABT_ROOT}/build/wasm2c" "${INDIRECT_FIXTURE}/indirect_diagnostics.wasm" --module-name=indirect_diagnostics -o "${INDIRECT_FIXTURE}/indirect_diagnostics.c"
+  COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/../Scripts/patch_indirect_diagnostics.py" "${INDIRECT_FIXTURE}/indirect_diagnostics.c"
+  DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/../Tests/indirect_diagnostics.wat" "${CMAKE_CURRENT_SOURCE_DIR}/../Scripts/patch_indirect_diagnostics.py" "${WABT_ROOT}/build/wasm2c")
+add_executable(zone_indirect_test ../Tests/indirect_diagnostics.c "${INDIRECT_FIXTURE}/indirect_diagnostics.c")
+target_include_directories(zone_indirect_test PRIVATE "${INDIRECT_FIXTURE}")
+target_compile_options(zone_indirect_test PRIVATE -UNDEBUG)
+target_link_libraries(zone_indirect_test PRIVATE xray_aot)
+add_test(NAME indirect_diagnostics COMMAND zone_indirect_test)
 add_executable(zone_bc_test ../Tests/bc_test.c Host/BC.c)
 target_include_directories(zone_bc_test PRIVATE Host)
 target_compile_options(zone_bc_test PRIVATE -UNDEBUG)

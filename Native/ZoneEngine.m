@@ -12,6 +12,8 @@
 #include <string.h>
 #include <time.h>
 #include <TargetConditionals.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 typedef struct { float x,y;bool down; } Pointer;
 typedef struct {
@@ -28,12 +30,17 @@ typedef struct {
     int32_t mouse_x,mouse_y;
 } Session;
 static _Atomic(Session *) current_session;
+static void native_log_setup(void) {
+    NSString *path=[NSHomeDirectory() stringByAppendingPathComponent:@"Documents/engine-native.log"];
+    int file=open(path.fileSystemRepresentation,O_WRONLY|O_CREAT|O_APPEND,0600);
+    if(file>=0){fflush(stdout);fflush(stderr);dup2(file,STDOUT_FILENO);dup2(file,STDERR_FILENO);close(file);}
+    setvbuf(stdout,NULL,_IONBF,0);setvbuf(stderr,NULL,_IONBF,0);
+    fprintf(stderr,"[native app] Native logging enabled (%s)\n",TARGET_OS_SIMULATOR?"iOS simulator":"physical iOS device");
+}
 #if TARGET_OS_SIMULATOR
 static bool smoke_setup(void) {
     if(![NSProcessInfo.processInfo.arguments containsObject:@"--engine-smoke-test"])return false;
-    NSString *path=[NSHomeDirectory() stringByAppendingPathComponent:@"Documents/engine-native.log"];
-    freopen(path.fileSystemRepresentation,"a",stdout);freopen(path.fileSystemRepresentation,"a",stderr);
-    setvbuf(stdout,NULL,_IONBF,0);setvbuf(stderr,NULL,_IONBF,0);setenv("ZONE_TRACE_EVENTS","1",1);
+    setenv("ZONE_TRACE_EVENTS","1",1);
     return true;
 }
 static void smoke_frame(Session *s) {
@@ -132,6 +139,10 @@ static void input_frame(Session *s) {
     }
 }
 static void fail(Session *s,const char *message) {
+    fprintf(stderr,"[native app] Engine failure: %s; frames=%llu; guest-thread=%llu\n",message,
+        (unsigned long long)atomic_load(&s->frames),(unsigned long long)s->host->pthread);
+    if(zone_indirect_detail[0])fprintf(stderr,"[native app] Last rejected call: %s\n",zone_indirect_detail);
+    zone_diagnostic_backtrace("engine failure");
     z_audio_pause(s->host,true);z_gl_suspend(s->host);atomic_store(&s->runtime->stopping,true);
     if(atomic_load(&s->runtime->error_ready))message=s->runtime->error;
     status(s,ZEngineFailed,message);
@@ -144,13 +155,22 @@ static void *run(void *pointer) {
         #endif
         zone_native_checkpoint_handler=checkpoint;zone_native_checkpoint_context=s;
         pthread_setname_np("Zone native engine");
+        fprintf(stderr,"[native app] Opening game filesystem\n");
         s->runtime->files=z_files_open(s->game,s->overlay);
         if(!s->runtime->files){fail(s,"The selected game folder or writable app-data folder could not be opened.");return NULL;}
+        fprintf(stderr,"[native app] Reserving 2048 MiB guest heap\n");
         if(!z_memory_open(s->runtime,2048)){fail(s,"The engine could not reserve its native heap.");return NULL;}
         if(setjmp(h->yielded)==0) {
             wasm_rt_trap_t trap=wasm_rt_impl_try();
             if(trap){fail(s,wasm_rt_strerror(trap));return NULL;}
+            fprintf(stderr,"[native app] Instantiating native engine and static constructors\n");
             wasm2c_xray_instantiate(&h->engine,h);w2c_xray_fi(&h->engine);
+            #if TARGET_OS_SIMULATOR
+            if([NSProcessInfo.processInfo.arguments containsObject:@"--diagnostic-trap-test"]){
+                zone_indirect_failure(Z_EXPORT__indirect_function_table(&h->engine),NULL,UINT32_MAX,"diagnostic self-test");
+                wasm_rt_trap(WASM_RT_TRAP_CALL_INDIRECT);
+            }
+            #endif
             // Load campaign objects on demand instead of prefetching the full
             // model list into the phone's memory before the level starts.
             const char *args[]={"xr_3da","-nosplash","-nointro","-nogameintro","-noprefetch","-fsltx","/opfs/fsgame.ltx"};
@@ -159,6 +179,7 @@ static void *run(void *pointer) {
                 size_t bytes=strlen(args[i])+1;u64 text=Z_EXPORT_malloc(&h->engine,bytes);
                 memcpy(z_pointer(h,text,bytes),args[i],bytes);z_write64(h,argv+8*i,text);
             }
+            fprintf(stderr,"[native app] Entering engine main; native cores=%ld\n",sysconf(_SC_NPROCESSORS_ONLN));
             z_write64(h,argv+sizeof args,0);h->status=(int)Z_EXPORT_main(&h->engine,sizeof args/sizeof *args,argv);
         }
         if(h->yield_reason==1&&h->main_loop) {
@@ -196,6 +217,7 @@ static void *run(void *pointer) {
 bool ZEngineCanStart(void) { return atomic_load(&current_session)==NULL; }
 bool ZEngineStart(void *layer,const char *game,const char *overlay,double width,double height) {
     if(!NSThread.isMainThread||!game||!overlay||!ZEngineCanStart())return false;
+    native_log_setup();
     Session *s=calloc(1,sizeof *s);ZRuntime *rt=calloc(1,sizeof *rt);struct w2c_a *h=calloc(1,sizeof *h);
     if(!s||!rt||!h){free(s);free(rt);free(h);return false;}
     s->runtime=rt;s->host=h;h->runtime=rt;rt->threads=h;rt->width=1280;rt->height=720;rt->offline=true;
