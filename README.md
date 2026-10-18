@@ -116,6 +116,12 @@ Native pointer input opens Options on Linux. The connected iOS simulator app
 also visibly renders the menu through GLES and UIKit. These menu tests do not
 establish retail-level compatibility, physical-device gameplay or performance.
 
+The supplied Enhanced Edition files now mount and render on the fresh native
+Linux build after shader and duplicate-info-ID repairs. Its campaign scripts
+expect additional engine APIs, so this is not Enhanced Edition support. The
+current campaign baseline remains the original/classic CoP 1.6.02 release.
+See [retail startup diagnostics](Docs/verification/retail-startup.md).
+
 `prepare_engine.py --wasm /path/to/custom.wasm --javascript /path/to/custom.js`
 accepts an explicitly supplied custom engine build. Shared-memory assumptions
 are checked by the postprocessor and must be reviewed if the module changes.
@@ -136,7 +142,11 @@ does not establish iOS compatibility.
 
 Players supply their own installed game files separately from the app. A GOG
 installer needs installing/extracting first. The original installation is never
-modified by this checkpoint. No texture conversion or compression has been done.
+modified by this checkpoint. The optional `Scripts/convert_font_masks.py` creates
+loose L8 font overrides from extracted, colorless Enhanced Edition BC3 masks;
+it preserves the base-level glyph mask exactly. This manual compatibility tool
+does not run automatically during iOS import. General texture resizing and GPU
+compression have not been implemented.
 Once gameplay works, profile texture residency and streaming before making a
 separate mobile asset pack. Archive compression and GPU texture compression
 solve different problems.

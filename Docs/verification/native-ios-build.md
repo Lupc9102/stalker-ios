@@ -52,3 +52,16 @@ passed for `a26a064`: process identity stayed unchanged across backgrounding,
 30 or more new frame callbacks completed after foregrounding (240 → 274),
 and both actual screen checks passed. Engine/app source is unchanged from the
 shared `ae1e908` test IPA; these later changes only strengthen verification.
+
+## Repaired snapshot build
+
+[Run 39050698630](https://github.com/Lupc9102/stalker-ios/actions/runs/39050698630)
+at `5ba6be8` passes device/simulator compilation and the actual UIKit menu/resume
+test with the duplicate-info-ID snapshot repair and GLES shader fixes.
+Its unsigned IPA is 41,341,823 bytes, SHA-256
+`f934bf7419834ad9597982e53f436d35cd4378fb04e2196b4b3a7a87e279c245`.
+The downloaded artifact ZIP matches GitHub's published digest, and the extracted
+IPA passes local ARM64, landscape, fullscreen and Files checks. No game data,
+WASM/JavaScript runtime or runtime JIT is added. Enhanced Edition font conversion
+and script-compatibility diagnostics are manual and are not included in this
+device package. Physical-device gameplay remains unverified.

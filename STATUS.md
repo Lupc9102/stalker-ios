@@ -58,10 +58,14 @@
 - The player's Enhanced Edition upload mounts on the native Linux host. Two
   bundled shader repairs eliminate four GLES compilation failures. A duplicate
   info-ID diagnostic in the pinned engine was then identified as the startup
-  trap; an equivalent native branch repair reaches 80 real frames and a
-  backdrop/cursor capture. Menu labels and retail gameplay remain unverified.
-  The checked build-time snapshot repair still needs a fresh translated-runtime
-  test; see `Docs/verification/retail-startup.md`.
+  trap. A fresh CI translation/build of the repaired snapshot reproduces 80
+  real frames. The optional font-mask converter makes ordinary Enhanced Edition
+  menu labels visible; all 136 tested masks match an independent alpha decode.
+  Campaign startup still encounters newer script APIs. See
+  `Docs/verification/retail-startup.md`.
+- The repaired engine also passes a fresh native iOS device/simulator build
+  and UIKit benchmark-menu/background-resume test at `5ba6be8`. The same app
+  process renders 32 new callbacks after foregrounding (278 → 310).
 
 ## Not implemented / not verified
 
@@ -79,11 +83,14 @@
   remain explicit traps. Native input tests cover the callback ABI, surface
   listener removal and thread ownership. Real pointer input opens Options;
   see `Docs/verification/native-engine-options.log` and `Docs/NATIVE-HOST.md`.
-- No level, save, combat, game memory-budget or sustained frame-rate test
-  has been performed. Reaching missing game data is a startup test only.
+- Campaign startup has been attempted with Enhanced Edition data; compatibility
+  diagnostics reach 6,464 loaded spawn points before further script errors.
+  No retail level has rendered. Saves, combat, game memory budget and sustained
+  frame rate remain unverified.
 - No physical-device engine test has completed. The new native app build does
   contain the translated engine.
-- No retail game archives or textures have been compressed, resized or modified.
+- Original retail archives remain unchanged. A manual font-mask converter is
+  tested; general texture resizing/GPU compression is not implemented.
 - Full archive integrity/compatibility checks are not implemented; the app checks
   for archive presence and obvious missing/empty/cloud-only files.
 
@@ -108,5 +115,6 @@ Continue the native engine host in the order documented in `Docs/ENGINE-HOST.md`
 The native engine renders the menu and responds to input. The native
 UIKit simulator/resume test and unsigned device package checks pass. Test the
 player's files next: the supplied Enhanced Edition data now reaches backdrop
-rendering in a Linux diagnostic. Verify the reproducibly rebuilt engine, menu UI,
-new game, retail-level loading, saves and physical-device controls.
+rendering with the reproducibly rebuilt engine. Resolve Enhanced Edition's
+script/UI differences or test original/classic CoP 1.6.02 files for the campaign
+baseline. Retail-level rendering, saves and physical-device controls remain.

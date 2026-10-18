@@ -56,6 +56,16 @@ Selected CI output is preserved in [native-ios-resume.log](native-ios-resume.log
 
 ## Earlier checks and control mode
 
+[Run 39050698630](https://github.com/Lupc9102/stalker-ios/actions/runs/39050698630)
+at `5ba6be8` passes the same complete device/simulator and UIKit runtime checks
+with the repaired engine snapshot and mobile shader fixes. The app process
+survives background/resume, and fresh callbacks advance from 278 to 310 after
+foregrounding. Both screenshot-content checks pass. The final report has 553
+callbacks, phase 2, a visible surface and a hidden loading view. Game/drawable
+readbacks contain 779,808 and 2,209,185 non-black pixels respectively, with no
+GLES errors. Actual menu and resumed screenshots were inspected. These use
+GSC's free benchmark; private Enhanced Edition campaign data is not in CI.
+
 [Run 39024669702](https://github.com/Lupc9102/stalker-ios/actions/runs/39024669702)
 at `9c1787b` first established real iOS game-framebuffer output. Its system-cursor
 flag was false while the main menu was visible: CoP draws its own cursor. That

@@ -70,10 +70,67 @@ yields into its real frame loop, renders 80 frames and captures a 1280 × 720
 framebuffer. Visual inspection shows the game backdrop and cursor; menu labels
 are not visible. This is **not** a verified working menu or playable campaign.
 
-The repaired Wasm input has passed its hash and instruction checks. A fresh
-translation/build and runtime test of that generated executable remain necessary
-to confirm the complete reproducible build path. Retail-level loading, saves,
-combat and physical iPhone performance remain unverified. Enhanced Edition has
-additional renderer/configuration differences, including unsupported `mtb_*`
-commands and blender names; rendering the backdrop does not establish full
-Enhanced Edition support.
+The complete reproducible path now also passes:
+[Linux run 39050698557](https://github.com/Lupc9102/stalker-ios/actions/runs/39050698557)
+at `5ba6be8` translates the repaired snapshot, compiles the engine and passes
+native service/GPU tests. Its downloaded executable reproduces 80 frames with
+the player's unchanged archives and committed support shaders, without the
+temporary native executable repair. Coverage metadata records the repaired
+snapshot hash. The artifact ZIP's verified SHA-256 is
+`5c72fc51e0cd2d67e289675c91e8bd446f3424042833ff72f877b3b14491cf2b`.
+
+[iOS run 39050698630](https://github.com/Lupc9102/stalker-ios/actions/runs/39050698630)
+at the same commit passes device/simulator compilation, actual UIKit menu
+screenshots, and the same-process background/resume check. That test uses the
+official free benchmark, not the private Enhanced Edition archives. See the
+[iOS runtime record](native-ios-runtime.md).
+
+## Font-mask compatibility
+
+The inspected Enhanced Edition UI fonts use BC3/DXT5 textures with zero RGB
+and glyph coverage in alpha. The pinned `hud_font.ps` samples red, so ordinary
+menu labels are transparent. Sampling alpha in a private shader override makes
+those labels visible; the device's default shader should not be changed this
+way because classic data uses a different font format.
+
+The optional `Scripts/convert_font_masks.py` instead creates loose L8 DDS
+overrides from extracted, colorless BC3 font textures. GLI maps L8 to red, which
+the existing shader expects. It preserves the decoded base-level mask byte for
+byte, without resizing. Other texture formats or nonzero RGB endpoints are
+skipped, malformed/truncated inputs are rejected, existing output directories
+are refused, and originals are never changed. Output is staged before being
+published and includes source/result hashes. Only base levels are retained.
+
+All 136 converted masks in this test match an independent Pillow alpha decode
+exactly; 22 other font files were skipped. A selected atlas also matched the
+converter's current output exactly, and a truncated texture was rejected.
+Repeating the 80-frame native test with these loose L8 masks and the unchanged
+committed shaders makes the ordinary menu labels visible. The selected first
+menu entry remains invisible, and Enhanced Edition's extra menu actions have
+not been validated. This converter is a manual diagnostic tool; automatic iOS
+archive extraction/font conversion is not implemented. No font assets are
+committed or included in the IPA.
+
+## Campaign boundary
+
+The temporary `user.ltx` command
+`start server(all/single/alife/new) client(localhost)` exercises real campaign
+startup. Object/model/texture prefetch completes, then the supplied
+`sound_theme.script` fails because `xr_sound_impl` is absent from this engine.
+The supplied `xr_sound.script` and seven related scripts depend on that newer
+Enhanced Edition sound binding. They are not ordinary missing texture files.
+
+Private compatibility diagnostics using original implementations extracted
+from GSC's free benchmark get further. Restoring those eight sound-related
+scripts reaches a missing `get_cached_ini` call. A real Lua INI cache adapter
+then allows 6,464 spawn points to load. Additional logging/game-graph adapters
+reach NPC creation, where Enhanced Edition expects `get_platform_id` and
+`platform_ids`. Replacing the entire benchmark script set instead fails an
+object-creation assertion. These diagnostic overlays are not shipped fixes or
+evidence of a playable campaign.
+
+Retail-level rendering, saves, combat and physical iPhone performance remain
+unverified. Enhanced Edition also has unsupported `mtb_*` renderer commands,
+blender names and changed scripts/UI. The original/classic CoP 1.6.02 data is
+still needed for the intended campaign baseline; Enhanced Edition support is a
+separate compatibility effort.
