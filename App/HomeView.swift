@@ -165,7 +165,7 @@ final class HomeView: UIView {
         filesTitle.textColor = Theme.text
         filesDetail.font = Theme.body(13)
         filesDetail.textColor = Theme.secondaryText
-        filesDetail.numberOfLines = 2
+        filesDetail.numberOfLines = 3
         let texts = UIStackView(arrangedSubviews: [filesTitle, filesDetail])
         texts.axis = .vertical
         texts.spacing = 2

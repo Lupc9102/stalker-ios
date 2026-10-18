@@ -11,6 +11,8 @@ if command -v swiftc >/dev/null; then
         swiftc -typecheck Scripts/verify_simulator_screen.swift
         swiftc App/PreparedGameProfile.swift Tests/prepared_profile.swift -o Build/Checks/prepared-profile-test
         Build/Checks/prepared-profile-test
+        swiftc App/PreparedGameProfile.swift App/GameFiles.swift Tests/local_game_files.swift -o Build/Checks/local-game-files-test
+        Build/Checks/local-game-files-test
     fi
 else
     echo 'Swift compiler unavailable: UIKit source syntax check skipped.'

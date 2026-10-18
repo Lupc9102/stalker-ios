@@ -17,6 +17,8 @@ targets:
     sources:
       - App
       - Native
+      - path: Resources/Assets.xcassets
+        buildPhase: resources
       - path: Resources/ZoneBackdrop.jpg
         buildPhase: resources
     dependencies:
@@ -25,6 +27,7 @@ targets:
       - sdk: UniformTypeIdentifiers.framework
     settings:
       base:
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         INFOPLIST_FILE: Resources/Info.plist
         PRODUCT_BUNDLE_IDENTIFIER: io.github.lupc9102.zoneport
         PRODUCT_NAME: ZonePort

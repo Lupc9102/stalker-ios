@@ -75,11 +75,16 @@ The xtool configuration also targets that smaller variant.
 
 1. Install/extract your original GOG or Steam PC copy of Call of Pripyat. Enhanced
    Edition requires the prepared files described under Game content below.
-2. Copy the installed folder to the iPhone and make sure its files are fully
-   downloaded. Keep `resources/`, `levels/`, `localization/` and `patches/`
-   (when present) together.
-3. In the native engine app, select that folder and start CoP. Changes and
-   engine logs go to `Documents/ZonePortData`, separate from the originals.
+2. Launch ZonePort once. It creates a real `GameFiles` folder visible in
+   **Files → On My iPhone → ZonePort**. Move the extracted `CoP-Mobile` folder
+   inside `GameFiles`; no folder picker is required. Keep `resources/`, `levels/`,
+   `gamedata/` and `zone-mobile-profile.json` together for the prepared EE bundle.
+   Classic installs keep `localization/` and `patches/` when present. Finish the
+   full copy before starting; the ZIP itself is not an installed game folder.
+3. Return to ZonePort. It rescans on foregrounding, detects nested extracted
+   folders, and enables campaign Play when archive presence checks pass. The
+   game-files card also offers **Check again** and an optional external picker.
+   Changes and engine logs go to `Documents/ZonePortData`, separate from originals.
 4. The app starts with direct taps for the game menus. In Controls, choose
    Show game controls for the customizable movement/action HUD; Use game menus
    switches back. CoP draws its own cursor, so this mode is selected manually.

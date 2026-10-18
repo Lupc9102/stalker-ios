@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: [App/**, Native/**, Engine/**, Scripts/**, project-engine.yml, .github/workflows/ios-engine.yml]
+    paths: [App/**, Native/**, Engine/**, Resources/**, Scripts/**, Tests/**, project-engine.yml, .github/workflows/ios-engine.yml]
 permissions:
   contents: read
 concurrency:
@@ -41,6 +41,8 @@ jobs:
           if-no-files-found: error
       - name: Build the connected native engine simulator app
         run: bash Scripts/build_native_simulator.sh
+      - name: Verify local game folder creation and foreground discovery
+        run: python3 Scripts/local_folder_simulator_capture.py
       - name: Prepare external benchmark test data
         run: |
           brew install innoextract
@@ -55,6 +57,7 @@ jobs:
           path: |
             Build/native-ios-menu.png
             Build/native-ios-resumed.png
+            Build/local-files-detected.png
           if-no-files-found: error
       - uses: actions/upload-artifact@v4
         if: always()

@@ -14,7 +14,7 @@ def verify(path):
         info = plistlib.loads(archive.read(prefix + 'Info.plist'))
         expected = {
             'CFBundleIdentifier': 'io.github.lupc9102.zoneport',
-            'CFBundleDisplayName': 'STALKER Port',
+            'CFBundleDisplayName': 'ZonePort',
             'UIRequiresFullScreen': True,
             'UIFileSharingEnabled': True,
             'LSSupportsOpeningDocumentsInPlace': True,
@@ -22,6 +22,11 @@ def verify(path):
         for key, value in expected.items():
             if info.get(key) != value:
                 raise ValueError(f'Packaged {key} must be {value!r}')
+        icons = info.get('CFBundleIcons', {}).get('CFBundlePrimaryIcon', {})
+        if icons.get('CFBundleIconName') != 'AppIcon' or not icons.get('CFBundleIconFiles'):
+            raise ValueError('Missing compiled AppIcon metadata')
+        if prefix + 'Assets.car' not in archive.namelist():
+            raise ValueError('Missing compiled app asset catalog')
         landscape = {'UIInterfaceOrientationLandscapeLeft', 'UIInterfaceOrientationLandscapeRight'}
         for key in ['UISupportedInterfaceOrientations', 'UISupportedInterfaceOrientations~ipad']:
             if set(info.get(key, [])) != landscape:

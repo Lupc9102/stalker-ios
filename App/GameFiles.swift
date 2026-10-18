@@ -52,17 +52,61 @@ enum GameFiles {
         return GameFilesReport(root: root, archiveCount: count, bytes: bytes, problems: problems)
     }
     static func find(in root: URL) -> GameFilesReport? {
-        if FileManager.default.fileExists(atPath: root.appendingPathComponent("resources").path) { return inspect(root) }
-        guard let enumerator = FileManager.default.enumerator(at: root, includingPropertiesForKeys: [.isDirectoryKey, .isSymbolicLinkKey], options: [.skipsHiddenFiles]) else { return nil }
-        for case let url as URL in enumerator {
-            if enumerator.level > 3 { enumerator.skipDescendants(); continue }
-            guard let values = try? url.resourceValues(forKeys: [.isDirectoryKey, .isSymbolicLinkKey]) else { continue }
-            if values.isSymbolicLink == true { enumerator.skipDescendants(); continue }
-            if values.isDirectory == true && url.lastPathComponent.lowercased() == "resources" { return inspect(url.deletingLastPathComponent()) }
+        // Walk directories, not thousands of textures. Accept an extracted ZIP's
+        // enclosing folders, and prefer a complete installation over a partial copy.
+        let manager = FileManager.default
+        let keys: Set<URLResourceKey> = [.isDirectoryKey, .isSymbolicLinkKey]
+        let excluded: Set<String> = ["gamedata", "levels", "resources", "localization", "zoneportdata", "benchmark", "_appdata_"]
+        var pending = [(root, 0)], firstProblem: GameFilesReport?
+        var index = 0
+        while index < pending.count {
+            let (directory, depth) = pending[index]; index += 1
+            guard let values = try? directory.resourceValues(forKeys: keys),
+                  values.isDirectory == true, values.isSymbolicLink != true else { continue }
+            if manager.fileExists(atPath: directory.appendingPathComponent("resources").path) {
+                let report = inspect(directory)
+                if report.detected { return report }
+                if firstProblem == nil { firstProblem = report }
+            }
+            guard depth < 3, let children = try? manager.contentsOfDirectory(at: directory,
+                includingPropertiesForKeys: Array(keys), options: [.skipsHiddenFiles]) else { continue }
+            for child in children.sorted(by: { $0.lastPathComponent < $1.lastPathComponent }) {
+                if !excluded.contains(child.lastPathComponent.lowercased()) { pending.append((child, depth + 1)) }
+            }
         }
-        return nil
+        return firstProblem
     }
     static var documents: URL { FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0] }
+    static let localFolderName = "GameFiles"
+    static var localFolder: URL { documents.appendingPathComponent(localFolderName, isDirectory: true) }
+
+    /// Creating a real document makes the app's container appear in iOS Files.
+    /// Never create dummy resources/levels folders or change the player's data.
+    @discardableResult
+    static func prepareLocalFolder(in documents: URL = GameFiles.documents) throws -> URL {
+        let folder = documents.appendingPathComponent(localFolderName, isDirectory: true)
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        let readme = folder.appendingPathComponent("START-HERE.txt")
+        if !FileManager.default.fileExists(atPath: readme.path) {
+            try """
+            Move your extracted CoP-Mobile folder here using the Files app.
+
+            On My iPhone > ZonePort > GameFiles > CoP-Mobile
+
+            CoP-Mobile must contain resources, levels, gamedata and zone-mobile-profile.json.
+            Return to ZonePort. The app detects the files automatically; no folder picker is needed.
+            You can also place resources, levels and the prepared files directly in GameFiles.
+            Extract the ZIP first. Wait for the entire copy to finish before pressing Play.
+            """.write(to: readme, atomically: true, encoding: .utf8)
+        }
+        return folder
+    }
+
+    static func findLocal(in documents: URL = GameFiles.documents) -> GameFilesReport? {
+        let preferred = find(in: documents.appendingPathComponent(localFolderName, isDirectory: true))
+        if preferred?.detected == true { return preferred }
+        return find(in: documents) ?? preferred
+    }
     static func remember(_ root: URL) throws {
         let bookmark = try root.bookmarkData(options: [], includingResourceValuesForKeys: nil, relativeTo: nil)
         UserDefaults.standard.set(bookmark, forKey: "zone.gameFolder")
