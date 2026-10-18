@@ -5,8 +5,9 @@ editable touch layout adapted from the MIT-licensed GTA V iOS port.
 
 **The native engine build renders the real CoP main menu in an iOS simulator,
 without JIT.** It links the translated engine, native graphics/audio/file services
-and customizable touch controls. Retail levels and physical iPhone gameplay
-remain unverified. See [STATUS.md](STATUS.md) and the
+and customizable touch controls. A private prepared EE/classic data layer also
+renders Zaton on Linux and passes an initial save reload and movement/look test.
+Physical iPhone gameplay remains unverified. See [STATUS.md](STATUS.md) and the
 [runtime record](Docs/verification/native-ios-runtime.md).
 
 Use `ZonePort-Native.ipa` for engine testing. The older `ZonePort.ipa` is the
@@ -26,7 +27,8 @@ launcher/controls-practice build.
 - Reset held input on backgrounding, cancelled touches and controller disconnect.
 - File picker can remember an installed original CoP folder. Presence checks
   detect resources/, levels/ and localization/ archives; they are **not** full
-  game-integrity or compatibility validation. Original GOG/Steam PC version only.
+  game-integrity or compatibility validation. Experimental Enhanced Edition data
+  requires the separately prepared compatibility profile described below.
 
 ## Launcher-only build on Linux with xtool
 
@@ -71,7 +73,8 @@ The xtool configuration also targets that smaller variant.
 
 ## Load your game files
 
-1. Install/extract your original GOG or Steam PC copy of Call of Pripyat.
+1. Install/extract your original GOG or Steam PC copy of Call of Pripyat. Enhanced
+   Edition requires the prepared files described under Game content below.
 2. Copy the installed folder to the iPhone and make sure its files are fully
    downloaded. Keep `resources/`, `levels/`, `localization/` and `patches/`
    (when present) together.
@@ -81,8 +84,10 @@ The xtool configuration also targets that smaller variant.
    Show game controls for the customizable movement/action HUD; Use game menus
    switches back. CoP draws its own cursor, so this mode is selected manually.
 
-This is an experimental engine checkpoint. Level loading, saves and performance
-still require testing with retail files. Only one engine session is supported
+This is an experimental engine checkpoint. Zaton rendering, an initial save
+reload and movement/look input pass on Linux with the prepared EE/classic data.
+Physical iPhone gameplay, combat and sustained performance remain unverified.
+Only one engine session is supported
 per app process; relaunch the app after ending a session.
 
 ## Engine experiment
@@ -117,9 +122,12 @@ also visibly renders the menu through GLES and UIKit. These menu tests do not
 establish retail-level compatibility, physical-device gameplay or performance.
 
 The supplied Enhanced Edition files now mount and render on the fresh native
-Linux build after shader and duplicate-info-ID repairs. Its campaign scripts
-expect additional engine APIs, so this is not Enhanced Edition support. The
-current campaign baseline remains the original/classic CoP 1.6.02 release.
+Linux build after shader and duplicate-info-ID repairs. Its original scripts
+expect additional APIs; a private classic-script/UI layer now reaches the world
+and passes initial save reload and movement/look checks. Offline BC7 conversion
+removes the observed sky corruption. Ground/vegetation artifacts remain, and
+this is not complete Enhanced Edition campaign support. The intended campaign
+baseline remains original/classic CoP 1.6.02.
 See [retail startup diagnostics](Docs/verification/retail-startup.md).
 
 `prepare_engine.py --wasm /path/to/custom.wasm --javascript /path/to/custom.js`

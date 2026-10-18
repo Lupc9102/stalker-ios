@@ -51,8 +51,9 @@ def main():
     support = app / 'SupportData'
     relative = 'gamedata/scripts/ui_main_menu.script'
     marker = 'Prepared profile override loaded'
-    # The benchmark's Lua printf is intentionally disabled; use the engine log.
-    script = ('log("' + marker + '")\n').encode() + (support / relative).read_bytes()
+    # Both printf and log can be suppressed in release snapshots. log1 maps
+    # unconditionally to the engine's Msg logger at the pinned source revision.
+    script = ('log1("' + marker + '")\n').encode() + (support / relative).read_bytes()
     prepared = documents / 'Benchmark' / relative
     prepared.parent.mkdir(parents=True, exist_ok=True)
     prepared.write_bytes(script)
@@ -88,7 +89,11 @@ def main():
     try:
         initial_process = run('xcrun', 'simctl', 'launch', identifier, bundle, '--engine-smoke-test', timeout=60)
         state = wait_frames(60)
-        if marker not in (documents / 'engine-native.log').read_text():
+        installed = documents / 'ZonePortData' / relative
+        if not installed.is_file() or hashlib.sha256(installed.read_bytes()).digest() != hashlib.sha256(script).digest():
+            raise RuntimeError('App did not install the verified prepared override')
+        logs = [documents / 'engine-native.log', *(documents / 'ZonePortData/_appdata_/logs').glob('*.log')]
+        if not any(marker in path.read_text(errors='replace') for path in logs if path.is_file()):
             raise RuntimeError('Prepared script did not take priority over bundled support')
         print('Prepared-file hashes checked and override execution verified in the native UIKit app.', flush=True)
         verify_engine_frame(framebuffer)

@@ -77,6 +77,11 @@
   180 callbacks and an actual Zaton world/weapon/HUD capture on Linux. The
   initial save is written; rendering artifacts remain. See
   `Docs/verification/retail-startup.md`.
+- A separate run restores all 11,082 objects from that save, completes 240
+  callbacks, and visibly changes the world view after forward/look input.
+  Offline conversion of all 26 BC7 textures (25 sky cubemaps and ground detail)
+  to legacy RGBA8 then removes the colored sky corruption in another 180-frame
+  saved-game run. Ground/vegetation artifacts remain.
 
 ## Not implemented / not verified
 
@@ -95,14 +100,15 @@
   listener removal and thread ownership. Real pointer input opens Options;
   see `Docs/verification/native-engine-options.log` and `Docs/NATIVE-HOST.md`.
 - Campaign startup with the experimental Enhanced Edition/classic overlay now
-  renders a retail world view on Linux. Save reload, combat, the iPhone memory
-  budget and sustained
+  renders a retail world view and reloads its initial save on Linux. Combat,
+  the iPhone memory budget and sustained
   frame rate remain unverified.
 - No physical-device engine test has completed. The new native app build does
   contain the translated engine.
 - Original retail archives remain unchanged. A manual font-mask converter is
-  tested, along with selection of existing BC mipmaps. General texture resizing,
-  GPU format conversion and automatic mobile asset preparation are not implemented.
+  tested, along with selection of existing BC mipmaps and offline BC7-to-RGBA8
+  conversion. General resizing, ASTC encoding and automatic on-phone archive
+  conversion are not implemented. Prepared overrides are checked before startup.
 - Full archive integrity/compatibility checks are not implemented; the app checks
   for archive presence and obvious missing/empty/cloud-only files.
 
@@ -125,7 +131,8 @@ Artifact details and verification limits are in
 
 Continue the native engine host in the order documented in `Docs/ENGINE-HOST.md`.
 The native engine renders Zaton with the private prepared EE/classic overlay
-on Linux. Verify save reload and movement, compile/check the new prepared-file
-app path, and test that same data on a physical iPhone. The native UIKit menu,
+on Linux, reloads the initial save and responds to movement/look input. Complete
+the prepared-file UIKit integration check and test the same data on a physical
+iPhone. The native UIKit menu,
 simulator/resume test and unsigned device package checks pass; iOS world
 rendering, combat and sustained performance remain.

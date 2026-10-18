@@ -201,7 +201,7 @@ combat, sustained frame rate and physical iPhone performance are not established
 by this capture. This is Linux/Mesa rendering through the native, no-JIT engine;
 the iOS simulator has so far rendered the benchmark menu only.
 
-The prepared mobile profile combines 2,910 loose override files (370,014,481
+The initial prepared mobile profile combines 2,910 loose override files (370,014,481
 bytes) and a size/SHA-256 manifest. The new app path checks these files and the
 matching engine-support manifest before startup, gives prepared UI priority,
 and accepts EE's embedded localization only with a recognized prepared profile.
@@ -209,7 +209,41 @@ Archives remain read-only and separate from the writable save folder. Physical
 iPhone verification remains required; this is not a complete playable-release
 claim or a reduction of the original archive storage size.
 
+## Save reload, input and BC7 compatibility
+
+The executable from [run 39104506660](https://github.com/Lupc9102/stalker-ios/actions/runs/39104506660)
+at `d50f494` restores the generated save, reports all 11,082 objects loaded, and
+completes 240 callbacks with exit 0. W press/release reaches the native callback;
+relative look is submitted through the registered shared motion buffer. Its
+actual capture shows a changed camera view and position near the tree/rock.
+The mouse DOM-listener return is false, while the separate shared-motion path
+still updates the camera. This is an initial movement/look test, not combat or
+sustained performance validation.
+
+An inventory of every DDS in the supplied archives finds 26 BC7_UNORM (DXGI 98)
+textures: 25 sky cubemaps and `detail_grnd_earth.dds`. One additional DX10 DDS is
+already RGBA8 sRGB. The mobile host's compressed fallback decodes BC1/2/3 only.
+`convert_bc7_overlay.py` uses Pillow 12.3.0 offline to decode existing BC7 mips,
+keeping all cube faces in order and writing legacy RGBA8_UNORM DDS. It does not
+resize or introduce new lossy compression, and leaves sRGB BC7 untouched rather
+than losing its metadata. Originals remain unchanged.
+
+The 26 decoded DDS overrides total 204,824,972 bytes. With these files, another
+180-frame save-load run exits 0 and visibly removes the colored grid corruption
+from the sky. Ground/vegetation artifacts remain. The updated prepared profile
+has 2,936 files totaling 574,839,453 bytes; its ZIP with setup instructions is
+250,961,975 bytes, SHA-256
+`23e47435dddd368aa7c11038e69ee71a2e7b5130e94db013a90b5cb7d0a33f5d`.
+The app's support manifest matches this profile exactly.
+
+Native input checks and 19 local Python tests pass, including synthetic BC7
+mode-6 pixels, selected mip values, all cube faces, truncation and sRGB handling.
+The optional BC7 tests require Pillow. Mac checks also exercise the actual Swift
+prepared-file verifier against valid files, same-size corruption, a different
+support revision and a symlinked parent directory.
+
 Enhanced Edition also has unsupported `mtb_*` renderer commands,
-blender names and changed scripts/UI. This experimental layer is not integrated
-into automatic iOS import. Original/classic CoP 1.6.02 remains the intended
+blender names and changed scripts/UI. Prepared files are recognized by the app;
+automatic conversion of archives on the phone is not implemented.
+Original/classic CoP 1.6.02 remains the intended
 campaign baseline; Enhanced Edition support is a separate compatibility effort.
