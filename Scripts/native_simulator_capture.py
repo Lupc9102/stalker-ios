@@ -1,4 +1,5 @@
 """Run the real native engine in UIKit using external free benchmark test data."""
+import hashlib
 import json
 from pathlib import Path
 import shutil
@@ -45,6 +46,20 @@ def main():
     documents = container / 'Documents'; documents.mkdir(exist_ok=True)
     # Test data remains outside the app and the packaged IPA.
     shutil.copytree('Build/Benchmark/app', documents / 'Benchmark', dirs_exist_ok=True)
+    # Exercise the real prepared-file verifier and its priority over bundled
+    # support. This fixture uses public support source, not private retail data.
+    support = app / 'SupportData'
+    relative = 'gamedata/scripts/ui_main_menu.script'
+    marker = 'Prepared profile override loaded'
+    script = ('printf("' + marker + '")\n').encode() + (support / relative).read_bytes()
+    prepared = documents / 'Benchmark' / relative
+    prepared.parent.mkdir(parents=True, exist_ok=True)
+    prepared.write_bytes(script)
+    (documents / 'Benchmark/zone-mobile-profile.json').write_text(json.dumps({
+        'version': 1, 'kind': 'cop-ee-classic-compat',
+        'supportManifestSHA256': hashlib.sha256((support / 'support-manifest.json').read_bytes()).hexdigest(),
+        'files': {relative: {'bytes': len(script), 'sha256': hashlib.sha256(script).hexdigest()}},
+    }) + '\n')
     report = documents / 'engine-smoke.json'
     report.unlink(missing_ok=True)
     framebuffer = documents / 'engine-frame.ppm'
@@ -72,6 +87,9 @@ def main():
     try:
         initial_process = run('xcrun', 'simctl', 'launch', identifier, bundle, '--engine-smoke-test', timeout=60)
         state = wait_frames(60)
+        if marker not in (documents / 'engine-native.log').read_text():
+            raise RuntimeError('Prepared script did not take priority over bundled support')
+        print('Prepared-file hashes checked and override execution verified in the native UIKit app.', flush=True)
         verify_engine_frame(framebuffer)
         verify_engine_frame(drawable)
         if state.get('surfaceHidden') or not state.get('loadingHidden'):
