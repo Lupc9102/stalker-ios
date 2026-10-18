@@ -82,6 +82,11 @@
   Offline conversion of all 26 BC7 textures (25 sky cubemaps and ground detail)
   to legacy RGBA8 then removes the colored sky corruption in another 180-frame
   saved-game run. Ground/vegetation artifacts remain.
+- At `e0fd8f3`, the complete iOS build and UIKit workflow passes with a prepared
+  script fixture: hash verification, installed-file readback, actual override
+  execution, visible screenshots and same-process/fresh-frame background resume.
+  This uses the official benchmark, not the private retail archives. The saved
+  unsigned IPA matches the prepared pack's support manifest.
 
 ## Not implemented / not verified
 
@@ -131,8 +136,8 @@ Artifact details and verification limits are in
 
 Continue the native engine host in the order documented in `Docs/ENGINE-HOST.md`.
 The native engine renders Zaton with the private prepared EE/classic overlay
-on Linux, reloads the initial save and responds to movement/look input. Complete
-the prepared-file UIKit integration check and test the same data on a physical
-iPhone. The native UIKit menu,
+on Linux, reloads the initial save and responds to movement/look input. The
+prepared-file UIKit integration check passes. Install the signed test IPA and
+test the prepared data on a physical iPhone. The native UIKit menu,
 simulator/resume test and unsigned device package checks pass; iOS world
 rendering, combat and sustained performance remain.

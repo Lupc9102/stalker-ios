@@ -242,6 +242,14 @@ The optional BC7 tests require Pillow. Mac checks also exercise the actual Swift
 prepared-file verifier against valid files, same-size corruption, a different
 support revision and a symlinked parent directory.
 
+The complete [iOS run 39105956344](https://github.com/Lupc9102/stalker-ios/actions/runs/39105956344)
+at `e0fd8f3` passes device/simulator compilation and the prepared-file UIKit
+fixture: the installed override hash matches, the real engine executes it,
+and screenshot/background-resume checks pass. Its app support manifest matches
+the private pack. The fixture uses public source with the free benchmark;
+the full private campaign data has not yet been tested on an iPhone. See the
+[iOS runtime record](native-ios-runtime.md).
+
 Enhanced Edition also has unsupported `mtb_*` renderer commands,
 blender names and changed scripts/UI. Prepared files are recognized by the app;
 automatic conversion of archives on the phone is not implemented.

@@ -78,7 +78,7 @@ test. The current test checks RGB content in the game and drawable readbacks,
 visibility/loading state, and the actual simulator screenshot. It then
 backgrounds the app, returns, waits for more frames and verifies another screen.
 
-## Limits
+## Additional build checks
 
 [Run 39103015993](https://github.com/Lupc9102/stalker-ios/actions/runs/39103015993)
 at `055de63` passes device/simulator compilation, both actual screenshot checks
@@ -91,7 +91,32 @@ visually inspected. The unsigned IPA is 41,343,013 bytes, SHA-256
 packaged ARM64, landscape, full-screen and Files checks pass. This uses the
 official benchmark, not the private campaign compatibility overlay.
 
-Physical iPhone gameplay, retail-level loading, saves, combat, sustained
-performance and memory use remain unverified. This integration retains one
+[Run 39105956344](https://github.com/Lupc9102/stalker-ios/actions/runs/39105956344)
+at `e0fd8f3` passes the complete device/simulator and background/resume workflow
+with prepared-file verification enabled. A public support script is modified
+in a fixture profile outside the app bundle. The app verifies its manifest,
+the test reads back the exact installed script hash, and the real engine emits
+`Prepared profile override loaded` through the unconditional `log1` binding.
+Both actual screenshots and the same-process/fresh-frame resume gate pass.
+The final report has 542 callbacks, phase 2, a visible surface and a hidden
+loading view. Game/drawable readbacks contain 779,803 and 2,209,182 non-black
+pixels with no GL errors. The actual final simulator screenshot was inspected.
+
+The unsigned IPA is 41,356,722 bytes, SHA-256
+`556c16f3422f61cd79864dec4be3e05dfea7d3f49b7850a3e47e2b39cf6723f1`.
+Its packaged ARM64, landscape, full-screen and Files checks pass. The bundled
+support-manifest hash matches the private prepared data pack. The diagnostics
+ZIP has SHA-256 `24f8ff916a1ee1fb04146f674deada227292f6cd768ce6739b631e2171bcb4f2`.
+
+Earlier fixture checks used `printf`, then `log`, which do not emit this
+marker's message in the release snapshot. Those runs reached the menu but failed
+the additional execution assertion. `log1` is verified both in a separate native
+Linux benchmark run and in the successful UIKit run. This fixture contains
+public support source, not the player's private campaign archives.
+
+## Limits
+
+Physical iPhone gameplay, iOS retail-world loading, iOS save/reload, combat,
+sustained performance and device memory use remain unverified. This integration retains one
 engine session per app process; exiting a session requires relaunching the app.
 The simulator's Apple software renderer is not evidence of iPhone GPU speed.
