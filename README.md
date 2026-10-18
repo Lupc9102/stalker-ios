@@ -191,6 +191,26 @@ automatic iOS importer. It contains game assets: keep it outside the repository
 and public build artifacts. A separate texture overlay can be merged into its
 `gamedata/` folder without replacing the original archives.
 
+To prepare these overrides for the app:
+
+```sh
+python3 Scripts/prepare_mobile_profile.py --classic-overlay /path/to/private/classic-overlay --texture-overlay /path/to/private/mobile-overlay --output-dir /path/to/private/phone-files
+```
+
+Copy the resulting `gamedata/` folder and `zone-mobile-profile.json` beside the
+player's `resources/` and `levels/` folders, then select that parent folder in
+the app. The app checks every prepared file's size/SHA-256 before starting and
+requires a matching engine-support manifest. Prepared UI takes priority over
+the bundled UI variants. Original archives stay read-only, and saves stay in
+the app's separate data folder. EE's embedded localization is accepted only
+with this prepared profile; classic installations keep their existing checks.
+This validates the copied overrides, not the integrity of all retail archives
+or sustained physical-device gameplay.
+
+The Linux diagnostic also accepts `ZONE_LOAD_SAVE='player - beginning of the game'`
+instead of `ZONE_START_NEW_GAME=1`. `ZONE_TEST_MOVEMENT=1` sends W press/release
+and relative look input after the loading prompt and runs at least 220 frames.
+
 Once gameplay works, profile texture residency and streaming before making a
 separate mobile asset pack. Archive compression and GPU texture compression
 solve different problems.

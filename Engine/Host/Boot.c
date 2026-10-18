@@ -58,8 +58,13 @@ int main(int argc,char **argv) {
         // Let campaign assets load when the engine requests them instead.
         const char *args[9]={"xr_3da","-nosplash","-nointro","-nogameintro","-noprefetch","-fsltx","/opfs/fsgame.ltx"};
         unsigned count=7;
-        const char *campaign=getenv("ZONE_START_NEW_GAME");
-        if(campaign&&!strcmp(campaign,"1")) {
+        const char *campaign=getenv("ZONE_START_NEW_GAME"),*saved=getenv("ZONE_LOAD_SAVE");
+        char load_command[512];
+        if(saved&&*saved) {
+            if(strlen(saved)>200||strpbrk(saved,"/\\()\r\n")){fprintf(stderr,"[engine] Invalid save name\n");return 1;}
+            snprintf(load_command,sizeof load_command,"server(%s/single/alife/load) client(localhost)",saved);
+            args[count++]="-start";args[count++]=load_command;
+        } else if(campaign&&!strcmp(campaign,"1")) {
             args[count++]="-start";
             args[count++]="server(all/single/alife/new) client(localhost)";
         }
@@ -81,8 +86,11 @@ int main(int argc,char **argv) {
         bool pointer_options=input_test&&!strcmp(input_test,"pointer-options");
         const char *dismiss_setting=getenv("ZONE_DISMISS_LOADING");
         bool dismiss=dismiss_setting&&!strcmp(dismiss_setting,"1");
+        const char *movement_setting=getenv("ZONE_TEST_MOVEMENT");
+        bool movement=movement_setting&&!strcmp(movement_setting,"1");
         if((options||pointer_options)&&limit<70)limit=70;
         if(dismiss&&limit<120)limit=120;
+        if(movement&&limit<220)limit=220;
         if(limit>3600)limit=3600;
         z_input_focus(h,true);
         z_input_mouse(h,33,0,0,runtime->width/2,runtime->height/2,0,0);
@@ -101,6 +109,14 @@ int main(int argc,char **argv) {
             if(dismiss&&(frame==90||frame==91)) {
                 bool down=frame==90,handled=z_input_key(h,13,"Enter","Enter",0,down,0);
                 fprintf(stderr,"[engine] Loading prompt input: Enter %s; handled=%d\n",down?"down":"up",handled);
+            }
+            if(movement&&(frame==140||frame==180)) {
+                bool down=frame==140,handled=z_input_key(h,87,"w","KeyW",0,down,0);
+                fprintf(stderr,"[engine] Movement input: W %s; handled=%d\n",down?"down":"up",handled);
+            }
+            if(movement&&frame==150) {
+                bool handled=z_input_mouse(h,8,0,0,runtime->width/2,runtime->height/2,120,0);
+                fprintf(stderr,"[engine] Movement input: look right; handled=%d\n",handled);
             }
             if(options&&frame>=40&&frame<=47) {
                 u32 key=frame>=46?13:40;const char *name=frame>=46?"Enter":"ArrowDown";

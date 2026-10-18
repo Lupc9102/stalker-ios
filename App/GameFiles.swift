@@ -18,7 +18,19 @@ enum GameFiles {
         let manager = FileManager.default
         let keys: Set<URLResourceKey> = [.fileSizeKey, .isRegularFileKey, .isSymbolicLinkKey, .ubiquitousItemDownloadingStatusKey]
         var count = 0, bytes: Int64 = 0, problems: [String] = []
-        for directory in ["resources", "levels", "localization"] {
+        var directories = ["resources", "levels", "localization"]
+        // EE embeds localization in configs.db. Its experimental prepared layer
+        // is required; archive presence alone does not establish compatibility.
+        if !manager.fileExists(atPath: root.appendingPathComponent("localization").path),
+           manager.fileExists(atPath: root.appendingPathComponent("resources/configs.db").path) {
+            directories.removeAll { $0 == "localization" }
+            do {
+                if try PreparedGameProfile.read(from: root) == nil {
+                    problems.append("These Enhanced Edition files need the prepared gamedata folder and zone-mobile-profile.json. Copy them beside resources/ and levels/ first.")
+                }
+            } catch { problems.append(error.localizedDescription) }
+        }
+        for directory in directories {
             let url = root.appendingPathComponent(directory, isDirectory: true)
             guard let enumerator = manager.enumerator(at: url, includingPropertiesForKeys: Array(keys), options: [.skipsHiddenFiles]) else {
                 problems.append("Missing \(directory)/ folder."); continue

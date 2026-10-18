@@ -9,7 +9,7 @@ private enum EngineFiles {
     // the native host's process-owned shared heap and file descriptors.
     static var grant: URL?
     static func hold(_ root: URL) { _ = root.startAccessingSecurityScopedResource(); grant = root }
-    static func prepare() throws -> URL {
+    static func prepare(gameRoot: URL) throws -> URL {
         let manager = FileManager.default
         let overlay = GameFiles.documents.appendingPathComponent("ZonePortData", isDirectory: true)
         try manager.createDirectory(at: overlay, withIntermediateDirectories: true)
@@ -17,12 +17,17 @@ private enum EngineFiles {
               let files = manager.enumerator(at: support, includingPropertiesForKeys: [.isRegularFileKey]) else {
             throw NSError(domain: "ZonePort", code: 1, userInfo: [NSLocalizedDescriptionKey: "This build is missing its engine support files. Reinstall the native engine build."])
         }
+        let profile = try PreparedGameProfile.read(from: gameRoot)
+        try profile?.verify(in: gameRoot, support: support)
         for case let source as URL in files {
             guard try source.resourceValues(forKeys: [.isRegularFileKey]).isRegularFile == true else { continue }
             let relative = String(source.path.dropFirst(support.path.count + 1))
             let target = overlay.appendingPathComponent(relative)
             try manager.createDirectory(at: target.deletingLastPathComponent(), withIntermediateDirectories: true)
-            try Data(contentsOf: source).write(to: target, options: .atomic)
+            // Prepared classic UI must take priority over bundled UI variants.
+            // Other prepared assets are read directly from the selected folder.
+            let selected = profile?.files[relative] == nil ? source : gameRoot.appendingPathComponent(relative)
+            try Data(contentsOf: selected).write(to: target, options: .atomic)
         }
         let settings = overlay.appendingPathComponent("user.ltx")
         if !manager.fileExists(atPath: settings.path) {
@@ -160,10 +165,11 @@ final class EngineController: UIViewController {
         displayLink?.invalidate(); lastTime = 0
         let link = CADisplayLink(target: self, selector: #selector(tick(_:))); link.add(to: .main, forMode: .common); displayLink = link
         guard !started else { return }; started = true; EngineFiles.hold(root)
-        information.text = "Preparing shaders and mobile settings…"
+        information.text = "Checking prepared files and setting up the game…"
+        let gameRoot = root
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             do {
-                let overlay = try EngineFiles.prepare()
+                let overlay = try EngineFiles.prepare(gameRoot: gameRoot)
                 DispatchQueue.main.async { [weak self] in self?.start(overlay: overlay) }
             } catch { DispatchQueue.main.async { [weak self] in self?.showFailure(error.localizedDescription) } }
         }
