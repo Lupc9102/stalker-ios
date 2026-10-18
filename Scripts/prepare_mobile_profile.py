@@ -25,6 +25,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--classic-overlay', type=Path, required=True)
     parser.add_argument('--texture-overlay', type=Path, required=True)
+    parser.add_argument('--bc7-overlay', type=Path, help='Optional offline RGBA8 conversions from convert_bc7_overlay.py')
     parser.add_argument('--output-dir', type=Path, required=True)
     args = parser.parse_args()
     output = args.output_dir.resolve()
@@ -39,11 +40,15 @@ def main():
     if c['support_commit'] != s['commit']:
         raise ValueError('Classic overlay does not match current engine support files')
     records = {}
+    layers = [(classic, c['files'], ''), (textures, t['files'], 'gamedata/')]
+    if args.bc7_overlay:
+        bc7 = args.bc7_overlay.resolve()
+        layers.append((bc7, json.loads((bc7 / 'bc7-overlay.json').read_text())['files'], 'gamedata/'))
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix='zone-mobile-', dir=output.parent) as temporary:
         staging = Path(temporary) / 'content'
         staging.mkdir()
-        for root, files, prefix in [(classic, c['files'], ''), (textures, t['files'], 'gamedata/')]:
+        for root, files, prefix in layers:
             for member, record in files.items():
                 name = prefix + member
                 if not name.startswith('gamedata/') or any(p.startswith('.') for p in name.split('/')):

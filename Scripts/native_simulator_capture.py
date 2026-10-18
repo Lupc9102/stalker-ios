@@ -51,7 +51,8 @@ def main():
     support = app / 'SupportData'
     relative = 'gamedata/scripts/ui_main_menu.script'
     marker = 'Prepared profile override loaded'
-    script = ('printf("' + marker + '")\n').encode() + (support / relative).read_bytes()
+    # The benchmark's Lua printf is intentionally disabled; use the engine log.
+    script = ('log("' + marker + '")\n').encode() + (support / relative).read_bytes()
     prepared = documents / 'Benchmark' / relative
     prepared.parent.mkdir(parents=True, exist_ok=True)
     prepared.write_bytes(script)

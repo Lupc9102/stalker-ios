@@ -197,6 +197,14 @@ To prepare these overrides for the app:
 python3 Scripts/prepare_mobile_profile.py --classic-overlay /path/to/private/classic-overlay --texture-overlay /path/to/private/mobile-overlay --output-dir /path/to/private/phone-files
 ```
 
+EE also uses BC7 for 25 sky cubemaps and its ground-detail texture. The native
+mobile fallback handles BC1/2/3, not BC7. With Pillow installed,
+`Scripts/convert_bc7_overlay.py --input-root /path/to/installed-game
+--output-dir /path/to/private/bc7-overlay --max-size 512` decodes their existing
+mips into legacy RGBA8 DDS, including every cubemap face. This is offline pixel
+decoding, with no resizing or new lossy compression. Pass that output as
+`--bc7-overlay /path/to/private/bc7-overlay` to `prepare_mobile_profile.py`.
+
 Copy the resulting `gamedata/` folder and `zone-mobile-profile.json` beside the
 player's `resources/` and `levels/` folders, then select that parent folder in
 the app. The app checks every prepared file's size/SHA-256 before starting and
