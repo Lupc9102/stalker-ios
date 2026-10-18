@@ -73,8 +73,10 @@
   loads Zaton's geometry and objects from Enhanced Edition archives. Selecting
   existing 512px DDS mips avoids the earlier host OOM kill. Matching classic
   achievement definitions then allow 100 callbacks and a successful diagnostic
-  exit. The capture is the final "Press any button to play" loading screen;
-  world rendering is not established. See `Docs/verification/retail-startup.md`.
+  exit at the final loading prompt. At `67f5c11`, real Enter events then allow
+  180 callbacks and an actual Zaton world/weapon/HUD capture on Linux. The
+  initial save is written; rendering artifacts remain. See
+  `Docs/verification/retail-startup.md`.
 
 ## Not implemented / not verified
 
@@ -93,8 +95,8 @@
   listener removal and thread ownership. Real pointer input opens Options;
   see `Docs/verification/native-engine-options.log` and `Docs/NATIVE-HOST.md`.
 - Campaign startup with the experimental Enhanced Edition/classic overlay now
-  reaches the final loading prompt. No retail world view has been verified.
-  Saves, combat, game memory budget and sustained
+  renders a retail world view on Linux. Save reload, combat, the iPhone memory
+  budget and sustained
   frame rate remain unverified.
 - No physical-device engine test has completed. The new native app build does
   contain the translated engine.
@@ -122,9 +124,8 @@ Artifact details and verification limits are in
 ## Next action
 
 Continue the native engine host in the order documented in `Docs/ENGINE-HOST.md`.
-The native engine renders the menu and responds to input. The native
-UIKit simulator/resume test and unsigned device package checks pass. Test the
-player's files next: the supplied Enhanced Edition data now reaches backdrop
-rendering with the reproducibly rebuilt engine. Resolve Enhanced Edition's
-script/UI differences or test original/classic CoP 1.6.02 files for the campaign
-baseline. Retail-level rendering, saves and physical-device controls remain.
+The native engine renders Zaton with the private prepared EE/classic overlay
+on Linux. Verify save reload and movement, compile/check the new prepared-file
+app path, and test that same data on a physical iPhone. The native UIKit menu,
+simulator/resume test and unsigned device package checks pass; iOS world
+rendering, combat and sustained performance remain.

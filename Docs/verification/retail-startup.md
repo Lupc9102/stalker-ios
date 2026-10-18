@@ -184,8 +184,32 @@ manifested and refused if the destination already exists. No game assets are
 committed or included in app artifacts. The separate 512-mip overlay is merged
 into `gamedata/` for this test.
 
-Retail-world rendering, saves, combat and physical iPhone performance remain
-unverified. Enhanced Edition also has unsupported `mtb_*` renderer commands,
+## First retail-world capture
+
+The executable from [run 39103809523](https://github.com/Lupc9102/stalker-ios/actions/runs/39103809523)
+at `67f5c11`, with the same private 512px/classic compatibility overlay, accepts
+the native Enter press/release and completes 180 frame callbacks with exit 0.
+Visual inspection of its actual 1280 × 720 framebuffer shows Zaton terrain,
+trees, sky, the actor's weapon and HUD. It is a real world view, not the static
+loading illustration. The engine also reports 11,082 saved objects and writes
+the initial `player - beginning of the game.scop` file (587,401 bytes).
+
+Observed peak RSS, including process high-water values sampled after loading
+had begun, is 2,907,240 KiB (about 2.8 GiB). No additional OOM kill is recorded.
+The sky and vegetation have visible rendering artifacts. Movement, save reload,
+combat, sustained frame rate and physical iPhone performance are not established
+by this capture. This is Linux/Mesa rendering through the native, no-JIT engine;
+the iOS simulator has so far rendered the benchmark menu only.
+
+The prepared mobile profile combines 2,910 loose override files (370,014,481
+bytes) and a size/SHA-256 manifest. The new app path checks these files and the
+matching engine-support manifest before startup, gives prepared UI priority,
+and accepts EE's embedded localization only with a recognized prepared profile.
+Archives remain read-only and separate from the writable save folder. Physical
+iPhone verification remains required; this is not a complete playable-release
+claim or a reduction of the original archive storage size.
+
+Enhanced Edition also has unsupported `mtb_*` renderer commands,
 blender names and changed scripts/UI. This experimental layer is not integrated
 into automatic iOS import. Original/classic CoP 1.6.02 remains the intended
 campaign baseline; Enhanced Edition support is a separate compatibility effort.

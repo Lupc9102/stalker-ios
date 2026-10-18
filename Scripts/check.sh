@@ -9,6 +9,8 @@ if command -v swiftc >/dev/null; then
     swiftc -frontend -parse App/*.swift
     if [[ "$(uname -s)" == Darwin ]]; then
         swiftc -typecheck Scripts/verify_simulator_screen.swift
+        swiftc App/PreparedGameProfile.swift Tests/prepared_profile.swift -o Build/Checks/prepared-profile-test
+        Build/Checks/prepared-profile-test
     fi
 else
     echo 'Swift compiler unavailable: UIKit source syntax check skipped.'
