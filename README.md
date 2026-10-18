@@ -163,6 +163,15 @@ Use `--kind fonts` for font conversion inputs; the extracted fonts retain their
 traps and a capture path was supplied, the host attempts to capture the last
 framebuffer and still exits with failure. Such captures can show loading/error
 screens and do not establish playable gameplay.
+
+`Scripts/prepare_texture_overlay.py --input-root /path/to/installed-game
+--output-dir /path/to/private/mobile-overlay --max-size 512` selects existing
+BC1/2/3 mip levels into loose overrides. It preserves retained compressed bytes
+and leaves original archives, UI atlases, cubemaps and unsupported formats alone.
+Textures without smaller mip levels cannot be reduced by this tool. This is
+manual asset preparation, not automatic iOS import or GPU format conversion.
+The mobile app and diagnostic host disable bulk object/model prefetch to lower
+the startup memory peak; assets still load when requested by the engine.
 Once gameplay works, profile texture residency and streaming before making a
 separate mobile asset pack. Archive compression and GPU texture compression
 solve different problems.

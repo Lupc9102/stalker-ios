@@ -151,7 +151,9 @@ static void *run(void *pointer) {
             wasm_rt_trap_t trap=wasm_rt_impl_try();
             if(trap){fail(s,wasm_rt_strerror(trap));return NULL;}
             wasm2c_xray_instantiate(&h->engine,h);w2c_xray_fi(&h->engine);
-            const char *args[]={"xr_3da","-nosplash","-nointro","-nogameintro","-fsltx","/opfs/fsgame.ltx"};
+            // Load campaign objects on demand instead of prefetching the full
+            // model list into the phone's memory before the level starts.
+            const char *args[]={"xr_3da","-nosplash","-nointro","-nogameintro","-noprefetch","-fsltx","/opfs/fsgame.ltx"};
             u64 argv=Z_EXPORT_malloc(&h->engine,sizeof args+8);
             for(unsigned i=0;i<sizeof args/sizeof *args;i++) {
                 size_t bytes=strlen(args[i])+1;u64 text=Z_EXPORT_malloc(&h->engine,bytes);

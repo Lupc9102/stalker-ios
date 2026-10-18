@@ -54,8 +54,10 @@ int main(int argc,char **argv) {
         wasm2c_xray_instantiate(&h->engine,h);
         fprintf(stderr,"[engine] Running static constructors\n");
         w2c_xray_fi(&h->engine);
-        const char *args[8]={"xr_3da","-nosplash","-nointro","-nogameintro","-fsltx","/opfs/fsgame.ltx"};
-        unsigned count=6;
+        // Prefetching the full object/model list raises the mobile memory peak.
+        // Let campaign assets load when the engine requests them instead.
+        const char *args[9]={"xr_3da","-nosplash","-nointro","-nogameintro","-noprefetch","-fsltx","/opfs/fsgame.ltx"};
+        unsigned count=7;
         const char *campaign=getenv("ZONE_START_NEW_GAME");
         if(campaign&&!strcmp(campaign,"1")) {
             args[count++]="-start";
