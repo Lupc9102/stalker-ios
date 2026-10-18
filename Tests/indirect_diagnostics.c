@@ -1,6 +1,7 @@
 #include "indirect_diagnostics.h"
 #include "Diagnostics.h"
 #include "wasm-rt-impl.h"
+#include "wasm-rt-exceptions.h"
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
